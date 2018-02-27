@@ -1,0 +1,49 @@
+\documentclass[conference]{IEEEtran}
+
+\ifCLASSINFOpdf
+  \usepackage[pdftex]{graphicx}
+  \graphicspath{{figs/}}
+  \DeclareGraphicsExtensions{.pdf,.jpeg,.png}
+\else
+  \usepackage[dvips]{graphicx}
+  \graphicspath{{../eps/}}
+  % every instance of \includegraphics
+  \DeclareGraphicsExtensions{.eps}
+\fi
+
+% todo notes
+\usepackage[colorinlistoftodos]{todonotes}
+\newcommand{\TODO}[1]{\todo[inline, color=yellow!40]{#1}}
+
+\begin{document}
+\title{A Year in the Life of a Parallel File System}
+
+\author{\IEEEauthorblockN{Glenn K. Lockwood, Teng Wang, Suren Byna, Nicholas J. Wright}
+\IEEEauthorblockA{Lawrence Berkeley National Laboratory\\\{glock,tengwang,sbyna,njwright\}@lbl.gov
+}
+\and
+\IEEEauthorblockN{Shane Snyder, Philip Carns}
+\IEEEauthorblockA{Argonne National Laboratory\\
+\{ssnyder,carns\}@mcs.anl.gov}
+}
+
+
+\maketitle
+
+\input{abstract}
+
+\input{introduction}
+
+\input{methods}
+
+\input{results}
+
+\input{conclusion}
+
+\input{acknowledgments}
+
+\bibliographystyle{IEEEtran}
+
+\bibliography{IEEEabrv,references}
+
+\end{document}
