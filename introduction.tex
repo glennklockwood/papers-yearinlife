@@ -1,9 +1,56 @@
 \section{Introduction / Extended Abstract}
 
 I/O performance variation has been studied extensively, and a variety of conditions have been identified as contributing factors to poor I/O performance.  Most studies have focused on enumerating the sources of I/O performance loss at a single point in time, assuming that performance loss is a transient effect due to contention from other jobs.  However, recent work~\cite{Lockwood2017} has shown that performance variation can occur over periods of days as a result of systematic, longer-term conditions of a storage system.
+%
+Overall performance (and thus scientific productivity) can be improved for a
+wide range of users if these deviations can be identified and attributed
+quickly in production.
 
-Such systematic, long-term I/O performance variation remains much less well understood despite its relevance to scientific campaigns that may experience uneven throughput or resource consumption over the course of months or years.  In this work, we differentiate \emph{long-term performance variation} from \emph{short-term performance variation} and characterize the factors that contribute to long-term performance variation on a diverse range of large-scale production parallel storage systems.
+%Such systematic, long-term I/O performance variation remains much less well understood despite its relevance to scientific campaigns that may experience uneven throughput or resource consumption over the course of months or years.  In this work, we differentiate \emph{long-term performance variation} from \emph{short-term performance variation} and characterize the factors that contribute to long-term performance variation on a diverse range of large-scale production parallel storage systems.
 
-To accomplish this, we sampled the performance of a set of I/O benchmarks and applications on parallel file systems operated at NERSC and ALCF over the course of a year.  The resulting data captures performance variation over multiple time scales, ranging from days to weeks, and allows us insight into how often performance loss is observed over longer periods of time.  By integrating holistic I/O monitoring throughout the year-long experiment, we then quantitatively show that common sources of short-term variation, such as bandwidth or metadata contention, play less significant role in long-term performance variation.
+A number of recent efforts~\cite{TODO:tokio,guide,ldms,siox} have advanced the
+state of the art in scalable data collection, making it possible to observe
+production systems at unprecedented scales.  It remains an open problem,
+however, how go best interpret this data to quickly for maximum production
+impact, and what types of instrumentation have the greatest return on
+investment.
 
-Given this multiscale nature of I/O performance variation, we conclude that the probabilistic effects of transient interference \emph{and} the autocorrelative effects of long-term variation are required to capture the full picture of performance variation on parallel storage systems.
+We investigate this issue by studying performance data collected from
+large parallel file systems at NERSC and the ALCF over the course of
+a year of production use.  We capture not only system data, but also
+application-level instrumentation as well as explicit nightly benchmarking
+results from a range of representative applications.  The breadth of
+this data set enables us to investigate performance variation over
+multiple time scales, ranging from days to weeks, and allows us insight
+into how often performance loss is observed over longer periods of time.
+The depth of this data set enables us to observe how system behavior is
+reflected in user-perceived performance and how combinations of factors
+contribute to overall performance.
+
+We also develop a methodology for identifying inflection points in
+long-term user-perceived performance due to factors beyond their control,
+such as hardware failures, software changes, capacity constraints, or
+contention.  These trends are easily overlooked or misattributed given the
+complexity and inherent variability of the I/O system itself, but can have a
+significant long term impact on efficiency.  Once an inflection point has
+been found, we investigate methods for guiding administrators to likely
+contributing factors if not outright identifying definitive root causes for
+anomolous performance.
+
+%By integrating holistic I/O monitoring throughout the
+%year-long experiment, we then quantitatively show
+%that common sources
+%of short-term variation, such as bandwidth or metadata contention,
+%play less significant role in long-term performance variation.
+%Given this multiscale nature of I/O performance variation, we conclude that the probabilistic effects of transient interference \emph{and} the autocorrelative effects of long-term variation are required to capture the full picture of performance variation on parallel storage systems.
+
+The primary contributions of this paper are as follows:
+\begin{itemize}
+\item \TODO{fill in firm contributions as we nail down outcomes, see text in latex comments}
+\item \TODO{could be findings about the nature of file system performance
+(especially things that notably diverge from expectations),
+methodologies for analyzing data, recommendations for instrumentation
+techniques, or recommendations for system administration}
+\end{itemize}
+
+The remainder of the paper is organized as follows.  \TODO{Fill in}
