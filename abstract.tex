@@ -2,26 +2,34 @@
 % in the abstract
 \begin{abstract}
 
-I/O performance is critical to productivity for data-intensive
+I/O performance is a critical part of data-intensive
 scientific computing, but it is notoriously difficult to understand
-and diagnose. This problem is exacerbated by an ongoing trend towards
+and diagnose. This problem is exacerbated by the current trend towards
 deeper I/O hierarchies and more complex I/O architectures. Capturing
 and visualizing system-wide performance telemetry is a key step towards
-solving this problem, but is only a partial solution because it continues to
-hinge upon specialized human expertise to identify and interpret problems
-and turn raw data into actionable intelligence.
+solving this problem, but identifying important events and interpreting their
+significance remains a labor-intensive process that depends heavily upon human
+expertise.
 
 In this work we explore how algorithmic methods can be used to ease the
 burden of extracting actionable insight from long-running production
-instrumentation using a full year of telemetry from two leading HPC
-facilities as test cases.  In doing so, we answer the following questions:
+I/O instrumentation.  We demonstrate our methodology on a full year's worth
+of telemetry data collected at two leading HPC
+facilities.  In doing so, we answer the following questions:
+%
+How do we detect critical inflection points in performance?
+%
+How do we assess the scope and contributing factors for a given inflection point?
+%
 Does intuition and methodology derived from individual application
-anecdotes match the reality of long-term production behavior? How do we
-detect critical inflection points in performance?  How do we assess the
-scope and contributing factors for a given a performance inflection point?
+anecdotes match the reality of long-term production behavior? 
+%
 Can underlying trends be identified beyond the noise of day-to-day
 performance variability?
 
-We find that \TODO{...}
+Our analysis, and key case studies derived from that analysis, reveal the
+presence of both short-term and long-term performance deviations.  We also
+find that the ramifications of these performance deviations are not uniform 
+across applications and can thus affect users in unexpected ways.
 
 \end{abstract}
