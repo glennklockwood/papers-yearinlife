@@ -1,11 +1,39 @@
-\section{Experimental Platform}
+\section{Experimental Setup}
+
+\TODO{Rely on PDSW paper and upcoming CUG submission on TOKIO to provide lower level details, summarize high-level concepts most relevant to this study.}
+
+Previously, we have demonstrated the feasability of a general approach to holistic I/O analysis of HPC systems, leveraging monitoring data provided by existing monitoring tools already deployed on these systems to synthesize on-demand, holistic views of I/O behavior across distinct components of the I/O subsystem~\cite{Lockwood2017}. That study demonstrated X and laid the groundwork for ... the CUG paper \cite{LockwoodCUG2018}.
+
+Our experimental setup can be viewed as a continuation and a refinement of work we previously presented in~\cite{Lockwood2017}. In that work, we ran daily I/O performance regression benchmarks on production HPC filesystems and then contextualized perceived application I/O performance with data extracted from an array of monitoring tools deployed on these systems. 
+
+\subsection{TOKIO}
+
+TOKIO (Total Knowledge of I/O) is a framework facilitating holistic characterization and analysis of I/O workloads running on today's production HPC systems. A holistic approach to understanding I/O behavior is a necessity given the move towards more complicated I/O architectures (in terms of number of constituent components, like high-level I/O libraries, I/O middleware systems, and low-level storage hardware) on these systems. TOKIO's primary goal is to arm system users, administrators, and I/O researchers with the necessary tools to navigate this complexity and to make meaningful observations into how workloads interact with the I/O subsystem.
+
+Conceptually, TOKIO provides an abstraction layer between component-level monitoring tools already deployed on HPC platforms and higher-level I/O analysis tools that utilize this data. The fundamental roles of the TOKIO framework are to: collate monitoring data from distinct sources; integrates and normalizes monitoring data from these components, each with its own native format, scope, and granularity; and present coherent APIs for indexing and accessing this data. Unlike other monitoring tools, .
+TOKIO also has its own data format specification for I/O monitoring data and has tools for archiving timeseries data in this format.
+
+\TODO{Briefly summarize instrumentation sources etc, but lean on PDSW paper for details.  We won't have space to be exhaustive here and at some point we want ``We used TOKIO'' to gain traction as shorthand for what we are doing.}
+
+Monitoring sources:
+
+\begin{itemize}
+\item application-level I/O characterization
+\item file system workload monitoring
+\item file system health and capacity
+\item job scheduler data
+\item (in theory, not practice) burst buffer monitoring, fabric counters, etc.
+\end{itemize}
+
+\TODO{Worth giving the shoutout to the pytokio implementation here, or does that go in the reproducibility appendix?}
+
+\subsection{Platforms}
+
+\TODO{Describe Mira and Edison, and the file systems being studied.}
+
+\subsection{I/O Workloads}
 
 We ran the benchmarks described in~\cite{Lockwood2017} for a period of one year on Mira and Edison.
-
-\TODO{Describe Mira and Edison.  Briefly summarize instrumentation sources
-etc, but lean on PDSW paper for details.  We won't have space to be
-exhaustive here and at some point we want ``We used TOKIO'' to gain traction
-as shorthand for what we are doing.}
 
 \TODO{Be sure to point out some anecdotes about the volume of data collected
 (in total) over the year.  How many darshan logs, how many benchmark runs,
