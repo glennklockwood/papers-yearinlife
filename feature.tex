@@ -1,4 +1,20 @@
-\section{Feature detection and contributing factors}
+\section{Feature detection and contributing factors}  \label{sec:features}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=1.0\columnwidth]{timeseries_baseline-cscratch_hacc_io_read_fpp_read}
+    \vspace{-.35in}
+    \caption{Performance evolution of HACC file-per-process  workload on Cori.  Red line is the overall mean (298 GiB/sec write, 204 GiB/sec read), orange line is 28-day SMA, and blue bars are daily performance measurements.}
+    \label{fig:timeseries_baseline}
+%   \vspace{-.3in}
+% UP01 to UP03 upgrade, UP03 to UP04
+\end{figure}\
+
+As shown in Figure \ref{fig:summary-heatmap}, I/O performance variation is not randomly distributed.  To quantify such time-dependent performance variation, we propose applying simple moving averages (SMAs) as a means to identify correlated performance trends in production parallel file systems.
+Given a time window of width $w$, we define the SMA for a metric $M$ at time $t$ as the average value of $M$ over $-0.5w <= t < +0.5w$;
+when chosen to be sufficiently wide (e.g., $w = 28$ days) with respect to the benchmark frequency (nominally one day), the SMA distinguishes long-term performance variation (such as that caused by degraded file system health) from high-frequency variation caused by transient sources (such as conflicting jobs and network congestion).
+
+\subsection{Longer-term behavior} \label{sec:features/longterm}
 
 \TODO{How do we identify cases where performance is diverging in a
 significant, sustained way?  Slowly worse, worse at at once, improving etc.}
@@ -6,8 +22,65 @@ significant, sustained way?  Slowly worse, worse at at once, improving etc.}
 \TODO{Once we've found these regions, how do we then find the factors that
 contributed to that behavior?}
 
+The 28-day SMA is for the HACC workload on Cori shown in Figure \ref{fig:timeseries_baseline} and highlights an example of long-term performance variation in the write workload:
+
+\begin{enumerate}
+\item The nominal performance of specific applications' I/O can vary over the service life of a storage system and its dependent components with periods of variation extending for months at a time
+\item Not all workloads are affected by such long-term variation equally; in the case of HACC on Cori, write performance was adversely affected by a specific Lustre patch, while read performance of that same application was unaffected.
+\end{enumerate}
+
+Thus, it is important to contextualize I/O performance variation within the longer-term performance state of each storage subsystem to clarify whether the observation of "poor performance" is poor with respect to a longer-term performance depression or poor in the absolute capability of the storage system.
+
+To provide this time-dependent context, we can use a second SMA with a longer window $w$ to compare the variation of the shorter-term performance with a more stable, long-term representation.  Figure \ref{fig:timeseries_baseline} includes the extreme case where ${w \rightarrow \infty}$ (i.e., the mean performance over the entire year) and, in the case of HACC write performance, visibly distinguishes the extent of the long-term performance depression that occurred between April and August.
+
+Finding the intersection points between these two SMAs also provides an analytical tool for demarcating regions of interest;
+for example, the intersection between $\textup{SMA}_{28}$ and $\textup{SMA}_\infty$ in Figure \ref{fig:timeseries_baseline} occurs at March 23 and August 8.
+By comparing these dates to the service history of Cori, this performance depression was retrospectively attributed to patches applied to the Lustre clients on Cori on March 24 and August 10--within two days of the SMA interception points.
+
+\subsection{Shorter-term behavior} \label{sec:features/shortterm}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=1.0\columnwidth]{contributors-bad-by-system}
+    \vspace{-.35in}
+    \caption{Metrics that correlated with poor I/O performance across all file systems and benchmarks tested.}
+    \label{fig:contributors-bad-by-system}
+%   \vspace{-.3in}
+% UP01 to UP03 upgrade, UP03 to UP04
+\end{figure}
+
 \TODO{This is where we introduce methodology for flagging regions,
 identifying key point, running umami, binning likely contributors, etc.}
+
+Long-term behavior has very low frequency by definition, so analyzing the causes of a few long-term performance depressions by hand (as was done in characterizing the HACC write performance in Figure \ref{fig:timeseries_baseline}) remains tractable.
+In contrast, shorter-term variations in I/O performance are both more frequent and more perceptible by users, and automating the process of identifying those regions and the factors contributing to reduced performance is more urgent.
+
+We generalize the approach taken to identify longer-term behavior in Section \ref{sec:features/longterm} and define $\textup{SMA}_{long}$ and $\textup{SMA}_{short}$ as simple moving averages with differing window lengths.
+Adjusting $w_{short}$ and $w_{long}$ allows this approach to partition performance measurements into regions of adjustable width, and judicious choice of $w$ enables analysis at timescales relevant to users (e.g., frequency of jobs in a scientific campaign) or system operators (e.g., sufficient width for meaningful statistical analysis).
+
+To illustrate this latter point, we use SMAs to define \emph{performance regions} that can be analyzed using the UMAMI method~\cite{Lockwood2017} where the performance of a job of interest is visualized alongside a variety of metrics concurrently collected from component-level monitoring tools.
+By focusing on particular jobs of interest \emph{and} the other jobs that also ran within the same performance region, we can contextualize both the application's I/O performance and the telemetric data collected during that job to identify factors that statistically correlate with abnormal performance.
+
+...
+
+We first separated each combination of five file systems, four test applications, and read/write character into a set of 40 performance measurements spanning a year.
+Using $SMA_{short}$ of $w = 7$ days and $SMA_{long}$ of $w = 28$ days, we then partitioned each set of measurements into between 16 and 27 performance regions.
+For each region, we then applied a classification method whereby
+
+\begin{enumerate}
+\item The lowest performance measurement of that region is identified as a Job of Interest
+\item TOKIO's UMAMI analysis is performed where metrics that speak to application-side performance, file system load, file system health, system batch scheduler load, and system topology are all combined into a single holistic description of each job's I/O performance
+\item The value of each metric measured during the Job of Interest is compared to the statistical distribution of those metrics across all other jobs in the performance region.  All metrics whose values were at their worst at the same time the Job of Interest was running are flagged as potential contributors to the poor performance of the job of interest.
+\end{enumerate}
+
+The result of this analysis is zero or more metrics being flagged as potential contributors to poor performance within each performance region for each application, file system, and read/write mode.
+
+Aggregating all of the performance regions' poor-performance contributors yields a broad overview of the metrics that most commonly coincide with poor performance across all of the test systems.
+This distribution, shown in Figure \ref{fig:contributors-bad-by-system}, reveals that abnormally high bandwidth contention was found to coincide with abnormally poor performance most frequently.
+
+\TODO{Update Fig \ref{fig:contributors-bad-by-system} to use the new minmax classifier}
+
+\TODO{Define the metrics in Fig \ref{fig:contributors-bad-by-system}}
 
 \TODO{Somewhere, maybe not here, revisit findings from PDSW paper and see if
 they still make sense in year long context?}

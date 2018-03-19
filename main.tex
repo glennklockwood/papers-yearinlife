@@ -1,15 +1,8 @@
 \documentclass[conference]{IEEEtran}
 
-\ifCLASSINFOpdf
-  \usepackage[pdftex]{graphicx}
-  \graphicspath{{figs/}}
-  \DeclareGraphicsExtensions{.pdf,.jpeg,.png}
-\else
-  \usepackage[dvips]{graphicx}
-  \graphicspath{{../eps/}}
-  % every instance of \includegraphics
-  \DeclareGraphicsExtensions{.eps}
-\fi
+\usepackage{graphicx}
+\graphicspath{{figs/}}
+\DeclareGraphicsExtensions{.pdf,.jpeg,.png}
 
 % todo notes
 \usepackage[colorinlistoftodos]{todonotes}
@@ -37,8 +30,6 @@
 \input{related}
 
 \input{methods}
-
-\input{sitaware}
 
 \input{feature}
 
