@@ -1,14 +1,28 @@
 \section{Related Work}
 
-\TODO{Up for discussion whether to put this early or late in paper.  The
-``collect lots of system data'' space is crowded now, we need to acknowledge
-lots of good stuff here, and be ready to make the case that we are doing
-more.}
+Several recent studies have contributed techniques to combine
+system-wide HPC instrumentation data for integrated
+analysis~\cite{Lockwood2017,Vazhkudai2017guide,Agelastos2014ldms,Kunkel2014siox}
+. Vazhkudai et. al notably used a Splunk data warehouse to analyze system
+logs and perform operational analytics on a large-scale storage system.
+The cloud computing community has also identified the need to to unify
+analysis capabilities across diverse environments. The Dapper system
+developed by Sigelman et. al combines comprehensive tracing with a novel
+sampling method to observe critical paths in cloud computing in great
+detail~\cite{Sigelman2010dapper}.
 
-\TODO{GUIDE, Dapper, root cause analysis stuff}
+Di et. al~\cite{7973730} and Park et. al~\cite{Park2017BigDM} have
+investigated how to perform correlation analysis on HPC log data once it has been
+collected.  Their analyses included compute and network resources, with a
+particular emphasis on event logs.
 
-Lofstead ~\cite{Lofstead2010}, 
-Dorier et al.~\cite{Yildiz2016}, 
-Carns et al.~\cite{carns2011understanding}.
+Several researchers have documented 
+I/O performance variability anecdotes on leadership-scale
+systems~\cite{Lofstead2010,Yildiz2016,carns2011understanding} and proposed
+methods to combat it.  
 
-Here is the GUIDE reference~\cite{Vazhkudai2017guide} and the Dapper reference~\cite{Sigelman2010dapper}.
+Our work builds upon best-in-class previous efforts by combining system
+monitoring, application monitoring, and explicit performance probing
+into a portable, holistic framework without the need for additional database
+infrastructure, and by introducing methods to help automate the task
+of deriving actional insight from these data sources.
