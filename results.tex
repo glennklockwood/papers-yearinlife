@@ -18,7 +18,7 @@ In the following sections, we identify regions at different timescales and apply
 The horizontal bands in Figures \ref{fig:summary-heatmap} and \ref{fig:regions-heatmap}b identify long periods of reduced performance for the file-per-process write workloads as dark horizontal bands between April and August.
 Because this region occurred over a period of months, we choose a ${w_{short}} = 28$ days to minimize the effects of high-frequency transients and ${w_{long}} \rightarrow \infty$ to identify performance regions that are abnormal relative to the global mean performance.  The resulting SMAs for the HACC write workload on Cori are shown in Figure \ref{fig:timeseries-baseline}a.
 
-The intercepts between $\textup{SMA}_{28}$ and $\textup{SMA}_{\infty}$ visibly distinguish the extent of the long-term performance depression that occurred between April and August for the HACC write workload.
+The crossovers between $\textup{SMA}_{28}$ and $\textup{SMA}_{\infty}$ visibly distinguish the extent of the long-term performance depression that occurred between April and August for the HACC write workload.
 This performance region defining this performance depression lasted for 139 days, and no other performance regions were identified for this workload.
 In stark contrast, the performance of HACC read workload (Figure \ref{fig:timeseries-baseline}b) was unaffected during this time; the longest performance region identified was 59 days long and exhibited abnormally \emph{high} performance.
 Incidentally, this abnormally high performance occurred between May 7 and July 4--a time when the HACC write performance was also experiencing high performance \emph{relative to its long-term performance depression.}
@@ -107,7 +107,7 @@ Given that sustained performance degradation was not detected at any other time 
 \end{figure}
 
 As evidenced in Figures \ref{fig:summary-heatmap} and \ref{fig:regions-heatmap}, application performance is sometimes severely degraded for one and only one day in an otherwise unremarkable performance region.
-What's more, this performance loss may only be observed in one of the I/O motifs tested on that day, suggesting a very short-lived issue that disappeared over the course of one or two of the eight daily test jobs.
+Furthermore, this performance loss may only be observed in one of the I/O motifs tested on that day, suggesting a very short-lived issue that disappeared over the course of one or two of the eight daily test jobs.
 The lack of a gradual transition of performance around these transients results in a low-diversity set of observations that limits the confidence of correlation-based classification and places these events beyond the capabilities of the aforementioned correlative approach.
 
 To classify these short-term cases, we apply a formalization of the UMAMI approach presented in earlier work~\cite{Lockwood2017}.
