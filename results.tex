@@ -77,12 +77,15 @@ abs \left (
 and $C$ is a cutoff threshold typically between 0.15 and 0.40 whose optimal value is a function of $w_{short}$, $w_{long}$, and how variable the storage system performance tends to be over long periods of time.
 Given a well-chosen $C$, the result set of transition regions satisfy both the (\ref{sec:results/transitions/criterion1}) sampling criterion and (\ref{sec:results/transitions/criterion2}) diversity criterion.
 
-To demonstrate the utility of this approach, we apply it to the entirety of the fraction of peak performance observations from Mira.
-With $C = 0.15$, only two transition regions were identified for the entire year.
-For each region, we then calculated the Pearson correlation coefficient between the fraction peak performance measurements and all other telemetric data associated with each job.
-Using a p-value threshold of ${1.0 \times 10^{-5}}$, only one of the two regions (shown in Figure \ref{fig:mira-correlation-region}a) exhibited significant correlation, and the bandwidth coverage factor was the only metric that showed strong (${R = 0.565}$) correlation with high confidence (Figure \ref{fig:mira-correlation-region}b).
-While we cannot determine causation from this correlation, this transition region correlation analysis automatically identified a long-term performance transition between October 13 and November 15 that was strongly correlated with bandwidth contention.
-Given that sustained performance degradation caused by bandwidth correlation (or any other factors) were not observed at any other time during the year on Mira, the contentious activity was likely not caused by routine job traffic and may have been related to year-end activity on the system.
+To demonstrate the utility of this approach, we apply it to the entirety of performance observations across all benchmarks run on Mira.
+Using $w_{short} = 14$ and $w_{long}$ = 48 with a cutoff $C = 0.15$ results in only two transition regions are identified for the entire year, consistent with the relatively stable performance of Mira shown in Figure \ref{fig:summary-heatmap}.
+For each transition region, we then calculate the Pearson correlation coefficient between the fraction peak performance observations and the other telemetric data associated with each job as described in Section \ref{sec:methods/tokio}.
+
+Discarding all correlations with low confidence ($\textup{p-value} > {1.0 \times 10^{-5}}$), only one of the two regions (shown in Figure \ref{fig:mira-correlation-region}a) exhibited significant correlation between performance and any other metrics.
+Furthermore, the bandwidth coverage factor was the only metric that showed moderate correlation (${R = 0.565}$) with high confidence ($\textup{p-value} < 1.4 \times 10^{-11}$), as shown in Figure \ref{fig:mira-correlation-region}b.
+While we cannot determine causation from this correlation, we can confidently state that this analysis identified a long-term performance transition between October 13 and November 15 that was strongly correlated with bandwidth contention.
+The fact that this performance degradation was observed across all I/O motifs distinguishes it from the case discussed in section \ref{sec:results/longterm} and further indicates a system-wide loss of performance.
+Given that sustained performance degradation was not detected at any other time during the year, the contentious activity that coincided with this performance depression on Mira was likely not caused by routine job traffic and may have been related to year-end activity on the system.
 
 
 
