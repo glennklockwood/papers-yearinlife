@@ -84,7 +84,7 @@ For each transition region, we then calculate the Pearson correlation coefficien
 Discarding all correlations with low confidence ($\textup{p-value} > {1.0 \times 10^{-5}}$), only one of the two regions (shown in Figure \ref{fig:mira-correlation-region}a) exhibited significant correlation between performance and any other metrics.
 Furthermore, the bandwidth coverage factor was the only metric that showed moderate correlation (${R = 0.565}$) with high confidence ($\textup{p-value} < 1.4 \times 10^{-11}$), as shown in Figure \ref{fig:mira-correlation-region}b.
 While we cannot determine causation from this correlation, we can confidently state that this analysis identified a long-term performance transition between October 13 and November 15 that was strongly correlated with bandwidth contention.
-The fact that this performance degradation was observed across all I/O motifs distinguishes it from the case discussed in section \ref{sec:results/longterm} and further indicates a system-wide loss of performance.
+The fact that this performance degradation was observed across all I/O motifs (similar to Figure \ref{fig:regions-heatmap}a) distinguishes it from the case discussed in section \ref{sec:results/longterm} and further indicates a system-wide loss of performance.
 Given that sustained performance degradation was not detected at any other time during the year, the contentious activity that coincided with this performance depression on Mira was likely not caused by routine job traffic and may have been related to year-end activity on the system.
 
 
@@ -93,7 +93,7 @@ Given that sustained performance degradation was not detected at any other time 
 
 
 
-\subsection{Shorter-term behavior} \label{sec:results/shortterm}
+\subsection{Transient performance loss} \label{sec:results/shortterm}
 
 \begin{figure}[t]
     \centering
@@ -106,19 +106,20 @@ Given that sustained performance degradation was not detected at any other time 
 % UP01 to UP03 upgrade, UP03 to UP04
 \end{figure}
 
-During this experiment, we often observed the case where application performance was severely degraded for one and only one day in an otherwise unremarkable performance region.  
-The lack of a gradual transition of performance around these bad days results in a low-diversity set of observations that limits the confidence of correlation-based classification.
+As evidenced in Figures \ref{fig:summary-heatmap} and \ref{fig:regions-heatmap}, application performance is sometimes severely degraded for one and only one day in an otherwise unremarkable performance region.
+What's more, this performance loss may only be observed in one of the I/O motifs tested on that day, suggesting a very short-lived issue that disappeared over the course of one or two of the eight daily test jobs.
+The lack of a gradual transition of performance around these transients results in a low-diversity set of observations that limits the confidence of correlation-based classification and places these events beyond the capabilities of the aforementioned correlative approach.
 
-To automatically classify the factors contributing to these isolated days of transient performance loss, we first separate performance observations based on three criteria: the test application, whether the application was reading or writing, and the file system on which the test was run.
-Each resulting set of \{app, r/w, system\} was then partitioned using the interception points of $\textup{SMA}_{7}$ and $\textup{SMA}_{28}$ and resulted in between 16 and 27 performance regions.
+To classify these short-term cases, we apply a formalization of the UMAMI approach presented in earlier work~\cite{Lockwood2017}.
+In this approach, the performance of a job of interest is contextualized with respect to other jobs that ran in the same period of time and exhibited the same I/O motif to determine if its performance was truly abnormal given its performance region.
+Following this, other telemetric data (as described in Section \ref{sec:methods/tokio}) collected during each of the jobs sharing the same performance region are also compared to determine the limits of normalcy for each metric.
+By identifying all of the metrics which were statistically abnormal at the same time job performance was abnormal, we can establish a list of metrics that \emph{may have} contributed to that job's abnormal performance.
 
-\TODO{A few sentences answering why 16 and 27 regions are generated may be helpful. May also replace 40 by 5$\times$4$\times$2 for easier understanding -Teng}
+For this work, we partitioned each set of observations $J_{app, rw, sys}$ using $\textup{SMA}_{28}$ and $\textup{SMA}_{7}$ to establish performance regions sufficiently small to capture individual performance transients.
 
-\begin{enumerate}[leftmargin=*]
-\item The lowest performance measurement of that region is identified as a Job of Interest
-\item TOKIO's UMAMI analysis is performed where metrics that speak to application-side performance, file system load, file system health, system batch scheduler load, and system topology are all combined into a single holistic description of each job's I/O performance
-\item The value of each metric measured during the Job of Interest is compared to the statistical distribution of those metrics across all other jobs in the performance region.  All metrics whose values were at their worst at the same time the Job of Interest was running are flagged as potential contributors to the poor performance of the job of interest.
-\end{enumerate}
+\TODO{gkl: resume work here on 2017-03-22}
+
+The value of each metric measured during the Job of Interest is compared to the statistical distribution of those metrics across all other jobs in the performance region.  All metrics whose values were at their worst at the same time the Job of Interest was running are flagged as potential contributors to the poor performance of the job of interest.
 
 The result of this analysis is zero or more metrics being flagged as potential contributors to poor performance within each performance region for each application, file system, and read/write mode.
 
