@@ -4,15 +4,13 @@
     \centering
     \includegraphics[width=0.90\linewidth]{summary-heatmap}
     \vspace{-.2in}
-    \caption{Performance of daily benchmarks normalized to each benchmark's peak observed performance on the specified storage system.  Grey represents days on which no observations were made.  The two regions highlighted in green boxes are expanded upon in Figure \ref{fig:regions-heatmap}.}
+    \caption{Performance of daily benchmarks normalized to each benchmark's peak observed performance on the specified storage system.  The y-axis labels show combinations of system, I/O motif, and mode (Read/Write).  Grey represents days on which no observations were made.  The two regions highlighted in green boxes are expanded upon in Figure \ref{fig:regions-heatmap}.}
     \label{fig:summary-heatmap}
 \end{figure*}
 
 \TODO{How about changing this to ``Methodology'' section and have 'Data collection', 'Data characteristics', and 'Data analysis methods' as subsections, to make it sound this is the novel contribution of this effort? -- Suren}
 
 \TODO{Need to accommodate double-blind review requirements while referring to TOKIO.}
-
-\TODO{Rely on PDSW paper and upcoming CUG submission on TOKIO to provide lower level details, summarize high-level concepts most relevant to this study.  That paper's ref is ~\cite{Lockwood2018tokio}.}
 
 \TODO{Does this paragraph need to be moved into related work or otherwise reworded? -SS}
 Previously, we have demonstrated the feasibility of a general approach to holistic I/O analysis of HPC systems and applied that approach over a month-long benchmarking study to examine specific cases of anomalous I/O behavior and to deduce potential factors contributing to this behavior~\cite{Lockwood2017}. We later formalized our methodology with the specification of the TOKIO (Total Knowledge of I/O) framework~\cite{Lockwood2018tokio}. For this study, we build on our prior research and use TOKIO to analyze a massive amount of I/O monitoring data culminating from a year-long benchmarking study conducted on a number of leadership-class HPC systems. 
@@ -99,27 +97,30 @@ The resulting 366-day experiment generated 11,986 performance observations acros
 The remaining 18.1\% of missing benchmarks resulted from system downtime, malfunctions of component-level monitoring tools or the automated test scheduling, queue wait times that exceeded 24 hours, and benchmarks exceeding their walltime.
 The fact that no results were obtained for jobs that ran so slowly that they exceeded their reserved walltime is significant in that this dataset does not capture the absolute worst performance observed.
 Although not ideal, this reflects the realities of daily testing on production systems.
+\TODO{Add details of the number of processes the benchmarks ran with, and how the file systems are set up, i.e., number of OSTs on Cori, number of I/O nodes used on Mira 
+
+Edison was mentioned in the previous paragraph; Figure 1 doesn't have the results. -- Suren}
 
 % \TODO{Things that are important here: behavior over time, grouping data sources in a way that helps understand scope, focusing on fundamental \emph{changes} in performance rather than steady state, everything in one view.}
 
 I/O performance is known to vary as a function of (1) the application I/O pattern, (2) whether the application is reading or writing, and (3) the architecture of the system on which I/O is happening~\cite{Lockwood2017}.
 To remove the effects of these factors and enable us to focus on performance \emph{variation}, we therefore express the performance of each of the 11,986 observations $j$ in terms of its \emph{fraction of peak performance}.
-This fraction of peak performance $j$ is defined as the absolute performance (in bytes/sec) of $j$ divided by the maximum absolute performance observed within the set $J_{app, rw, sys}$ where
+This fraction of peak performance $j$ is defined as the absolute performance (in bytes/sec) of $j$ divided by the maximum absolute performance observed within the set $J_{app, rw, sys}$, where
 
 \begin{equation}
 J_{app, rw, sys} = \big\{ j_{app} \cap j_{rw} \cap j_{sys} \big \}
 \end{equation}
-
+\TODO{A little lost in Equation 1, may add more explanations on $j_{app}$, $j_{rw}$ and $j_{sys}$ -- Teng}
 \noindent
 and $app$, $rw$, and $sys$ correspond to the three performance variables mentioned above.
 
-An overview of the fraction of peak performance for two of the five systems tested is shown in Figure \ref{fig:summary-heatmap}.
-These data demonstrate that the steady state for performance on production file systems is highly dynamic; were this not the case, all observations shown in Figure \ref{fig:summary-heatmap} would have an even tone.
+An overview of the fraction of peak performance for two of the five systems tested is shown in Fig. \ref{fig:summary-heatmap}.
+These data demonstrate that the steady state for performance on production file systems is highly dynamic; were this not the case, all observations shown in Fig. \ref{fig:summary-heatmap} would have an even tone.
 In addition, performance variation is clearly not randomly distributed throughout the year, and the data exhibits a significant a mount of correlated structure.
-Figure \ref{fig:regions-heatmap} highlights two subsets of Figure \ref{fig:summary-heatmap} and demonstrate three phenomena commonly observed:
+Figure \ref{fig:regions-heatmap} highlights two subsets of Fig. \ref{fig:summary-heatmap} and demonstrate three phenomena commonly observed:
 
 \begin{enumerate}[leftmargin=*]
-\item Dark vertical bands, exemplified in the Mira data in \ref{fig:regions-heatmap}, represent transient system-wide issues that resulted in a uniform loss of performance for all applications tested that day.
+\item Dark vertical bands, exemplified in the Mira data in Fig. \ref{fig:regions-heatmap}, represent transient system-wide issues that resulted in a uniform loss of performance for all applications tested that day.
 \item Dark horizontal bands, shown in the Cori data, indicate a long-term degradation in performance that disproportionately affects a specific I/O motif or reads or writes.
 \item Isolated dark blocks represent individual application runs where performance was poor despite an absence of system-wide transients (vertical bands) or systematic, motif-specific problems (horizontal bands).
 \end{enumerate}
