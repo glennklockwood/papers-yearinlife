@@ -30,7 +30,9 @@ In combination with expert knowledge, the root cause for the long-term performan
 The intersection between $\textup{SMA}_{14}$ and $\textup{SMA}_\infty$ in Figure \ref{fig:timeseries-baseline} occurs at March 24 and August 10, and comparing these dates to the service history of Cori revealed that operating system upgrades occurred on exactly those dates--March 24 and August 10.
 The Lustre client versions were updated on those two dates, and the appearance and subsequent disappearance of the anomalous behavior was attributed to a bug in the client software.
 % March 24 was the upgrade of CLE6UP01 to UP03, and August 10 was CLE6UP03 to UP04.  The performance loss in t > Aug 10 is caused by Lustre bug LU-9574
-\TODO{Has this bug affected IOR/fpp R/W the same way? That could confirm (to some extent) that all apps with similar I/O patterns might have suffered from this bug. Has this bug affected shared file patterns? -- Suren}
+\TODO{Has this bug affected IOR/fpp R/W the same way? That could confirm (to some extent) that all apps with similar I/O patterns might have suffered from this bug. Has this bug affected shared file patterns similarly? -- Suren
+
+Glenn: Yes, Figure \ref{fig:regions-heatmap}b shows that ior/fpp/write was also affected, but none of the other benchmarks were.}
 Finally, our choice of averaging $\textup{SMA}_{short}$ over ${-0.5w_{short} <= t < +0.5w_{short}}$ makes it insensitive to choice of $w_{short}$.
 For this dataset, changing $\textup{SMA}_{short}$ from $\textup{w}_{14}$ to both $\textup{w}_{7}$ and $\textup{w}_{28}$ resulted in no change to the dates bounding the 139-day divergence region.
 The principal effect of changing $\textup{w}_{short}$ is the number of short regions that arise from the higher-frequency oscillations of $\textup{SMA}_{short}$ around $\textup{SMA}_{long}$.
@@ -50,11 +52,12 @@ The principal effect of changing $\textup{w}_{short}$ is the number of short reg
     % source: sc18_centroids-for-paper.ipynb
 \end{figure}
 
-Long-term behavior has very low frequency by definition, so analyzing the causes of a few long-term performance depressions by hand (as was done in Section \ref{sec:results/longterm}) is not unreasonable.
-With smaller values of $w_{long}$, though, this method identifies an increasing number of divergence regions, and characterizing the factors that contribute to these long-term performance depressions using automated statistical techniques becomes imperative.
+%Long-term behavior has very low frequency by definition, so analyzing the causes of a few long-term performance depressions by hand (as was done in Section \ref{sec:results/longterm}) is not unreasonable.
+%With smaller values of $w_{long}$, though, this method identifies an increasing number of divergence regions, and characterizing the factors that contribute to these long-term performance depressions using automated statistical techniques becomes imperative.
 
 Performance can be effectively correlated with other metrics collected during I/O-intensive jobs if sufficient variation in performance is observed in the neighboring jobs to establish compelling correlation coefficients.
 To capture regions that exhibit a broad range of performance measurements, we convert pairs of divergence regions into \emph{trend regions} as defined in Section \ref{sec:features}.
+
 %We then discard divergence regions whose $\textup{SMA}_{short}$ exhibit minimal change between their first and last value in the region.  For each divergence region bounded by times $t_0$ and $t_f$, we then discard those regions where
 %
 %\begin{equation}
@@ -69,14 +72,16 @@ To capture regions that exhibit a broad range of performance measurements, we co
 %Given a well-chosen $C$, the result set of divergence regions satisfy both the (\ref{sec:results/transitions/criterion1}) sampling criterion and (\ref{sec:results/transitions/criterion2}) diversity criterion.
 
 To demonstrate the utility of this approach, we apply it to the entirety of performance observations across all benchmarks run on Mira.
-{\color{red}Using $w_{short} = 14$ and $w_{long}$ = 48 results in only two divergence regions are identified for the entire year}, consistent with the relatively stable performance of Mira shown in Figure \ref{fig:summary-heatmap}.
-For each trend region, we then calculate the Pearson correlation coefficient between the fraction peak performance observations and the other telemetric data associated with each job as described in Section \ref{sec:methods/tokio}.
+It identifies eleven divergence regions across the entire year, and for each of these trend regions, we then calculate the Pearson correlation coefficient between the fraction peak performance observations and the other telemetric data associated with each job as described in Section \ref{sec:methods/tokio}.
 
-Discarding all correlations with low confidence ($\textup{p-value} > {1.0 \times 10^{-5}}$), only {\color{red}one of the two regions} (shown in Figure \ref{fig:mira-correlation-region}a) exhibited significant correlation between performance and any other metrics.
-Furthermore, the bandwidth coverage factor was the only metric that showed moderate correlation (${R = 0.565}$) with high confidence ($\textup{p-value} < 1.4 \times 10^{-11}$), as shown in Figure \ref{fig:mira-correlation-region}b.
-While we cannot determine causation from this correlation, we can confidently state that this analysis identified a long-term performance transition between October 13 and November 15 that was strongly correlated with bandwidth contention.
-The fact that this performance degradation was observed across all I/O motifs (similar to Figure \ref{fig:regions-heatmap}a) distinguishes it from the case discussed in section \ref{sec:results/longterm} and further indicates a system-wide loss of performance.
-Given that sustained performance degradation was not detected at any other time during the year, the contentious activity that coincided with this performance depression on Mira was likely not caused by routine job traffic and may have been related to year-end activity on the system.
+Discarding all correlations except those with extremely high confidence ($\textup{p-value} > {1.0 \times 10^{-5}}$), only five of the eleven regions exhibited moderate correlation ($R > 0.35$) between performance and any other metric.
+Furthermore, the bandwidth coverage factor was the sole metric that showed compelling correlation with performance in these five regions, with correlation coefficients ranging from +0.399 to +0.590.
+
+An example of one of these regions and the correlation between performance and bandwidth coverage factor observed within is shown in Figure \ref{fig:mira-correlation-region}.
+During this region, $\textup{SMA}_{short}$ fell from a 0.868 fraction of peak performance to 0.654 over 21 days, representing a significant loss of performance.
+While this correlative analysis cannot attest to the cause of this event, this analysis confidently identified a long-term performance transition between October 25 and November 15 that was strongly correlated ($R = 0.565$) with bandwidth contention.
+The fact that this correlation with performance degradation was observed across all I/O motifs (similar to Figure \ref{fig:regions-heatmap}a) distinguishes it from the case discussed in section \ref{sec:results/longterm} and further indicates a system-wide loss of performance.
+The relative rarity of an event of this magnitude on Mira further suggests that the contentious activity coincident with this performance depression on Mira was likely not caused by routine job traffic and may have been related to year-end activity on the system.
 
 
 
@@ -126,5 +131,3 @@ This distribution, shown in Figure \ref{fig:contributors-bad-by-system}, reveals
 IOPS contention, which was only measured on Mira, and the incidence of metadata 
 
 \TODO{Define the metrics in Fig \ref{fig:contributors-bad-by-system}}
-
-\TODO{Somewhere, maybe not here, revisit findings from PDSW paper and see if they still make sense in year long context?}
