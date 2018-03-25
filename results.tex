@@ -123,58 +123,68 @@ The positive correlation between performance and CPU load is consistent with the
 
 \subsection{Transient performance loss} \label{sec:results/shortterm}
 
-\begin{figure}
-    \centering
-    \includegraphics[width=1.0\columnwidth]{shortterm-mirafs1-dbscan}
-    \vspace{-.35in}
-    \caption{SMA partitioning and using minima in each region to identify transient.  The region from August 30 to September 5 contained fewer than seven measurements, so it was not considered.}
-    \label{fig:shortterm-mirafs1-dbscan}
-    % source: sc18_umamify.ipynb
-\end{figure}
+\TODO{This is a very complicated analysis to describe completely.  Please point out places where clarification is necessary or would be helpful.}
+
+%\begin{figure}
+%    \centering
+%    \includegraphics[width=1.0\columnwidth]{shortterm-mirafs1-dbscan}
+%    \vspace{-.35in}
+%    \caption{SMA partitioning and using minima in each region to identify transient.}
+%    \label{fig:shortterm-mirafs1-dbscan}
+%    % source: sc18_umamify.ipynb
+%\end{figure}
 
 \begin{figure}
     \centering
     \includegraphics[width=1.0\columnwidth]{contributors-bad-by-system}
     \vspace{-.35in}
     \caption{Metrics that correlated with poor I/O performance across all file systems and benchmarks tested normalized to the number of probes during which each metric was measured.
-    "CF" refers to coverage factor as defined earlier;
-    "Indeterminate" are those jobs where no metrics could be classified as contributors.
+    Mira was the only system for which IOPS coverage factor was measured. 
+    These data represent 490 anomalous jobs, and 80 jobs (16\%) had no metrics classified as contributors.
+    Percentages do not add up to 100\% because multiple metrics are often classified as contributors for a single anomalous job.
     }
     \label{fig:contributors-bad-by-system}
-    % source: sc18_umamify.ipynb
+    % source: sc18_umamify-2.0.ipynb
 \end{figure}
 
-As evidenced in Figures \ref{fig:summary-heatmap} and \ref{fig:regions-heatmap}, application performance is sometimes severely degraded for one and only one day in an otherwise unremarkable divergence region.
-Furthermore, this performance loss may only be observed in one of the I/O motifs tested on that day, suggesting a very short-lived issue that disappeared over the course of one or two of the eight daily test jobs.
-The lack of a gradual transition of performance around these transients results in a low-diversity set of observations that limits the confidence of correlation-based classification and places these events beyond the capabilities of the aforementioned correlative approach.
+Another prominent phenomenon in I/O performance variation occurs when application performance severely degraded for one and only one day in an otherwise unremarkable period of time.
+Furthermore, this performance loss may only be observed in one of the I/O motifs tested on that day, suggesting a very short-lived issue that disappeared over the course of one or two of the eight daily performance probes.
+The lack of a consistent performance trend surrounding these transients makes them difficult to correlate with other metrics as was done in the previous section, but understanding the contributors to these transients is critical to informing the design of storage system hardware and software.
 
-To classify these short-term cases, we apply a formalization of the UMAMI approach presented in earlier work~\cite{Lockwood2017}.
-This method contextualizes the performance of a job of interest with respect to other jobs that (1) ran in the same period of time and (2) exhibited the same I/O motif to determine if its performance was truly abnormal given its divergence region.
-Following this, other telemetric data (as described in Section \ref{sec:methods/tokio}) collected during each of the jobs sharing the same divergence region are also compared to determine the limits of normalcy for each metric.
-By identifying all of the metrics which were statistically abnormal at the same time job performance was abnormal, we can establish a list of metrics that \emph{may have} contributed to that job's abnormal performance.
+To address these transients, we apply a simpler binary classification scheme where metrics are identified as either possible contributors or not.
+The performance of a particular performance result (hereafter referred to as the anomalous job) is first contextualized with respect its neighboring jobs, where neighboring jobs are those that
 
-For this work, we partitioned each set of observations $J_{app, rw, sys}$ using $\textup{SMA}_{28}$ and $\textup{SMA}_{7}$ to establish divergence regions sufficiently small to capture individual performance transients.
-Within each divergence region, the slowest performing day is then identified as a probe of interest, and each metric collected during that job's runtime is compared to the values measured during every other job in the same divergence region.
-If the worst value of any given metric was observed at the same time the performance transient was observed, we flag that metric as being a possible contributor to the transient.
-The result of this analysis is zero or more metrics being flagged as potential contributors to poor performance within each divergence region for each application, file system, and read/write mode.
+\begin{enumerate}[leftmargin=*]
+\item ran in the same period of time, so that we comparing jobs that share a common long-term divergence regions, and
+\item exhibited the same I/O motif, so we are not comparing jobs whose performance variation may have resulted from having different I/O patterns
+\end{enumerate}
 
-Aggregating all of the divergence regions' contributors yields a broad overview of the metrics that most commonly coincide with poor performance across all of the test systems.
-This distribution, shown in Figure \ref{fig:contributors-bad-by-system}, reveals that abnormally high bandwidth contention was found to coincide with abnormally poor performance most frequently.
-IOPS contention, which was only measured on Mira, and the incidence of metadata 
+In addition to I/O performance, telemetric data collected from other instrumentation sources throughout the I/O subsystem (as described in Section \ref{sec:methods/tokio}) are also associated with each job.
+With this set of jobs and their accompanying metrics, we then identify each metric associated with the anomalous job whose value was as statistically abnormal as that anomalous job's performance.
+For example, if both the performance and the bandwidth coverage factor for the anomalous job are the lowest values observed amongst its neighboring jobs, we classify bandwidth coverage factor as a possible contributor to that poor performance.
 
-\TODO{Define the metrics in Fig \ref{fig:contributors-bad-by-system}}
+In practice, we define the set of neighboring jobs to be the $N$ observations contained within a divergence region.
+The anomalous job is identified as the observation with the worst performance within its divergence region, and any metrics whose worst values were also observed during the anomalous job are classified as possible contributors.
+The result is zero or more metrics being flagged as potential contributors to poor performance for each divergence region, application, file system, and read/write mode.
 
+The statistical significance of these classifications is a function of how many observations are contained in the divergence region where each positive classification is made.
+For the sake of setting a limit on uncertainty, we discard all divergence regions whose classifications exceed a p-value of 0.10.
+The remaining positive classifications are then grouped by metric and normalized to the number of abnormal jobs where that metric was measured.
+The resulting values describe the frequency with which each metric coincides with poor performance across all of the test systems and are shown in Figure \ref{fig:contributors-bad-by-system}.
 
+This analysis reveals that abnormally high contention for bandwidth and IOPS are the metrics that most frequently coincide with abnormally poor performance.
+Contention on metadata servers and CPU load on data servers was also observed during anomalous jobs to a less significant degree, consistent with the correlation coefficients shown in Figure \ref{fig:trend-correlations}.
+Unlike the correlative analysis, though these data speak directly to the conditions that are present during abnormally poor I/O performance rather than summarize conditions during longer trend periods.
+Although the statistical significance of individual metric classifications is relatively high (${\textup{p-value} < 0.10}$), aggregating the classified metrics over all abnormal jobs reveals significantly greater degrees of significance.
+For example, the findings shown in Figure \ref{fig:contributors-bad-by-system} all demonstrate p-values of $10^{-4}$ or lower.
 
-
-
-
-
-
-\subsection Discussion \label{sec:results/discussion}
+\subsection {Discussion}
+\label{sec:results/discussion}
 
 \TODO{This is where interesting dribs and drabs are winding up.  Do we carve out a separate section about this stuff, or just drop it?}
 
-Finally, our choice of averaging $\textup{SMA}_{short}$ over ${-0.5w_{short} <= t < +0.5w_{short}}$ makes it insensitive to choice of $w_{short}$.
-For this dataset, changing $\textup{SMA}_{short}$ from $\textup{w}_{14}$ to both $\textup{w}_{7}$ and $\textup{w}_{28}$ resulted in no change to the dates bounding the 139-day divergence region.
+Our choice of averaging $\textup{SMA}_{short}$ over ${-0.5w_{short} <= t < +0.5w_{short}}$ makes it insensitive to choice of $w_{short}$.
+For the analysis in Section \ref{sec:results/longterm} changing $\textup{SMA}_{short}$ from $\textup{w}_{14}$ to both $\textup{w}_{7}$ and $\textup{w}_{28}$ resulted in no change to the dates bounding the 139-day divergence region.
 The principal effect of changing $\textup{w}_{short}$ is the number of short regions that arise from the higher-frequency oscillations of $\textup{SMA}_{short}$ around $\textup{SMA}_{long}$.
+
+\TODO{This is where a discussion about performance models having to account for long-term changes to baseline performance should go.  That doesn't seem to fit well into the rest of the narrative though.}
