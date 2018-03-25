@@ -1,7 +1,9 @@
 \section{Results}\label{sec:results}
 
 SMA-based partitioning of performance observations provides a procedural method for grouping time-correlated performance events observed during this experiment.
-In the following sections, we identify regions at different timescales and apply several statistical methods over these regions to identify the breadth of performance anomalies that occur on large-scale production file systems.
+In the following sections, we identify regions at different timescales and apply several statistical methods over these regions to identify the breadth of performance anomalies that occur on large-scale production file systems and gain insights into their causes.
+
+\TODO{This doesn't fit here. We have just introduced $SMA_short$ and $SMA_long$ and don't use them in this example- NJW}
 
 \subsection{Long-term performance evolution} \label{sec:results/longterm}
 
@@ -9,33 +11,33 @@ In the following sections, we identify regions at different timescales and apply
     \centering
     \includegraphics[width=1.0\columnwidth]{longterm-cscratch-hacc}
     \vspace{-.35in}
-    \caption{Performance evolution of HACC file-per-process workload on Cori.  Red line is the overall mean (298 GiB/sec write, 204 GiB/sec read) and blue bars are raw performance measurements.}
+    \caption{Performance evolution of HACC file-per-process workload on \cori.  Red line is the overall mean (298 GiB/sec write, 204 GiB/sec read) and blue bars are raw performance measurements.}
     \label{fig:timeseries-baseline}
     % source: sc18_segments.ipynb
 \end{figure}
 
 The overview of performance observations in Figures \ref{fig:summary-heatmap} shows that performance degradation is often correlated in time, and these correlations can last anywhere from days to months.
-Among the most striking cases of sustained performance degradation are the long periods of reduced performance for the file-per-process write workloads, depicted as dark horizontal bands, between April and August on the Cori dataset.
+Among the most striking cases of sustained performance degradation are the long periods of reduced performance for the file-per-process write workloads, depicted as dark horizontal bands, between April and August on the \cori dataset.
 To characterize the extent and possible sources of these long-term abnormalities, we compare $\textup{SMA}_{short}$ to the global mean performance for each set of $J_{app, rw, sys}$ to define divergence regions where performance remained below the time-independent peak capability of the affected applications.
-The resulting $\textup{SMA}_{short}$ and global mean performance for the HACC workload on Cori is shown in Figure \ref{fig:timeseries-baseline}.
+The resulting $\textup{SMA}_{short}$ and global mean performance for the HACC workload on \cori is shown in Figure \ref{fig:timeseries-baseline}.
 
-Four crossovers occur between $\textup{SMA}_{short}$ and the global mean for the HACC write workload on Cori (Figure \ref{fig:timeseries-baseline}a), two of which define the extent of a long, 139-day divergence region where performance was consistently below the global mean.
+Four crossovers occur between $\textup{SMA}_{short}$ and the global mean for the HACC write workload on \cori (Figure \ref{fig:timeseries-baseline}a), two of which define the extent of a long, 139-day divergence region where performance was consistently below the global mean.
 The other two regions were two days and eighteen days long and were not considered relevant in the context of this long-term analysis.
 In stark contrast to the HACC write workload though, the performance of HACC read workload (Figure \ref{fig:timeseries-baseline}b) was unaffected during this time.
 The longest divergence region identified was 59 days long, and the median width was only four days.
 
 These data demonstrate that the definition of an application's peak I/O performance can vary over the service life of a storage system and its dependent components.
 Furthermore, the difference between the read and write motifs in Figure \ref{fig:timeseries-baseline} indicates that not all workloads are affected by long-term variation equally. 
-In this case of HACC on Cori, write performance was adversely impacted for a period of months while read performance of the same I/O pattern was completely unaffected.
+In this case of HACC on \cori, write performance was adversely impacted for a period of months while read performance of the same I/O pattern was completely unaffected.
 
 In combination with expert knowledge, the root cause for this particular long-term performance regression was retrospectively identified using the boundaries of the 139-day divergence region.
-The intersection between $\textup{SMA}_{short}$ and the global mean in Figure \ref{fig:timeseries-baseline} occured at March 24 and August 10.
-Comparing these dates to the service history of Cori revealed that operating system upgrades occurred on exactly those dates--March 24 and August 10.
+The intersection between $\textup{SMA}_{short}$ and the global mean in Figure \ref{fig:timeseries-baseline} occurred on March 24 and August 10.
+Comparing these dates to the service history of \cori revealed that operating system upgrades occurred on exactly those dates--March 24 and August 10.
 The Lustre versions were updated on those two dates, and the appearance and subsequent disappearance of the anomalous behavior was attributed to a bug in the Lustre software.
 % March 24 was the upgrade of CLE6UP01 to UP03, and August 10 was CLE6UP03 to UP04.  The performance loss in t > Aug 10 is caused by Lustre bug LU-9574
-\TODO{Has this bug affected IOR/fpp R/W the same way? That could confirm (to some extent) that all apps with similar I/O patterns might have suffered from this bug. Has this bug affected shared file patterns similarly? -- Suren
-\\
-Glenn: Yes, Figure \ref{fig:regions-heatmap}b shows that ior/fpp/write was also affected, but none of the other benchmarks were.}
+%\TODO{Has this bug affected IOR/fpp R/W the same way? That could confirm (to some extent) that all apps with similar I/O patterns might have suffered from this bug. Has this bug affected shared file patterns similarly? -- Suren
+%\\
+%Glenn: Yes, Figure \ref{fig:regions-heatmap}b shows that ior/fpp/write was also affected, but none of the other benchmarks were.}
 
 
 
@@ -43,13 +45,13 @@ Glenn: Yes, Figure \ref{fig:regions-heatmap}b shows that ior/fpp/write was also 
 
 
 
-\subsection{Transitions between divergence regions} \label{sec:results/transitions}
+\subsection{Detection and attribution of transitions between divergence regions} \label{sec:results/transitions}
 
 \begin{figure}
     \centering
     \includegraphics[width=1.0\columnwidth]{mira-correlation-region}
     \vspace{-.35in}
-    \caption{Correlation between performance and $CF_{bw}$ in a transition between divergence regions on Mira. (a) shows a region automatically detected using the centroid method, and (b) shows the correlation between performance and $CF_{bw}$ in that region.  Correlation coefficient is $0.565$ and p-value is ${1.48 \times 10^{-11}}$; dashed line in (b) is a linear fit with slope $0.714$ drawn for visual aid.}
+    \caption{Correlation between performance and $CF_{bw}$ in a transition between divergence regions on \mira. (a) shows a region automatically detected using the centroid method, and (b) shows the correlation between performance and $CF_{bw}$ in that region.  Correlation coefficient is $0.565$ and p-value is ${1.48 \times 10^{-11}}$; dashed line in (b) is a linear fit with slope $0.714$ drawn for visual aid.}
     \label{fig:mira-correlation-region}
     % source: sc18_centroids-for-paper.ipynb
 \end{figure}
@@ -57,8 +59,10 @@ Glenn: Yes, Figure \ref{fig:regions-heatmap}b shows that ior/fpp/write was also 
 %Long-term behavior has very low frequency by definition, so analyzing the causes of a few long-term performance depressions by hand (as was done in Section \ref{sec:results/longterm}) is not unreasonable.
 %With smaller values of $w_{long}$, though, this method identifies an increasing number of divergence regions, and characterizing the factors that contribute to these long-term performance depressions using automated statistical techniques becomes imperative.
 
+In order to detect and explain changes in measured performance we need a mechanism to determine if
+
 Performance can be effectively correlated with other metrics collected during I/O-intensive jobs if sufficient variation in performance is observed in the neighboring jobs to establish compelling correlation coefficients.
-To capture regions that exhibit a broad range of performance measurements, we convert pairs of divergence regions into \emph{trend regions} as described in Section \ref{sec:features}.
+To capture regions that exhibit a broad range of performance measurements, we convert pairs of divergence regions into \emph{trend regions} as described in Section \ref{sec:features}. In this section we perform statistical analysis across these trend regions to enable determination of the reasons for performance changes. 
 
 %We then discard divergence regions whose $\textup{SMA}_{short}$ exhibit minimal change between their first and last value in the region.  For each divergence region bounded by times $t_0$ and $t_f$, we then discard those regions where
 %
@@ -73,7 +77,7 @@ To capture regions that exhibit a broad range of performance measurements, we co
 %and $C$ is a cutoff threshold typically between 0.15 and 0.40 whose optimal value is a function of $w_{short}$, $w_{long}$, and how variable the storage system performance tends to be over long periods of time.
 %Given a well-chosen $C$, the result set of divergence regions satisfy both the (\ref{sec:results/transitions/criterion1}) sampling criterion and (\ref{sec:results/transitions/criterion2}) diversity criterion.
 
-To demonstrate the utility of this approach, we apply it to the entirety of performance observations across all benchmarks run on Mira.
+To demonstrate the utility of this approach, we apply it to the entirety of performance observations across all benchmarks run on \mira.
 It identifies eleven divergence regions across the entire year, and for each of these trend regions, we then calculate the Pearson correlation coefficient between the fraction peak performance observations and the other telemetric data associated with each job as described in Section \ref{sec:methods/tokio}.
 
 Discarding all correlations except those with extremely high confidence ($\textup{p-value} > {1.0 \times 10^{-5}}$), only five of the eleven regions exhibited moderate correlation ($R > 0.35$) between performance and any other metric.
@@ -83,7 +87,7 @@ An example of one of these regions and the correlation between performance and b
 During this region, $\textup{SMA}_{short}$ fell from a 0.868 fraction of peak performance to 0.654 over 21 days, representing a significant loss of performance.
 While this correlative analysis cannot attest to the cause of this event, this analysis confidently identified a long-term performance transition between October 25 and November 15 that was strongly correlated ($R = 0.565$) with bandwidth contention.
 The fact that this correlation with performance degradation was observed across all I/O motifs (similar to Figure \ref{fig:regions-heatmap}a) distinguishes it from the case discussed in section \ref{sec:results/longterm} and further indicates a system-wide loss of performance.
-The relative rarity of an event of this magnitude on Mira further suggests that the contentious activity coincident with this performance depression on Mira was likely not caused by routine job traffic and may have been related to year-end activity on the system.
+The relative rarity of an event of this magnitude on \mira further suggests that the contentious activity coincident with this performance depression on \mira was likely not caused by routine job traffic and may have been related to year-end activity on the system.
 
 \begin{figure}
     \centering
@@ -101,15 +105,15 @@ The relative rarity of an event of this magnitude on Mira further suggests that 
     \centering
     \includegraphics[width=1.0\columnwidth]{cscratch-bimodal-fsaveosscpu}
     \vspace{-.35in}
-    \caption{Regions of negative correlation (red) and positive correlation (blue) between fraction peak performance and data server load during trend regions identified on Cori.
-    SMAs for Cori's HACC write workload also shown to illustrate the coincidence of a long-term performance issue with the direction of correlation.}
+    \caption{Regions of negative correlation (red) and positive correlation (blue) between fraction peak performance and data server load during trend regions identified on \cori.
+    SMAs for \cori's HACC write workload also shown to illustrate the coincidence of a long-term performance issue with the direction of correlation.}
     \label{fig:cscratch-bimodal-fsaveosscpu}
     % source: sc18_centroids-allsystems.ipynb
 \end{figure}
 
 Because the results found in Figure \ref{fig:mira-correlation-region} are only governed by a single input parameter (the maximum p-value to show), it can be trivially extended to all other storage systems tested in this study with no additional parametric tuning.
 Doing so results in a set of trend regions where performance was found to correlate moderately with other measured parameters as the performance evolved, providing a more holistic view of the factors that may contribute to these longer-term performance instabilities.
-The results of this analysis are shown in Figure \ref{fig:trend-correlations} which confirms that moderate correlation between performance and the bandwidth coverage factor is a consistent feature of trend regions across Mira, Cori, and Edison.
+The results of this analysis are shown in Figure \ref{fig:trend-correlations} which confirms that moderate correlation between performance and the bandwidth coverage factor is a consistent feature of trend regions across \mira, \cori, and \edison.
 Although intuitive at the scale of a single performance transient, the fact that these correlations were found over trend regions indicate that bandwidth contention from \emph{sustained workloads} often coincide with sustained performance losses.
 This is particularly relevant to the increasing fraction of experimental and observational data that is being processed on modern HPC platforms; as the volume of data being continually streamed from large-scale scientific instruments increases, the effects of sustained bandwidth contention are likely to become increasingly prominent.
 
@@ -139,7 +143,7 @@ The positive correlation between performance and CPU load is consistent with the
     \includegraphics[width=1.0\columnwidth]{contributors-bad-by-system}
     \vspace{-.35in}
     \caption{Metrics that correlated with poor I/O performance across all file systems and benchmarks tested normalized to the number of probes during which each metric was measured.
-    Mira was the only system for which IOPS coverage factor was measured. 
+    \mira was the only system for which IOPS coverage factor was measured. 
     These data represent 490 anomalous jobs, and 80 jobs (16\%) had no metrics classified as contributors.
     Percentages do not add up to 100\% because multiple metrics are often classified as contributors for a single anomalous job.
     }

@@ -1,6 +1,15 @@
 \section{Experimental Setup}\label{sec:methods}
 
-\begin{figure*}[t]
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\columnwidth]{summary-boxplots}
+    \vspace{-.15in}
+    \caption{I/O performance grouped by test applications and read(R)/write(W) mode.  Whiskers represent the 5th and 95th percentiles.}
+    \label{fig:summary-boxplots}
+%   \vspace{-.3in}
+\end{figure}
+
+\begin{figure*}
     \centering
     \includegraphics[width=0.90\linewidth]{summary-heatmap}
     \vspace{-.2in}
@@ -51,19 +60,19 @@ production-quality file system monitoring tools for Lustre and GPFS deployments,
 \begin{tabular}{|c|c|c|c|c|}
 \hline
                                                                                    & \textbf{Platform}                                                              & \textbf{FS Name (Type)} & \textbf{Size} & \textbf{Peak Rate}     \\ \hline
-\multirow{3}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}Edison\\ (NERSC)\end{tabular}}} & \multirow{3}{*}{\begin{tabular}[c]{@{}c@{}}Cray XC30\\ 5,586 CNs\end{tabular}} & scratch1                & 2.2 PiB       & 48 GB/sec              \\ \cline{3-5} 
+\multirow{3}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}\edison\\ (\nersc)\end{tabular}}} & \multirow{3}{*}{\begin{tabular}[c]{@{}c@{}}Cray XC30\\ 5,586 CNs\end{tabular}} & scratch1                & 2.2 PiB       & 48 GB/sec              \\ \cline{3-5} 
                                                                                    &                                                                                & scratch2                & 2.2 PiB       & 48 GB/sec              \\ \cline{3-5} 
                                                                                    &                                                                                & scratch3                & 3.3 PiB       & 72 GB/sec              \\ \hline
-\textbf{\begin{tabular}[c]{@{}c@{}}Cori\\ (NERSC)\end{tabular}}                    & \begin{tabular}[c]{@{}c@{}}Cray XC40\\ 12,076 CNs\end{tabular}                 & cscratch                & 28 PiB      & 744 GB/sec \\ \hline
-\textbf{\begin{tabular}[c]{@{}c@{}}Mira\\ (ALCF)\end{tabular}}                     & \begin{tabular}[c]{@{}c@{}}IBM BG/Q\\ 49,152 CNs\end{tabular}                  & mira-fs1                & 7.0 PiB       & 90 GB/sec              \\ \hline
+\textbf{\begin{tabular}[c]{@{}c@{}}\cori\\ (\nersc)\end{tabular}}                    & \begin{tabular}[c]{@{}c@{}}Cray XC40\\ 12,076 CNs\end{tabular}                 & cscratch                & 28 PiB      & 744 GB/sec \\ \hline
+\textbf{\begin{tabular}[c]{@{}c@{}}\mira\\ (\alcf)\end{tabular}}                     & \begin{tabular}[c]{@{}c@{}}IBM BG/Q\\ 49,152 CNs\end{tabular}                  & mira-fs1                & 7.0 PiB       & 90 GB/sec              \\ \hline
 \end{tabular}
 \end{table}
 
-For this study, we deployed \tokio on the Edison and Cori systems at NERSC and the Mira system at the ALCF. Each of these platforms, along with their corresponding file systems analyzed as part of this study, are briefly described in Table~\ref{tab:platform-descriptions}.
+For this study, we deployed \tokio on the \edison and \cori systems at \nersc and the \mira system at the \alcf. Each of these platforms, along with their corresponding file systems analyzed as part of this study, are briefly described in Table~\ref{tab:platform-descriptions}.
 
 Darshan is installed and automatically enabled on each of these systems, transparently characterizing the I/O workloads of a large portion of  each system's job population. 
-NERSC has deployed LMT for full-time monitoring of the Lustre scratch volumes on both Edison and Cori, while the ALCF has deployed ggiostat to do the same with numerous GPFS volumes on Mira.
-NERSC systems additionally utilize the Slurm job scheduler, which allows for the capture of detailed metadata for every job executed on Edison or Cori.
+\nersc has deployed LMT for full-time monitoring of the Lustre scratch volumes on both \edison and \cori, while the \alcf has deployed ggiostat to do the same with numerous GPFS volumes on \mira.
+\nersc systems additionally utilize the Slurm job scheduler, which allows for the capture of detailed metadata for every job executed on \edison or \cori.
 We additionally deployed \tokio on each of these systems, configuring it to leverage these existing monitoring sources in-place to provide a holistic view of I/O performance on each system.
 
 \subsection{Active I/O Performance Probes}\label{sec:methods/benchmarks}
@@ -81,11 +90,11 @@ We additionally deployed \tokio on each of these systems, configuring it to leve
 \label{tab:benchmark-motifs}
 \end{table}
 
-\begin{figure}[b]
+\begin{figure}
     \centering
     \includegraphics[width=0.90\linewidth]{regions-heatmap}
     \vspace{-.2in}
-    \caption{Examples of structure in the fraction of peak performance observations.  Color scale is the same as that in Figure \ref{fig:summary-heatmap}.  In (a), the vertical band on Sept 26 corresponds to a transient system-wide degradation on Mira.  The horizontal bands for the IOR file-per-process write workload (IOR/fpp(W)) and HACC write workload (HACC(W)) in (b) show a sustained performance problem for file-per-process write workloads on Cori.}
+    \caption{Examples of structure in the fraction of peak performance observations.  Color scale is the same as that in Figure \ref{fig:summary-heatmap}.  In (a), the vertical band on Sept 26 corresponds to a transient system-wide degradation on \mira.  The horizontal bands for the IOR file-per-process write workload (IOR/fpp(W)) and HACC write workload (HACC(W)) in (b) show a sustained performance problem for file-per-process write workloads on \cori.}
     \label{fig:regions-heatmap}
 \end{figure}
 
@@ -93,13 +102,13 @@ To measure the performance variation on the systems described in Section \ref{se
 We utilize these benchmarking runs as another ad-hoc monitoring source for this study, actively probing the I/O performance of each analyzed file system on a daily basis across a range of representative I/O motifs.
 The four underlying benchmarks (VPIC, BDCATS, HACC, and IOR) were configured to run identically to previous work~\cite{Lockwood2017} with the goal of using a substantial fraction of the I/O subsystem's peak bandwidth while using minimal production cycles.
 These performance probes were chosen to exercise a variety of I/O workloads and covered the four I/O motifs listed in Table \ref{tab:benchmark-motifs} in both read and write modes.
-The resulting 366-day experiment generated 11,986 performance observations across Mira, Cori, and Edison, reflecting 81.9\% of the intended probes having generated results.
+The resulting 366-day experiment generated 11,986 performance observations across \mira, \cori, and \edison, reflecting 81.9\% of the intended probes having generated results.
 The remaining 18.1\% of missing probes resulted from system downtime, malfunctions of component-level monitoring tools or the automated test scheduling, queue wait times that exceeded 24 hours, and benchmarks exceeding their walltime.
 The fact that no results were obtained for jobs that ran so slowly that they exceeded their reserved walltime is significant in that this dataset does not capture the absolute worst performance observed.
 Although not ideal, this reflects the realities of daily testing on production systems.
-\TODO{Add details of the number of processes the benchmarks ran with, and how the file systems are set up, i.e., number of OSTs on Cori, number of I/O nodes used on Mira 
-
-Edison was mentioned in the previous paragraph; Figure 1 doesn't have the results. -- Suren}
+\TODO{Add details of the number of processes the benchmarks ran with, and how the file systems are set up, i.e., number of OSTs on \cori, number of I/O nodes used on \mira 
+\\
+\edison was mentioned in the previous paragraph; Figure 1 doesn't have the results. -- Suren}
 
 % \TODO{Things that are important here: behavior over time, grouping data sources in a way that helps understand scope, focusing on fundamental \emph{changes} in performance rather than steady state, everything in one view.}
 
@@ -110,32 +119,29 @@ This fraction of peak performance $j$ is defined as the absolute performance (in
 \begin{equation}
 J_{app, rw, sys} = \big\{ j_{app} \cap j_{rw} \cap j_{sys} \big \}
 \end{equation}
-\TODO{A little lost in Equation 1, may add more explanations on $j_{app}$, $j_{rw}$ and $j_{sys}$ -- Teng}
+\TODO{A little lost in Equation 1, may add more explanations on $j_{app}$, $j_{rw}$ and $j_{sys}$ -- Teng 
+I don't think the set notation adds anything - Nick.}
 \noindent
 and $app$, $rw$, and $sys$ correspond to the three performance variables mentioned above.
 
-An overview of the fraction of peak performance for two of the five systems tested is shown in Fig. \ref{fig:summary-heatmap}.
-These data demonstrate that the steady state for performance on production file systems is highly dynamic; were this not the case, all observations shown in Fig. \ref{fig:summary-heatmap} would have an even tone.
-In addition, performance variation is clearly not randomly distributed throughout the year, and the data exhibits a significant a mount of correlated structure.
-Figure \ref{fig:regions-heatmap} highlights two subsets of Fig. \ref{fig:summary-heatmap} and demonstrate three phenomena commonly observed:
+An overview of the fraction of peak performance for two of the five systems tested is shown in Fig. \ref{fig:summary-boxplots} and demonstrates that the steady state for performance on production file systems is highly dynamic.
+Further decomposition of two of these performance distributions is shown in Fig. \ref{fig:summary-heatmap} and reveals that performance variation is not randomly distributed over the year.
+A significant amount of time-correlated structure, highlighted in Fig. \ref{fig:summary-heatmap}, demonstrates three phenomena commonly observed:
 
 \begin{enumerate}[leftmargin=*]
-\item Dark vertical bands, exemplified in the Mira data in Fig. \ref{fig:regions-heatmap}, represent transient system-wide issues that resulted in a uniform loss of performance for all applications tested that day.
-\item Dark horizontal bands, shown in the Cori data, indicate a long-term degradation in performance that disproportionately affects a specific I/O motif or reads or writes.
+\item Dark vertical bands, exemplified in the \mira data in Fig. \ref{fig:regions-heatmap}, represent transient system-wide issues that resulted in a uniform loss of performance for all applications tested that day.
+\item Dark horizontal bands, shown in the \cori data, indicate a long-term degradation in performance that disproportionately affects a specific I/O motif or reads or writes.
 \item Isolated dark blocks represent individual application runs where performance was poor despite an absence of system-wide transients (vertical bands) or systematic, motif-specific problems (horizontal bands).
 \end{enumerate}
 
 \TODO{Insert some smooth one-sentence transition into next section; perhaps mention that we don't consider the aforementioned results as surprising and the best is yet to come.}
 
+The preponderance of these time-correlated phenomena underscore the need to consider variation as a function of time.
+What may qualify as abnormally poor performance during one part of the year may be the baseline expected performance during another, and being able to understand these different regions of performance and variation is essential toward identifying and remedying their root causes.
+It is therefore imperative to have a systematic approach towards identifying different regions of I/O performance to differentiate long-term performance degradation from shorter-term and transient variation.
+In the following section, we describe a general approach to address this problem of partitioning performance measurements into regions of significant performance trends.
+
 \TODO{In addition to above, maybe worth pointing out this is only showing results based on Darshan data, so we haven't even crossed into holistic territory, where datasets become much larger and difficult to analyze. -SS}
 
 \TODO{Need to add definition of coverage factors somewhere}
 
-%\begin{figure}[t]
-%    \centering
-%    \includegraphics[width=1.0\columnwidth]{summary-boxplots}
-%    \vspace{-.35in}
-%    \caption{I/O performance grouped by test applications and read(R)/write(W) mode.  Whiskers represent the 5th and 95th percentiles.}
-%    \label{fig:summary-boxplots}
-%%   \vspace{-.3in}
-%\end{figure}\
