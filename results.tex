@@ -51,7 +51,9 @@ The Lustre versions were updated on those two dates, and the appearance and subs
     \centering
     \includegraphics[width=1.0\columnwidth]{mira-correlation-region}
     \vspace{-.35in}
-    \caption{Correlation between performance and $CF_{bw}$ in a transition between divergence regions on \mira. (a) shows a region automatically detected using the centroid method, and (b) shows the correlation between performance and $CF_{bw}$ in that region.  Correlation coefficient is $0.565$ and p-value is ${1.48 \times 10^{-11}}$; dashed line in (b) is a linear fit with slope $0.714$ drawn for visual aid.}
+    \caption{Correlation between performance and $CF_{bw}$ in a transition between divergence regions on \mira for all I/O motifs combined.
+    (a) shows a region automatically detected using the centroid method, and (b) shows the correlation between performance and $CF_{bw}$ in that region.
+    Correlation coefficient is $0.565$ and p-value is ${1.48 \times 10^{-11}}$; dashed line in (b) is a linear fit with slope $0.714$ drawn for visual aid.}
     \label{fig:mira-correlation-region}
     % source: sc18_centroids-for-paper.ipynb
 \end{figure}
@@ -59,10 +61,7 @@ The Lustre versions were updated on those two dates, and the appearance and subs
 %Long-term behavior has very low frequency by definition, so analyzing the causes of a few long-term performance depressions by hand (as was done in Section \ref{sec:results/longterm}) is not unreasonable.
 %With smaller values of $w_{long}$, though, this method identifies an increasing number of divergence regions, and characterizing the factors that contribute to these long-term performance depressions using automated statistical techniques becomes imperative.
 
-In order to detect and explain changes in measured performance we need a mechanism to determine if
-
-Performance can be effectively correlated with other metrics collected during I/O-intensive jobs if sufficient variation in performance is observed in the neighboring jobs to establish compelling correlation coefficients.
-To capture regions that exhibit a broad range of performance measurements, we convert pairs of divergence regions into \emph{trend regions} as described in Section \ref{sec:features}. In this section we perform statistical analysis across these trend regions to enable determination of the reasons for performance changes. 
+In order to detect and explain changes in measured performance we need to correlate the measured performance with the other telemetric data described in Section~\ref{sec:methods}. To begin this analysis we convert pairs of divergence regions into \emph{trend regions} as described in Section \ref{sec:features}. We then perform statistical analysis across these trend regions to enable determination of the reasons for performance changes. 
 
 %We then discard divergence regions whose $\textup{SMA}_{short}$ exhibit minimal change between their first and last value in the region.  For each divergence region bounded by times $t_0$ and $t_f$, we then discard those regions where
 %
@@ -78,15 +77,17 @@ To capture regions that exhibit a broad range of performance measurements, we co
 %Given a well-chosen $C$, the result set of divergence regions satisfy both the (\ref{sec:results/transitions/criterion1}) sampling criterion and (\ref{sec:results/transitions/criterion2}) diversity criterion.
 
 To demonstrate the utility of this approach, we apply it to the entirety of performance observations across all benchmarks run on \mira.
-It identifies eleven divergence regions across the entire year, and for each of these trend regions, we then calculate the Pearson correlation coefficient between the fraction peak performance observations and the other telemetric data associated with each job as described in Section \ref{sec:methods/tokio}.
+Our analysis identifies eleven divergence regions across the entire year, and for each of the corresponding trend regions, we then calculate the Pearson correlation coefficient between the fraction peak performance observations and the other telemetric data associated with each job as described in Section \ref{sec:methods/tokio}.
+
+\TODO{These 11 were across all benchmarks ? Read and Write equally ?- NJW}
 
 Discarding all correlations except those with extremely high confidence ($\textup{p-value} > {1.0 \times 10^{-5}}$), only five of the eleven regions exhibited moderate correlation ($R > 0.35$) between performance and any other metric.
-Furthermore, the bandwidth coverage factor was the sole metric that showed compelling correlation with performance in these five regions, with correlation coefficients ranging from +0.399 to +0.590.
+Furthermore, the bandwidth coverage factor was the sole metric that showed compelling correlation with performance in these five regions, with correlation coefficients ranging from +0.399 to +0.590. 
 
 An example of one of these regions and the correlation between performance and bandwidth coverage factor observed within is shown in Figure \ref{fig:mira-correlation-region}.
 During this region, $\textup{SMA}_{short}$ fell from a 0.868 fraction of peak performance to 0.654 over 21 days, representing a significant loss of performance.
-While this correlative analysis cannot attest to the cause of this event, this analysis confidently identified a long-term performance transition between October 25 and November 15 that was strongly correlated ($R = 0.565$) with bandwidth contention.
-The fact that this correlation with performance degradation was observed across all I/O motifs (similar to Figure \ref{fig:regions-heatmap}a) distinguishes it from the case discussed in section \ref{sec:results/longterm} and further indicates a system-wide loss of performance.
+While this correlative analysis does not prove the cause of this event, this analysis confidently identified a long-term performance transition between October 25 and November 15 that was strongly correlated ($R = 0.565$) with bandwidth contention.
+Additionally, this correlation with performance degradation was observed across {\emph all} I/O motifs (similar to Figure \ref{fig:regions-heatmap}a) distinguishes it from the case discussed in section \ref{sec:results/longterm} and further indicates a system-wide loss of performance.
 The relative rarity of an event of this magnitude on \mira further suggests that the contentious activity coincident with this performance depression on \mira was likely not caused by routine job traffic and may have been related to year-end activity on the system.
 
 \begin{figure}
@@ -111,19 +112,23 @@ The relative rarity of an event of this magnitude on \mira further suggests that
     % source: sc18_centroids-allsystems.ipynb
 \end{figure}
 
-Because the results found in Figure \ref{fig:mira-correlation-region} are only governed by a single input parameter (the maximum p-value to show), it can be trivially extended to all other storage systems tested in this study with no additional parametric tuning.
-Doing so results in a set of trend regions where performance was found to correlate moderately with other measured parameters as the performance evolved, providing a more holistic view of the factors that may contribute to these longer-term performance instabilities.
-The results of this analysis are shown in Figure \ref{fig:trend-correlations} which confirms that moderate correlation between performance and the bandwidth coverage factor is a consistent feature of trend regions across \mira, \cori, and \edison.
+%The results found in Figure \ref{fig:mira-correlation-region} are only governed by a single input parameter (the maximum p-value to show), it can be trivially extended to all other storage systems tested in this study with no additional parametric tuning.
+%Doing so results in a set of trend regions where performance was found to correlate moderately with other measured parameters as the performance evolved, providing a more holistic view of the factors that may contribute to these longer-term performance instabilities.
+
+Next we apply the same correlation analysis to the other machines in our study, again only keeping correlations with an extremely high confidence ($\textup{p-value} > {1.0 \times 10^{-5}}$). 
+The results of this analysis are shown in Figure \ref{fig:trend-correlations}. There is Moderate correlation between performance and the bandwidth coverage factor for all the trend regions across \mira, \cori, and \edison.
 Although intuitive at the scale of a single performance transient, the fact that these correlations were found over trend regions indicate that bandwidth contention from \emph{sustained workloads} often coincide with sustained performance losses.
 This is particularly relevant to the increasing fraction of experimental and observational data that is being processed on modern HPC platforms; as the volume of data being continually streamed from large-scale scientific instruments increases, the effects of sustained bandwidth contention are likely to become increasingly prominent.
 
-Another noteworthy feature that this method revealed is the bimodality of correlation between performance and the CPU load of the file system data servers ("Data Server Load" in Figure \ref{fig:trend-correlations}).
-Had this correlation analysis been performed without the benefit of partitioning over trend regions, the regions of positive and negative correlation would have obfuscated each other in the net result.
+Another noteworthy feature that this method revealed is the bimodality of correlation between performance and the CPU load of the file system data servers ("Data Server Load" in Figure \ref{fig:trend-correlations}) on the Lustre filesystem based machines.
+
 As shown in Figure \ref{fig:cscratch-bimodal-fsaveosscpu}, the bimodality of the correlation matches the biomodality observed in the HACC write workload on the affected storage systems.
 During the long-term performance regression discussed in Section \ref{sec:results/longterm}, high CPU load on the Lustre OSSs coincided with low performance of the I/O performance probes.
 As soon as performance was restored on August 10, the relationship reversed, and high CPU load was observed favorably with respect to performance.
 The positive correlation between performance and CPU load is consistent with the data servers using CPUs primarily to service incoming I/O requests, whereas the negative correlation indicates that another CPU load (as may be caused by an algorithmic bug) was present and competed with the data servers' ability to use CPU to service those same requests.
+Had this correlation analysis been performed without the benefit of partitioning over trend regions, the regions of positive and negative correlation would have obfuscated each other in the net result. 
 
+\TODO{There is no text that talks about the Open CF or fullness parts of the figure here- what do you want to say?}
 
 \subsection{Transient performance loss} \label{sec:results/shortterm}
 
@@ -151,28 +156,25 @@ The positive correlation between performance and CPU load is consistent with the
     % source: sc18_umamify-2.0.ipynb
 \end{figure}
 
-Another prominent phenomenon in I/O performance variation occurs when application performance severely degraded for one and only one day in an otherwise unremarkable period of time.
-Furthermore, this performance loss may only be observed in one of the I/O motifs tested on that day, suggesting a very short-lived issue that disappeared over the course of one or two of the eight daily performance probes.
-The lack of a consistent performance trend surrounding these transients makes them difficult to correlate with other metrics as was done in the previous section, but understanding the contributors to these transients is critical to informing the design of storage system hardware and software.
+As well as being able to determine long-term performance issues it would also be advantageous to determine the reasons why I/O performance is severely degraded for one and only one day in an otherwise unremarkable period of time.
+Such performance losses may only be observed in one of the I/O motifs tested on that day, suggesting a very short-lived issue that disappeared over the course of one or two of the eight daily performance probes.
+The lack of a consistent performance trend surrounding these transients makes them difficult to correlate with other metrics as was done in the previous section, a different approach will be required. Understanding the contributors to these transients is critical to informing the design of storage system hardware and software as well, eventually, mitigating them. 
 
-To address these transients, we apply a simpler binary classification scheme where metrics are identified as either possible contributors or not.
 The performance of a particular performance result (hereafter referred to as the anomalous job) is first contextualized with respect its neighboring jobs, where neighboring jobs are those that
-
 \begin{enumerate}[leftmargin=*]
-\item ran in the same period of time, so that we comparing jobs that share a common long-term divergence regions, and
+\item ran in the same period of time, so that we comparing jobs in the same long-term divergence regions, and
 \item exhibited the same I/O motif, so we are not comparing jobs whose performance variation may have resulted from having different I/O patterns
 \end{enumerate}
 
 In addition to I/O performance, telemetric data collected from other instrumentation sources throughout the I/O subsystem (as described in Section \ref{sec:methods/tokio}) are also associated with each job.
-With this set of jobs and their accompanying metrics, we then identify each metric associated with the anomalous job whose value was as statistically abnormal as that anomalous job's performance.
-For example, if both the performance and the bandwidth coverage factor for the anomalous job are the lowest values observed amongst its neighboring jobs, we classify bandwidth coverage factor as a possible contributor to that poor performance.
+\TODO{How does this work if one jobs spans more than one time point in a telemetric series of data? - NJW}
+The anomalous job is then identified as the observation with the worst performance within its divergence region, and any metrics whose worst values were also observed during the anomalous job are classified as possible contributors.
+The result is zero or more metrics being flagged as potential contributors to poor performance for each divergence region, application, file system, and read/write mode. For example, if both the performance and the bandwidth coverage factor for the anomalous job are the lowest values observed amongst its neighboring jobs, we classify bandwidth coverage factor as a possible contributor to that poor performance.
 
-In practice, we define the set of neighboring jobs to be the $N$ observations contained within a divergence region.
-The anomalous job is identified as the observation with the worst performance within its divergence region, and any metrics whose worst values were also observed during the anomalous job are classified as possible contributors.
-The result is zero or more metrics being flagged as potential contributors to poor performance for each divergence region, application, file system, and read/write mode.
+%To address these transients, we apply a simple binary classification scheme where metrics are identified as either possible contributors or not.
 
 The statistical significance of these classifications is a function of how many observations are contained in the divergence region where each positive classification is made.
-For the sake of setting a limit on uncertainty, we discard all divergence regions whose classifications exceed a p-value of 0.10.
+For the sake of setting a limit on uncertainty, we discard all divergence regions whose classifications exceed a p-value of 0.10. \TODO{where is the p-value classification of a divergence region defined ?}
 The remaining positive classifications are then grouped by metric and normalized to the number of abnormal jobs where that metric was measured.
 The resulting values describe the frequency with which each metric coincides with poor performance across all of the test systems and are shown in Figure \ref{fig:contributors-bad-by-system}.
 
@@ -181,6 +183,10 @@ Contention on metadata servers and CPU load on data servers was also observed du
 Unlike the correlative analysis, though these data speak directly to the conditions that are present during abnormally poor I/O performance rather than summarize conditions during longer trend periods.
 Although the statistical significance of individual metric classifications is relatively high (${\textup{p-value} < 0.10}$), aggregating the classified metrics over all abnormal jobs reveals significantly greater degrees of significance.
 For example, the findings shown in Figure \ref{fig:contributors-bad-by-system} all demonstrate p-values of $10^{-4}$ or lower.
+
+
+
+
 
 \subsection {Discussion}
 \label{sec:results/discussion}

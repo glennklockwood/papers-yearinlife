@@ -55,16 +55,16 @@ production-quality file system monitoring tools for Lustre and GPFS deployments,
 % \usepackage{multirow}
 \begin{table}
 \centering
-\caption{Description of NERSC and ALCF test platforms.}
+\caption{Description of \nersc and \alcf test platforms.}
 \label{tab:platform-descriptions}
 \begin{tabular}{|c|c|c|c|c|}
 \hline
                                                                                    & \textbf{Platform}                                                              & \textbf{FS Name (Type)} & \textbf{Size} & \textbf{Peak Rate}     \\ \hline
-\multirow{3}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}\edison\\ (\nersc)\end{tabular}}} & \multirow{3}{*}{\begin{tabular}[c]{@{}c@{}}Cray XC30\\ 5,586 CNs\end{tabular}} & scratch1                & 2.2 PiB       & 48 GB/sec              \\ \cline{3-5} 
-                                                                                   &                                                                                & scratch2                & 2.2 PiB       & 48 GB/sec              \\ \cline{3-5} 
-                                                                                   &                                                                                & scratch3                & 3.3 PiB       & 72 GB/sec              \\ \hline
-\textbf{\begin{tabular}[c]{@{}c@{}}\cori\\ (\nersc)\end{tabular}}                    & \begin{tabular}[c]{@{}c@{}}Cray XC40\\ 12,076 CNs\end{tabular}                 & cscratch                & 28 PiB      & 744 GB/sec \\ \hline
-\textbf{\begin{tabular}[c]{@{}c@{}}\mira\\ (\alcf)\end{tabular}}                     & \begin{tabular}[c]{@{}c@{}}IBM BG/Q\\ 49,152 CNs\end{tabular}                  & mira-fs1                & 7.0 PiB       & 90 GB/sec              \\ \hline
+\multirow{3}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}\edison\\ (\nersc)\end{tabular}}} & \multirow{3}{*}{\begin{tabular}[c]{@{}c@{}}Cray XC30\\ 5,586 CNs\end{tabular}} & \scratchone                & 2.2 PiB       & 48 GB/sec              \\ \cline{3-5} 
+                                                                                   &                                                                                & \scratchtwo                & 2.2 PiB       & 48 GB/sec              \\ \cline{3-5} 
+                                                                                   &                                                                                & \scratchthree                & 3.3 PiB       & 72 GB/sec              \\ \hline
+\textbf{\begin{tabular}[c]{@{}c@{}}\cori\\ (\nersc)\end{tabular}}                    & \begin{tabular}[c]{@{}c@{}}Cray XC40\\ 12,076 CNs\end{tabular}                 & \cscratch                & 28 PiB      & 744 GB/sec \\ \hline
+\textbf{\begin{tabular}[c]{@{}c@{}}\mira\\ (\alcf)\end{tabular}}                     & \begin{tabular}[c]{@{}c@{}}IBM BG/Q\\ 49,152 CNs\end{tabular}                  & \mirafsone                & 7.0 PiB       & 90 GB/sec              \\ \hline
 \end{tabular}
 \end{table}
 
@@ -115,14 +115,16 @@ Although not ideal, this reflects the realities of daily testing on production s
 I/O performance is known to vary as a function of (1) the application I/O pattern, (2) whether the application is reading or writing, and (3) the architecture of the system on which I/O is happening~\cite{Lockwood2017}.
 To remove the effects of these factors and enable us to focus on performance \emph{variation}, we therefore express the performance of each of the 11,986 observations $j$ in terms of its \emph{fraction of peak performance}.
 This fraction of peak performance $j$ is defined as the absolute performance (in bytes/sec) of $j$ divided by the maximum absolute performance observed within the set $J_{app, rw, sys}$, where
-
-\begin{equation}
-J_{app, rw, sys} = \big\{ j_{app} \cap j_{rw} \cap j_{sys} \big \}
-\end{equation}
-\TODO{A little lost in Equation 1, may add more explanations on $j_{app}$, $j_{rw}$ and $j_{sys}$ -- Teng 
-I don't think the set notation adds anything - Nick.}
-\noindent
-and $app$, $rw$, and $sys$ correspond to the three performance variables mentioned above.
+%
+%\begin{equation}
+%J_{app, rw, sys} = \big\{ j_{app} \cap j_{rw} \cap j_{sys} \big \}
+%\end{equation}
+%\TODO{A little lost in Equation 1, may add more explanations on $j_{app}$, $j_{rw}$ %and $j_{sys}$ -- Teng 
+%I don't think the set notation adds anything - Nick.}
+%\noindent
+%and 
+%
+$app$, $rw$, and $sys$ correspond to the three performance variables mentioned above.
 
 An overview of the fraction of peak performance for two of the five systems tested is shown in Fig. \ref{fig:summary-boxplots} and demonstrates that the steady state for performance on production file systems is highly dynamic.
 Further decomposition of two of these performance distributions is shown in Fig. \ref{fig:summary-heatmap} and reveals that performance variation is not randomly distributed over the year.
@@ -134,7 +136,7 @@ A significant amount of time-correlated structure, highlighted in Fig. \ref{fig:
 \item Isolated dark blocks represent individual application runs where performance was poor despite an absence of system-wide transients (vertical bands) or systematic, motif-specific problems (horizontal bands).
 \end{enumerate}
 
-\TODO{Insert some smooth one-sentence transition into next section; perhaps mention that we don't consider the aforementioned results as surprising and the best is yet to come.}
+% \TODO{Insert some smooth one-sentence transition into next section; perhaps mention that we don't consider the aforementioned results as surprising and the best is yet to come.} DONE - 2018-03-25 gkl
 
 The preponderance of these time-correlated phenomena underscore the need to consider variation as a function of time.
 What may qualify as abnormally poor performance during one part of the year may be the baseline expected performance during another, and being able to understand these different regions of performance and variation is essential toward identifying and remedying their root causes.
@@ -144,4 +146,3 @@ In the following section, we describe a general approach to address this problem
 \TODO{In addition to above, maybe worth pointing out this is only showing results based on Darshan data, so we haven't even crossed into holistic territory, where datasets become much larger and difficult to analyze. -SS}
 
 \TODO{Need to add definition of coverage factors somewhere}
-
