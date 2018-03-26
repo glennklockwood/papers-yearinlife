@@ -1,23 +1,24 @@
 \section{Methodology}\label{sec:methods}
 
-\TODO{How about changing this to ``Methodology'' section and have 'Data collection', 'Data characteristics', and 'Data analysis methods' as subsections, to make it sound this is the novel contribution of this effort? -- Suren}
+Previous studies have demonstrated the feasibility of 
+holistic HPC I/O analysis and used it to observe anomalous I/O behavior and
+contributing factors over short time scales\cite{Lockwood2017}. This methodology was later formalized in the specification of the \tokio (\tokiolong) framework~\cite{Lockwood2018tokio}. 
+In this work, we use the \tokio methodology to collect and analyze a complete
+year of I/O metrics on multiple production platforms.
 
-\TODO{Need to accommodate double-blind review requirements while referring to \tokio.}
+In the following sections, we provide an overview of \tokio, describe the production HPC platforms we have deployed it on, and describe our methodology for using a suite of daily I/O performance probes for active sampling of file system performance.
 
-Previously, we have demonstrated the feasibility of a general approach to holistic I/O analysis of HPC systems and applied that approach over a month-long benchmarking study to examine specific cases of anomalous I/O behavior and to deduce potential factors contributing to this behavior~\cite{Lockwood2017}. We later formalized our methodology with the specification of the \tokio (\tokiolong) framework~\cite{Lockwood2018tokio}. For this work, we build on our prior research and use \tokio to analyze a massive amount of monitoring data culminating from a year-long I/O performance study conducted on a number of leadership-class HPC systems. 
-
-In the following sections, we provide an overview of \tokio, describe the production HPC platforms we have deployed it on at NERSC and the ALCF, and describe our methodology for using a suite of daily I/O performance probes for active sampling of file system performance.
-
-\subsection{\tokio Overview}\label{sec:methods/tokio}
+\subsection{Data collection framework}\label{sec:methods/tokio}
 
 %A holistic approach to understanding I/O behavior is a necessity given the move towards more complicated I/O architectures (in terms of number of constituent components, like high-level I/O libraries, I/O middleware systems, and low-level storage hardware) on these systems. \tokio's primary goal is to arm system users, administrators, and I/O researchers with the necessary tools to navigate this complexity and to make meaningful observations into how workloads interact with the I/O subsystem.
 
 \tokio is a framework facilitating holistic characterization and analysis of I/O workloads running on today's production HPC systems. Conceptually, it provides an abstraction layer between component-level monitoring tools already deployed on HPC platforms and higher-level I/O analysis tools that utilize this data. The fundamental roles of the \tokio framework are to: collate monitoring data from distinct components; integrate and normalize the data from these components; and present coherent interfaces for indexing and accessing this data.
 \TODO{Maybe a simple component diagram is useful if we have the space -SS}
 
-\tokio boasts a modularized software architecture and a generic data format specification for system monitoring data, simplifying portability to new HPC platforms. Software modularity is accomplished by defining abstract \textit{connectors} to monitoring sources, each exposing interfaces for extracting relevant data in a format that is digestible by \tokio.  A generic timeseries format for monitoring data is also provided by \tokio, allowing for semantically consistent access to data originating from many distinct components (each with its own native format, scope, and granularity). This data format designates a number of metrics that are likely common to classes of monitoring components (e.g., file system monitoring tools likely gather common metrics, such as read/write bandwidths, operation counts, etc.). \tokio connectors can convert the native data formats of their underlying tools to this generic format in-memory as part of on-demand analysis, or \tokio-aware tools can archive directly into this format on-disk. These design decisions both greatly simplify the process of integrating new monitoring sources into the framework and the process of developing platform-independent I/O analysis tools.
+\tokio uses a modularized software architecture and a generic data format specification for system monitoring data, simplifying portability to new HPC platforms. Software modularity is accomplished by defining abstract \textit{connectors} to monitoring sources, each exposing interfaces for extracting relevant data in a format that is digestible by \tokio.  A generic timeseries format for monitoring data is also provided by \tokio, allowing for semantically consistent access to data originating from many distinct components (each with its own native format, scope, and granularity). This data format designates a number of metrics that are likely common to classes of monitoring components (e.g., file system monitoring tools likely gather common metrics, such as read/write bandwidths, operation counts, etc.). \tokio connectors can convert the native data formats of their underlying tools to this generic format in-memory as part of on-demand analysis, or \tokio-aware tools can archive directly into this format on-disk. These design decisions both greatly simplify the process of integrating new monitoring sources into the framework and the process of developing platform-independent I/O analysis tools.
 
-Here, we briefly summarize monitoring sources supported by \tokio that are relevant to this particular study, though we refer readers to our previous work~\cite{Lockwood2017, Lockwood2018tokio} for a more comprehensive description of these sources (and other monitoring data sources supported by \tokio):
+Here, we briefly summarize the subset of \tokio monitoring modules that are used
+in this particular study:
 
 \begin{itemize}[leftmargin=*]
 \item \textbf{Application-level monitoring}: \textit{Darshan}~\cite{Carns2009} is an application I/O characterization tool that is commonly deployed at production HPC facilities. It provides a condensed set of I/O counters, timers, and other statistics for each file accessed by a given application.
@@ -32,7 +33,7 @@ production-quality file system monitoring tools for Lustre and GPFS deployments,
 
 \TODO{Worth giving the shoutout to the pytokio implementation here, or does that go in the reproducibility appendix?}
 
-\subsection{HPC Platforms}\label{sec:methods/platforms}
+\subsection{Platforms}\label{sec:methods/platforms}
 
 % Please add the following required packages to your document preamble:
 % \usepackage{multirow}
@@ -58,7 +59,7 @@ Darshan is installed and automatically enabled on each of these systems, transpa
 \nersc systems additionally utilize the Slurm job scheduler, which allows for the capture of detailed metadata for every job executed on \edison or \cori.
 We additionally deployed \tokio on each of these systems, configuring it to leverage these existing monitoring sources in-place to provide a holistic view of I/O performance on each system.
 
-\subsection{Active I/O Performance Probes}\label{sec:methods/benchmarks}
+\subsection{I/O Performance Probes}\label{sec:methods/benchmarks}
 
 \begin{table}
 \centering
