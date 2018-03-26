@@ -31,7 +31,7 @@
 % \TODO{Things that are important here: behavior over time, grouping data sources in a way that helps understand scope, focusing on fundamental \emph{changes} in performance rather than steady state, everything in one view.}
 
 I/O performance is known to vary as a function of (a) application I/O pattern, (b) whether I/Os read or write, and (c) the architecture of the system on which I/O is happening~\cite{Lockwood2017, Xie2012}.
-To remove the effects of these factors and enable us to focus on performance \emph{variation}, we therefore express the performance of each of the 11,986 observations in terms of its \emph{fraction of peak performance}.
+To remove the effects of these factors and enable us to focus on performance \emph{variation}, we express the performance of each of the 11,986 observations in terms of its \emph{fraction of peak performance}.
 This fraction of peak performance is defined as the absolute performance (in bytes/sec) of an observation divided by the maximum absolute performance observed across all jobs with a common (a), (b), and (c) above.
 
 The distribution of the fraction of peak performance measurements for four of the five systems tested is shown in Fig. \ref{fig:summary-boxplots} and demonstrates that the performance of active I/O performance probes on production file systems is highly dynamic.
