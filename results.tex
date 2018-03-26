@@ -61,7 +61,7 @@ The Lustre versions were updated on those two dates, and the appearance and subs
 %Long-term behavior has very low frequency by definition, so analyzing the causes of a few long-term performance depressions by hand (as was done in Section \ref{sec:results/longterm}) is not unreasonable.
 %With smaller values of $w_{long}$, though, this method identifies an increasing number of divergence regions, and characterizing the factors that contribute to these long-term performance depressions using automated statistical techniques becomes imperative.
 
-In order to detect and explain changes in measured performance we need to correlate the measured performance with the other telemetric data described in Section~\ref{sec:methods}. To begin this analysis we convert pairs of divergence regions into \emph{trend regions} as described in Section \ref{sec:features}. We then perform statistical analysis across these trend regions to enable determination of the reasons for performance changes. 
+In order to detect and explain changes in measured performance, we need to correlate the measured performance with the other telemetric data described in Section~\ref{sec:methods}. To begin this analysis we convert pairs of divergence regions into \emph{trend regions} as described in Section \ref{sec:features}. We then perform statistical analysis across these trend regions to enable determination of the reasons for performance changes. 
 
 %We then discard divergence regions whose $\textup{SMA}_{short}$ exhibit minimal change between their first and last value in the region.  For each divergence region bounded by times $t_0$ and $t_f$, we then discard those regions where
 %
@@ -87,7 +87,7 @@ Furthermore, the bandwidth coverage factor was the sole metric that showed compe
 An example of one of these regions and the correlation between performance and bandwidth coverage factor observed within is shown in Figure \ref{fig:mira-correlation-region}.
 During this region, $\textup{SMA}_{short}$ fell from a 0.868 fraction of peak performance to 0.654 over 21 days, representing a significant loss of performance.
 While this correlative analysis does not prove the cause of this event, this analysis confidently identified a long-term performance transition between October 25 and November 15 that was strongly correlated ($R = 0.565$) with bandwidth contention.
-Additionally, this correlation with performance degradation was observed across {\emph all} I/O motifs (similar to Figure \ref{fig:regions-heatmap}a) distinguishes it from the case discussed in section \ref{sec:results/longterm} and further indicates a system-wide loss of performance.
+Additionally, this correlation with performance degradation was observed across \emph{all} I/O motifs (similar to Figure \ref{fig:regions-heatmap}a) distinguishes it from the case discussed in section \ref{sec:results/longterm} and further indicates a system-wide loss of performance.
 The relative rarity of an event of this magnitude on \mira further suggests that the contentious activity coincident with this performance depression on \mira was likely not caused by routine job traffic and may have been related to year-end activity on the system.
 
 \begin{figure}

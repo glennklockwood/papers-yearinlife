@@ -11,12 +11,13 @@ What's the next step for what we've shown here?}
 \TODO{Convert to prose:}
 
 \begin{enumerate}
-\item We have shown that the baseline peak performance for a given I/O motif on a file systems can change over time as a result of factors such as system software updates and sustained workloads motivated by external factors such as end of allocation year.
+\item \textbf{Baseline performance and performance variation changes over time.}
+We have shown that the baseline peak performance for a given I/O motif on a file systems can change over time as a result of factors such as system software updates and sustained workloads motivated by external factors such as end of allocation year.
 
-\item We have shown that the correlation between performance and some metrics can vary wildly with the aforementioned long-term changes.
+\item \textbf{The magnitude and sign of correlation between performance and other measured metrics also varies over time.} 
 We demonstrated that high CPU load can correlate with favorable performance under healthy file system conditions, and it can coincide with unfavorable performance when non-I/O workloads are impacting storage servers.
 
-\item We have found that bandwidth, IOPS, and metadata contention are often present when transient I/O performance problems are occurring.
+\item \textbf{Bandwidth, IOPS, and metadata contention are often confidently correlated with I/O performance problems are occurring.}
 We were able to obtain statistically significant trends about isolated performance transients by aggregating simple binary classifications based on coincident observations of worst values within regions.
 That said, some jobs defied classification using our binary classification method.
 This indicates that we are still missing telemetry from important components of the I/O subsystem that contribute to performance variation.
