@@ -1,22 +1,5 @@
 \section{Methodology}\label{sec:methods}
 
-\begin{figure}
-    \centering
-    \includegraphics[width=0.9\columnwidth]{summary-boxplots}
-    \vspace{-.15in}
-    \caption{I/O performance grouped by test applications and read(R)/write(W) mode.  Whiskers represent the 5th and 95th percentiles.}
-    \label{fig:summary-boxplots}
-%   \vspace{-.3in}
-\end{figure}
-
-\begin{figure*}
-    \centering
-    \includegraphics[width=0.90\linewidth]{summary-heatmap}
-    \vspace{-.2in}
-    \caption{Performance of daily benchmarks normalized to each benchmark's peak observed performance on the specified storage system.  The y-axis labels show combinations of system, I/O motif, and mode (Read/Write).  Grey represents days on which no observations were made.  The two regions highlighted in green boxes are expanded upon in Figure \ref{fig:regions-heatmap}.}
-    \label{fig:summary-heatmap}
-\end{figure*}
-
 \TODO{How about changing this to ``Methodology'' section and have 'Data collection', 'Data characteristics', and 'Data analysis methods' as subsections, to make it sound this is the novel contribution of this effort? -- Suren}
 
 \TODO{Need to accommodate double-blind review requirements while referring to \tokio.}
@@ -77,7 +60,7 @@ We additionally deployed \tokio on each of these systems, configuring it to leve
 
 \subsection{Active I/O Performance Probes}\label{sec:methods/benchmarks}
 
-\begin{table}[b]
+\begin{table}
 \centering
 \caption{I/O Performance Probe Motifs}
 \label{my-label}
@@ -89,14 +72,6 @@ We additionally deployed \tokio on each of these systems, configuring it to leve
 \end{tabular}
 \label{tab:benchmark-motifs}
 \end{table}
-
-\begin{figure}
-    \centering
-    \includegraphics[width=0.90\linewidth]{regions-heatmap}
-    \vspace{-.2in}
-    \caption{Examples of structure in the fraction of peak performance observations.  Color scale is the same as that in Figure \ref{fig:summary-heatmap}.  In (a), the vertical band on Sept 26 corresponds to a transient system-wide degradation on \mira.  The horizontal bands for the IOR file-per-process write workload (IOR/fpp(W)) and HACC write workload (HACC(W)) in (b) show a sustained performance problem for file-per-process write workloads on \cori.}
-    \label{fig:regions-heatmap}
-\end{figure}
 
 To measure the performance variation on the systems described in Section \ref{sec:methods/platforms}, we ran four I/O-intensive benchmarks on a daily basis from February 14, 2017 to February 15, 2018.
 We utilize these benchmarking runs as another ad-hoc monitoring source for this study, actively probing the I/O performance of each analyzed file system on a daily basis across a range of representative I/O motifs.
@@ -110,39 +85,3 @@ Although not ideal, this reflects the realities of daily testing on production s
 \\
 \edison was mentioned in the previous paragraph; Figure 1 doesn't have the results. -- Suren}
 
-% \TODO{Things that are important here: behavior over time, grouping data sources in a way that helps understand scope, focusing on fundamental \emph{changes} in performance rather than steady state, everything in one view.}
-
-I/O performance is known to vary as a function of (1) the application I/O pattern, (2) whether the application is reading or writing, and (3) the architecture of the system on which I/O is happening~\cite{Lockwood2017}.
-To remove the effects of these factors and enable us to focus on performance \emph{variation}, we therefore express the performance of each of the 11,986 observations $j$ in terms of its \emph{fraction of peak performance}.
-This fraction of peak performance $j$ is defined as the absolute performance (in bytes/sec) of $j$ divided by the maximum absolute performance observed within the set $J_{app, rw, sys}$, where
-%
-%\begin{equation}
-%J_{app, rw, sys} = \big\{ j_{app} \cap j_{rw} \cap j_{sys} \big \}
-%\end{equation}
-%\TODO{A little lost in Equation 1, may add more explanations on $j_{app}$, $j_{rw}$ %and $j_{sys}$ -- Teng 
-%I don't think the set notation adds anything - Nick.}
-%\noindent
-%and 
-%
-$app$, $rw$, and $sys$ correspond to the three performance variables mentioned above.
-
-An overview of the fraction of peak performance for two of the five systems tested is shown in Fig. \ref{fig:summary-boxplots} and demonstrates that the steady state for performance on production file systems is highly dynamic.
-Further decomposition of two of these performance distributions is shown in Fig. \ref{fig:summary-heatmap} and reveals that performance variation is not randomly distributed over the year.
-A significant amount of time-correlated structure, highlighted in Fig. \ref{fig:summary-heatmap}, demonstrates three phenomena commonly observed:
-
-\begin{enumerate}[leftmargin=*]
-\item Dark vertical bands, exemplified in the \mira data in Fig. \ref{fig:regions-heatmap}, represent transient system-wide issues that resulted in a uniform loss of performance for all applications tested that day.
-\item Dark horizontal bands, shown in the \cori data, indicate a long-term degradation in performance that disproportionately affects a specific I/O motif or reads or writes.
-\item Isolated dark blocks represent individual application runs where performance was poor despite an absence of system-wide transients (vertical bands) or systematic, motif-specific problems (horizontal bands).
-\end{enumerate}
-
-% \TODO{Insert some smooth one-sentence transition into next section; perhaps mention that we don't consider the aforementioned results as surprising and the best is yet to come.} DONE - 2018-03-25 gkl
-
-The preponderance of these time-correlated phenomena underscore the need to consider variation as a function of time.
-What may qualify as abnormally poor performance during one part of the year may be the baseline expected performance during another, and being able to understand these different regions of performance and variation is essential toward identifying and remedying their root causes.
-It is therefore imperative to have a systematic approach towards identifying different regions of I/O performance to differentiate long-term performance degradation from shorter-term and transient variation.
-In the following section, we describe a general approach to address this problem of partitioning performance measurements into regions of significant performance trends.
-
-\TODO{In addition to above, maybe worth pointing out this is only showing results based on Darshan data, so we haven't even crossed into holistic territory, where datasets become much larger and difficult to analyze. -SS}
-
-\TODO{Need to add definition of coverage factors somewhere}

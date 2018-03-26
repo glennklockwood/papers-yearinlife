@@ -1,4 +1,64 @@
-\section{Feature detection}  \label{sec:features}
+\section{Feature detection (new title TBD)}  \label{sec:features}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\columnwidth]{summary-boxplots}
+    \vspace{-.15in}
+    \caption{I/O performance grouped by test applications and read(R)/write(W) mode.  Whiskers represent the 5th and 95th percentiles.}
+    \label{fig:summary-boxplots}
+%   \vspace{-.3in}
+\end{figure}
+
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=0.90\linewidth]{summary-heatmap}
+    \vspace{-.2in}
+    \caption{Performance of daily benchmarks normalized to each benchmark's peak observed performance on the specified storage system.  The y-axis labels show combinations of system, I/O motif, and mode (Read/Write).  Grey represents days on which no observations were made.  The two regions highlighted in green boxes are expanded upon in Figure \ref{fig:regions-heatmap}.}
+    \label{fig:summary-heatmap}
+\end{figure*}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.90\linewidth]{regions-heatmap}
+    \vspace{-.2in}
+    \caption{Examples of structure in the fraction of peak performance observations.  Color scale is the same as that in Figure \ref{fig:summary-heatmap}.  In (a), the vertical band on Sept 26 corresponds to a transient system-wide degradation on \mira.  The horizontal bands for the IOR file-per-process write workload (IOR/fpp(W)) and HACC write workload (HACC(W)) in (b) show a sustained performance problem for file-per-process write workloads on \cori.}
+    \label{fig:regions-heatmap}
+\end{figure}
+
+\subsection{Statistical Summary} \label{sec:features/summary}
+
+% \TODO{Things that are important here: behavior over time, grouping data sources in a way that helps understand scope, focusing on fundamental \emph{changes} in performance rather than steady state, everything in one view.}
+
+I/O performance is known to vary as a function of (a) application I/O pattern, (b) whether I/Os read or write, and (c) the architecture of the system on which I/O is happening~\cite{Lockwood2017, Xie2012}.
+To remove the effects of these factors and enable us to focus on performance \emph{variation}, we therefore express the performance of each of the 11,986 observations in terms of its \emph{fraction of peak performance}.
+This fraction of peak performance is defined as the absolute performance (in bytes/sec) of an observation divided by the maximum absolute performance observed across all jobs with a common (a), (b), and (c) above.
+
+The distribution of the fraction of peak performance measurements for four of the five systems tested is shown in Fig. \ref{fig:summary-boxplots} and demonstrates that the performance of active I/O performance probes on production file systems is highly dynamic.
+Further decomposition of two of these performance distributions is shown in Fig. \ref{fig:summary-heatmap} and reveals that performance variation is not randomly distributed over the year.
+A significant amount of time-correlated structure, highlighted in Fig. \ref{fig:summary-heatmap}, demonstrates three phenomena commonly observed:
+
+\begin{enumerate}[leftmargin=*]
+\item Dark vertical bands, exemplified in the \mira data in Fig. \ref{fig:regions-heatmap}, represent transient system-wide issues that resulted in a uniform loss of performance for all applications tested that day.
+\item Dark horizontal bands, shown in the \cori data, indicate a long-term degradation in performance that disproportionately affects a specific I/O motif or reads or writes.
+\item Isolated dark blocks represent individual application runs where performance was poor despite an absence of system-wide transients (vertical bands) or systematic, motif-specific problems (horizontal bands).
+\end{enumerate}
+
+% \TODO{Insert some smooth one-sentence transition into next section; perhaps mention that we don't consider the aforementioned results as surprising and the best is yet to come.} DONE - 2018-03-25 gkl
+
+The preponderance of these time-correlated phenomena underscore the need to consider variation as a function of time.
+What may qualify as abnormally poor performance during one part of the year may be the baseline expected performance during another, and being able to understand these different regions of performance and variation is essential toward identifying and remedying their root causes.
+It is therefore imperative to have a systematic approach towards identifying different regions of I/O performance to differentiate long-term performance degradation from shorter-term and transient variation.
+In the following section, we describe a general approach to address this problem of partitioning performance measurements into regions of significant performance trends.
+
+\TODO{In addition to above, maybe worth pointing out this is only showing results based on Darshan data, so we haven't even crossed into holistic territory, where datasets become much larger and difficult to analyze. -SS}
+
+\TODO{Need to add definition of coverage factors somewhere}
+
+
+
+
+\subsection{Time-dependent Analysis} \label{sec:features/timedependent}
 
 \begin{figure}[t]
     \centering
