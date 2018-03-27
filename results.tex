@@ -23,17 +23,21 @@ In the following analyses, we separate our 11,986 performance observations into 
 
 % Bandwidth, IOPS, and metadata contention are confidently correlated with I/O performance at both long. 
 
-We apply Pearson correlation to the feature vectors within a divergence
+We begin our correlative analysis by partitioning a year-long data set into
+divergence regions using the method described in
+Section~\ref{sec:features/partitioning}.  Using observations from \mira
+\mirafsone as an example, we set $w_{short} = 2 \textup{weeks}$ and $w_{long}
+= 7 \textup{ weeks}$ to identify divergence regions, and then discard any
+regions with fewer than three data points. The small regions are discarded
+for two reasons: (a) intuitively, very short divergence regions occur
+when $\textup{SMA}_{short} \approx \textup{SMA}_{long}$ and there is
+minimal long-term variation, and (b) statistically, it is impossible
+to assert the statistical significance of a correlation with fewer than
+three data points.  This yields 32 divergence regions.
+
+We can now apply Pearson correlation to the feature vectors within a divergence
 region in order to identify factors that contributed to the performance
 trend in that region.
-
-Using the entirety of observations generated on \mira \mirafsone as an example, we first calculate ${SMA}_{short}$ and ${SMA}_{long}$ for all benchmark applications and both read and write modes over the year.  
-The resulting 34 crossover points define the extents of 33 divergence regions, and one of these regions is depicted in Figure \ref{fig:mira-correlation-region}a.
-We then discard all regions that contain fewer than three observations for two reasons:
-(a) intuitively, very short divergence regions occur when $\textup{SMA}_{short} \approx \textup{SMA}_{long}$ and there is minimal long-term variation, and
-(b) statistically, it is impossible to assert the statistical significance of a correlation with fewer than three data points.
-For each of the remaining 32 divergence regions, we then calculate the Pearson correlation coefficients between the fraction of peak performance for each observation and every other attribute in each observation's feature vector.
-
 The result of this process is a new feature vector for each divergence region which contains the correlation coefficients and p-values between the fraction of peak performance and every other attribute across all observations in that region.
 Considering only those regions and attributes whose correlations have extremely high significance ($\textup{p-value} < {1.0 \times 10^{-5}}$), we find that nine of the 32 regions exhibit moderate correlation ($R > 0.50$) between performance and any other attribute, and in fact, bandwidth coverage factor is the sole attribute with significant correlation.
 The correlation coefficients between performance and bandwidth coverage factor are all moderate to strong, though, and range from 0.507 to 0.884.
