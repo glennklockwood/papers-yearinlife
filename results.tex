@@ -109,8 +109,7 @@ The observed loss of performance is consistent with Lustre's known susceptibilit
     \includegraphics[width=1.0\columnwidth]{contributors-bad-by-system}
     \vspace{-.35in}
     \caption{Attributes that correlated with poor I/O performance across all file systems and benchmarks tested normalized to the number of probes during which each attribute was measured.
-    \mira was the only system for which IOPS coverage factor was measured. 
-    These data represent 490 anomalous jobs, and 80 jobs (16\%) had no attributes classified as contributors.
+    \mira was the only system for which IOPS coverage factor was measured.
     Percentages do not add up to 100\% because multiple attributes are often classified as contributors for a single anomalous job.
     }
     \label{fig:contributors-bad-by-system}
@@ -122,43 +121,39 @@ Such performance losses, exemplified as isolated dark blocks in Fig. \ref{fig:re
 The lack of a consistent performance trend surrounding these transients makes them difficult to correlate with other metrics as was done in the previous section, necessitating a different approach to characterizing them.
 
 To address this need to characterize isolated performance anomalies, we apply the same strategy of partitioning performance observations into divergence regions and then performing statistical analysis within each region.
-The observations are grouped into sets of data by the test platform on which they ran as was done in Section \ref{sec:results/correlate-mira}.
-In addition, these sets are further subdivided according to the test application and the read-or-write behavior that resulted in each specific observation.
-The net result are $5 \times 4 \times 2 = 40$ sets of data, each representing a unique combination of test platform ($5 \times$, as listed in Table \ref{tab:platform-descriptions}), I/O motif ($4 \times$, per Table \ref{tab:benchmark-motifs}), and whether the probe was reading or writing ($2 \times$).
-Schematically, each horizontal row in Figure \ref{fig:summary-heatmap} represents a single set.
-For each set of observations, SMAs are calculated, crossover points are defined, and the set is partitioned into a set of divergence regions.
-
-For each divergence region in each of the 40 sets of observations, when then identify and classify individual performance anomalies using the following method:
+To identify individual performance anomalies in a divergence region and classify the factors which contributed to them, we apply the following method:
 
 \begin{enumerate}[leftmargin=*]
 
-\item We examine the feature vector for every observation in the divergence region, and for each attribute $a$, determine the observation where that attribute's measured value was at its lowest $\min(a)$.
+\item We examine the feature vector for every observation in the divergence region, and for each attribute $a$, determine the observation where that attribute's measured value was at its lowest, $\min(a)$.
 
-\item We then define the \emph{anomalous observation} as the observation whose feature vector contains $\min(a)$ for fraction peak performance.
-Because divergence regions contain observations of similarly divergent performance by definition, this anomalous observation is truly anomalous--not only is it in a region of performance divergence, but it is divergent from that divergence.
+\item We then define the \emph{anomalous observation} for the divergence region as the observation whose feature vector contains $\min(a)$ for fraction peak performance.
+Because divergence regions contain observations of similarly divergent performance by definition, this anomalous observation is truly anomalous--not only is it in a region of performance divergence, but it is also divergent from that divergence.
 
 \item Finally, we determine which other $\min(a)$ values also fell in this anomalous observation's feature vector and classify those attributes $a$ as contributors to the anomalous observation's anomalous performance.
 
 \end{enumerate}
 
 Qualitatively, this process formalizes the conjecture that if I/O performance is anomalous on a specific day, the other measured attributes which were also anomalous at that time contributed to that anomalous performance.
-Quantitatively, we define the statistical significance of each classification using a p-value w
+Quantitatively, this simple classification scheme allows us to identify correlations and quantify the statistical significance of of each classification for individual anomalous observations.
+To assess the statistical significance of each classification, we calculate the p-value of each classification in a divergence region of $N$ observations as $\textup{p-value} = \frac{1}{N}$; intuitively, this is the probability of a positive classification being applied to a random variable.
 
-The performance of a particular performance result (hereafter referred to as the anomalous job) is first contextualized with respect its neighboring jobs, where neighboring jobs are those that
-\begin{enumerate}[leftmargin=*]
-\item ran in the same period of time, so that we comparing jobs in the same long-term divergence regions, and
-\item exhibited the same I/O motif, so we are not comparing jobs whose performance variation may have resulted from having different I/O patterns
-\end{enumerate}
+The result of this process is zero or more attributes being positively classified as contributors to anomalous performance.
+For example, if the lowest values of the bandwidth coverage factor and IOPS coverage factor attributes occur in the same feature vector as the lowest value for performance, we classify both bandwidth and IOPS coverage factors as contributors to that anomalous observation's behavior.
 
-In addition to I/O performance, telemetric data collected from other instrumentation sources throughout the I/O subsystem (as described in Section \ref{sec:methods/tokio}) are also associated with each job.
-\TODO{How does this work if one jobs spans more than one time point in a telemetric series of data? - NJW}
-The anomalous job is then identified as the observation with the worst performance within its divergence region, and any metrics whose worst values were also observed during the anomalous job are classified as possible contributors.
-The result is zero or more metrics being flagged as potential contributors to poor performance for each divergence region, application, file system, and read/write mode. For example, if both the performance and the bandwidth coverage factor for the anomalous job are the lowest values observed amongst its neighboring jobs, we classify bandwidth coverage factor as a possible contributor to that poor performance.
+% ...
 
-%To address these transients, we apply a simple binary classification scheme where metrics are identified as either possible contributors or not.
+To apply this method to our performance probes, we first group observations into sets of data by the test platform on which they ran as was done in Section \ref{sec:results/correlate-mira}.
+In addition, these sets are further subdivided according to I/O motif and read/write character of the performance probe to classify anomalies at full temporal resolution and motif-level granularity.
+The net result are $5 \times 4 \times 2 = 40$ sets of data, each representing a unique combination of test platform ($5 \times$, as listed in Table \ref{tab:platform-descriptions}), I/O motif ($4 \times$, per Table \ref{tab:benchmark-motifs}), and whether the probe was reading or writing ($2 \times$).
+Schematically, each horizontal row in Figure \ref{fig:summary-heatmap} represents a single set.
+For each set of observations, SMAs are calculated, crossover points are defined, and the set is partitioned into a set of divergence regions.
 
-The statistical significance of these classifications is a function of how many observations are contained in the divergence region where each positive classification is made.
-For the sake of setting a limit on uncertainty, we discard all divergence regions whose classifications exceed a p-value of 0.10. \TODO{where is the p-value classification of a divergence region defined ?}
+The result of this partitioning are 1,146 divergence regions across 40 sets of observations, each with one anomalous observation.
+For each divergence region, when then apply the classification procedure described and generate positive classifications of attributes that affected performance and the p-values of those classifications.
+We discard all statistically insignificant classifications ($\textup{p-value} > 0.10$) to eliminate divergence regions that are too small to make any meaningful classifications, positive or negative.
+The final product of this analysis are 490 anomalous observations, 410 of which have at least one attribute positive classified as a contributor.
+
 The remaining positive classifications are then grouped by metric and normalized to the number of abnormal jobs where that metric was measured.
 The resulting values describe the frequency with which each metric coincides with poor performance across all of the test systems and are shown in Figure \ref{fig:contributors-bad-by-system}.
 
