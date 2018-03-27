@@ -160,8 +160,9 @@ For each divergence region, when then apply the classification procedure describ
 We discard all statistically insignificant classifications ($\textup{p-value} > 0.10$) to eliminate divergence regions that are too small to make any meaningful classifications, positive or negative.
 The final product of this analysis are 490 anomalous observations, 410 of which have at least one attribute positively classified as a contributor.
 
-Figure \ref{fig:contributors-bad-by-system} shows the distribution of these classifications expressed as a fraction of the total number anomalous observations in which each attribute was measured.
-
+As described in Section \ref{sec:methods/tokio}, not every observation's feature vector has every feature defined.
+So as not to bias our results away from those attributes that were only measured for a subset of observations (e.g., IOPS coverage factor was only collected on \mira), we express the frequency of each attribute as the ratio of observations where it was defined \emph{and} classified to the number of observations where it was defined.
+The result of this aggregated summary is shown in Figure \ref{fig:contributors-bad-by-system}.
 
 As with the longer-term performance divergence characterized in Section \ref{sec:results/correlate-all}, high contention for bandwidth is found to also cause short-term performance transients.
 However, contention for IOPS is also positively classified in a significant fraction of anomalous observations despite it not arising as a factor in longer-term performance divergence.
@@ -173,6 +174,16 @@ Contention on metadata servers and CPU load on data servers was also observed du
 Unlike the correlative analysis, though these data speak directly to the conditions that are present during abnormally poor I/O performance rather than summarize conditions during longer trend periods.
 Although the statistical significance of individual metric classifications is relatively high (${\textup{p-value} < 0.10}$), aggregating the classified metrics over all abnormal jobs reveals significantly greater degrees of significance.
 For example, the findings shown in Figure \ref{fig:contributors-bad-by-system} all demonstrate p-values of $10^{-4}$ or lower.
+
+Two factors of this method are worth noting:
+
+\begin{itemize}
+\item Although the statistical significance of each individual classification is generally poor due to our generous choice of $\textup{p-value} < 0.10$, expressing the positively classified attributes as aggregate fractions allows us to assert much greater statistical significance.
+Since we have a number of positive and negative classifications as well as a 
+
+\end{itemize}
+
+
 
 
 
