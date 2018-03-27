@@ -220,8 +220,9 @@ The result of this significance analysis is the finding that the rates at which 
 Whereas the leftmost five attributes in Fig. \ref{fig:contributors-bad-by-system} all have p-values of ${5 \times 10^{-5}}$ or lower, the insignificant metrics' are 0.15 or higher.
 Qualitatively, these negative findings are not unreasonable; for example, file system fullness is most often a degenerative, long-term health problem as was identified in Section \ref{sec:results/correlate-all} and prior work~\cite{oral2014best,Lockwood2017}.
 
-The classification process and analysis described here demonstrates that it is possible to apply statistical analysis within fine-grained divergence regions and still obtain statistically significant insight into the causes of transient performance degradation.
-While we chose a very simple classification criteria based on $\min{a}$, this process can be applied using any classification methodology that can produce statistically meaningful classifications of attributes that may contribute to poor performance.
+The classification process and analysis described here demonstrates that it is possible to apply statistical analysis to fine-grained divergence regions and still obtain statistically significant insight into the causes of transient performance degradation.
+While we chose a very simple classification criteria based on $\min{a}$, this process can be applied using any classification methodology that identifies relationships between feature vectors in a divergence region and quantifies the associated statistical significance.
+For example, classifying attributes based on quartiles rather than minima would be feasible with more coarse-grained divergence regions to offset the decrease in significance inherent in the selection criteria.
 
 \subsection {Discussion}
 \label{sec:results/discussion}
