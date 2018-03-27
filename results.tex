@@ -178,6 +178,8 @@ To identify individual performance anomalies in a divergence region and classify
 
 \item We then define the \emph{anomalous observation} for the divergence region as the observation whose feature vector contains $\min(a)$ for fraction peak performance.
 Because divergence regions contain observations of similarly divergent performance by definition, this anomalous observation is truly anomalous--not only is it in a region of performance divergence, but it is also divergent from that divergence.
+\TODO{Is there a better way to phrase this than divergent from that
+divergence?}
 
 \item Finally, we determine which other $\min(a)$ values also fell in this anomalous observation's feature vector and classify those attributes $a$ as contributors to the anomalous observation's anomalous performance.
 
@@ -197,7 +199,7 @@ Schematically, each horizontal row in Figure \ref{fig:summary-heatmap} represent
 For each set of observations, SMAs are calculated, crossover points are defined, and the set is partitioned into a set of divergence regions.
 
 The result of this partitioning are 1,146 divergence regions across 40 sets of observations, each with one anomalous observation.
-For each divergence region, when then apply the classification procedure described and generate positive classifications of attributes that affected performance and the p-values of those classifications.
+For each divergence region, we then apply the classification procedure described and generate positive classifications of attributes that affected performance and the p-values of those classifications.
 We discard all statistically insignificant classifications ($\textup{p-value} > 0.10$) to eliminate divergence regions that are too small to make any meaningful classifications, positive or negative.
 The final product of this analysis are 490 anomalous observations, 410 of which have at least one attribute positively classified as a contributor.
 
@@ -207,12 +209,23 @@ The result of this aggregated summary is shown in Figure \ref{fig:contributors-b
 
 As with the longer-term performance divergence characterized in Section \ref{sec:results/correlate-all}, high contention for bandwidth is found to also cause short-term performance transients.
 However, contention for IOPS is also positively classified in a significant fraction of anomalous observations despite it not arising as a factor in longer-term performance divergence.
-This contrast demonstrates that \textbf{IOPS contention only becomes a statistically significant attribute related to performance degradation in short-term transients}, and there are no sustained periods of high IOPS on \mirafsone.
-This also distinguishes this utility of this transient classification from the longer-term correlative analysis and underscores the fact that the \textbf{sustained bandwidth contention identified in Section \ref{sec:results/correlate-all} is indeed a distinct phenomenon from the transient contention identified here}.
+This contrast demonstrates that IOPS contention only becomes a statistically significant attribute related to performance degradation in short-term transients, and there are no sustained periods of high IOPS on \mirafsone.
+This also distinguishes this utility of this transient classification from
+the longer-term correlative analysis.
 
-Metadata coverage factors and CPU load on data servers was also observed during anomalous jobs to a less significant degree, consistent with the correlation coefficients shown in Figure \ref{fig:trend-correlations}.
-Unlike the correlative analysis though, metadata contention was found to impact individual jobs on every test platform and occurred at much higher frequency.
+We also observed correlations with metadata coverage factor and CPU load on
+data servers during anamolous jobs to a less significant degree.  This is
+consistent with the correlation coefficients shown in
+Figure~\ref{fig:trend-correlations}.
+Unlike the correlative analysis, however, metadata contention was found to impact individual jobs on every test platform and occurred at much higher frequency.
 These findings indicate that metadata contention is much more likely to coincide with transient performance loss than a long-term and sustained divergence of performance.
+
+In general, the contrast in correlations between transient events and
+long-term trends shows that \textbf{transient
+problems correlate with different attributes (such as IOPS and
+metadata contention) those found in analysis of long-term problems (such
+as sustained bandwidth contention).} These are distinct conditions that
+require unique investigation techniques.
 
 Metadata server CPU load, file system fullness, and maximum job radius were also positively classified as contributors to anomalous performance in a small fraction of anomalous observations.
 To ascertain whether the rate at which these three attributes were classified is statistically significant, we can assign p-values to aggregate fraction of anomalous observations where each attribute was positively classified in Figure \ref{fig:contributors-bad-by-system}.
