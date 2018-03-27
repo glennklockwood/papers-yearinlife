@@ -62,7 +62,7 @@ Several archetypical forms of correlated performance degradation observed in Fig
 
 \begin{enumerate}[leftmargin=*]
 \item Dark vertical bands, exemplified in the \mira data in Fig. \ref{fig:regions-heatmap}, represent transient system-wide issues that resulted in a uniform loss of performance for all applications tested that day.
-\item Dark horizontal bands, shown in the \cori data, indicate a long-term degradation in performance that disproportionately affects a specific I/O motif or reads or writes.
+\item Dark horizontal bands, shown in the \cori data, indicate a long-term degradation in performance that disproportionately affects a specific I/O motif.
 \item Isolated dark blocks represent individual application runs where performance was poor for a very short period of time within a day.
 \end{enumerate}
 
@@ -70,15 +70,14 @@ Several archetypical forms of correlated performance degradation observed in Fig
 The preponderance of these time-dependent phenomena underscore the observation that \textbf{baseline I/O performance and variability are not constant over time}, and
 what may qualify as abnormally poor performance during one period of time may be the baseline performance expectation during another.
 
-This has implications for both HPC operators and users.
-For system architects and operators, identifying and remedying the root causes of variation requires classifying an absolute performance measurement with respect to the performance region in which it was observed to determine if it was the result of a long-term divergence from baseline peak performance or if it was caused by a transient issue in the system.
+This has implications for both HPC facility operators and users.  For
+facility operators, it indicates that performance anomolies and their root
+causes should not be assessed in isolation. By integrating broader spatial and
+termporal context into the analysis, facility operators can more accurately
+discrinate between applciation problems and environmental factors.
 % From Phil: In the prose we can site several predictive model papers (Bing Xie's papers, Sandeep's papers, and others) and point out that the implication is that these models aren't just "set it and forget it."  Not knocking them or even saying they can't do it, but just pointing out it's not covered yet.
 For users and application developers, it follows that the accuracy of parameterized I/O performance models~\cite{Xie2012,Madireddy2017} will degrade unless they are reparameterized as the I/O subsystem they model evolves.
 Both of these cases justify the need for a systematic approach for identifying different regions of I/O performance to differentiate long-term factors and phenomena from short-term transients.
-
-
-
-
 
 \subsection{Time-dependent analysis} \label{sec:features/timedependent}
 
