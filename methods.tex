@@ -108,14 +108,21 @@ of I/O performance without copying data to a dedicated database facility.
 \end{table}
 
 To measure the performance variation on the systems described in Section \ref{sec:methods/platforms}, we ran four I/O-intensive benchmarks on a daily basis from February 14, 2017 to February 15, 2018.
-We utilize these benchmarking runs as another ad-hoc monitoring source for this study, actively probing the I/O performance of each analyzed file system on a daily basis across a range of representative I/O motifs.
+We utilize these benchmarking runs as another monitoring source for this
+study, actively probing the user-percieved I/O performance of each analyzed file system on a daily basis across a range of representative I/O motifs.
 The four underlying benchmarks (VPIC, BDCATS, HACC, and IOR) were chosen to exercise a variety of I/O workloads and covered the four I/O motifs listed in Table \ref{tab:benchmark-motifs} in both read and write modes.
 Each application was configured to run identically to previous work~\cite{Lockwood2017} with the goal of using a substantial fraction of the I/O subsystem's peak bandwidth while using minimal production cycles.
 All probes ran using 256 nodes (4,096 processes) on \cori, 128 nodes (2,048 processes) on \edison, and 1,024 nodes (16,384 processes) on \mira.
-Data was striped as widely as possible in all cases; this corresponds to striping over every OST (for \cori and \edison) or every LUN and using the eight I/O nodes allocated to each job (for \mira).
+Data was striped as widely as possible in all cases; this corresponds to
+striping over every OST (for \cori and \edison) or every LUN and using the
+eight I/O nodes allocated to each job (for \mira).  \TODO{What does that
+last sentence above mean?  First half is about FS striping, second half is
+about forwarding layer resources?}
 
-The resulting 366-day experiment generated 11,986 performance observations across \mira, \cori, and \edison, reflecting 81.9\% of the intended probes having generated results.
-The remaining 18.1\% of missing probes resulted from system downtime, malfunctions of component-level monitoring tools or the automated test scheduling, queue wait times that exceeded 24 hours, and benchmarks exceeding their walltime.
+81.9\% of the intended probes successfully generated results, providing 
+11,986 performance observations across \mira, \cori, and \edison over the
+course of a year.
+The remaining 18.1\% of potential probes failed due to system downtime, malfunctions of component-level monitoring tools or the automated test scheduling, queue wait times that exceeded 24 hours, and benchmarks exceeding their walltime.
 The fact that no results were obtained for jobs that ran so slowly that they exceeded their reserved walltime is significant in that this dataset does not capture the absolute worst performance observed.
 Although not ideal, this reflects the realities of daily testing on production systems.
 
