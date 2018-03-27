@@ -156,7 +156,10 @@ The final product of this analysis are 490 anomalous observations, 410 of which 
 
 Figure \ref{fig:contributors-bad-by-system} shows the distribution of these classifications expressed as a fraction of the total number anomalous observations in which each attribute was measured.
 As with the longer-term performance divergence characterized in Section \ref{sec:results/correlate-all}, high contention for bandwidth is found to also cause short-term performance transients.
-However, contention for IOPS is also positively classified in a significant fraction of anomalous observations despite it not arising as 
+However, contention for IOPS is also positively classified in a significant fraction of anomalous observations despite it not arising as a factor in longer-term performance divergence.
+This contrast demonstrates that IOPS contention only becomes a statistically significant attribute related to performance degradation in short-term transients, and there are no sustained periods of high IOPS on \mirafsone.
+Furthermore, 
+From this, it follows that the long-term bandwidth contention revealed in Figure \ref{fig:trend-correlations} is a statistically distinct phenomenon from transient bandwidth contention, and it is not simply 
 
 Contention on metadata servers and CPU load on data servers was also observed during anomalous jobs to a less significant degree, consistent with the correlation coefficients shown in Figure \ref{fig:trend-correlations}.
 Unlike the correlative analysis, though these data speak directly to the conditions that are present during abnormally poor I/O performance rather than summarize conditions during longer trend periods.
