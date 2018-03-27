@@ -114,10 +114,11 @@ The four underlying benchmarks (VPIC, BDCATS, HACC, and IOR) were chosen to exer
 Each application was configured to run identically to previous work~\cite{Lockwood2017} with the goal of using a substantial fraction of the I/O subsystem's peak bandwidth while using minimal production cycles.
 All probes ran using 256 nodes (4,096 processes) on \cori, 128 nodes (2,048 processes) on \edison, and 1,024 nodes (16,384 processes) on \mira.
 Data was striped as widely as possible in all cases; this corresponds to
-striping over every OST (for \cori and \edison) or every LUN and using the
-eight I/O nodes allocated to each job (for \mira).  \TODO{What does that
-last sentence above mean?  First half is about FS striping, second half is
-about forwarding layer resources?}
+striping over every OST (for \cori and \edison) or every LUN (for \mira).
+In the case of \cori and \edison, each job had access to the full I/O bandwidth its I/O nodes as well, but due to the way in which I/O nodes are allocated in a fixed ratio to job size on Blue Gene/Q systems, \mira jobs were restricted to the bandwidth provided by eight I/O nodes.
+\TODO{What does that last sentence above mean?  First half is about FS striping, second half is about forwarding layer resources?
+\\
+gkl- hopefully the revised sentence addresses this without fully explaining the BG/Q and XC30 I/O forwarding architectures.}
 
 81.9\% of the intended probes successfully generated results, providing 
 11,986 performance observations across \mira, \cori, and \edison over the
