@@ -100,11 +100,7 @@ the resulting $\textup{SMA}_{short}$ provides a rapid visual means to
 identify performance degradation or recovery that lasts for
 $O(\textup{days})$.  Multiple SMAs can be plotted simultaneously over the
 same data set to differentiate short and long term trends and identify key
-crossover points. In the context of financial markets, SMAs (and other more
-sophisticated related techniques) are used for predictive purposes to time
-the execution of market trades.  In the context of I/O performance
-monitoring they more readily applicable to identifying regions of interest in past
-behavior rather than predicting future behavior.
+crossover points. 
 
 \begin{figure}[t]
     \centering
@@ -136,19 +132,40 @@ analysis and forward looking performance modeling parameterization.  The
 ramifications I/O research practitioners is that \textbf{holistic I/O monitoring
 should incorporate environmental provinence
 information, such as kernel version, operating system version, and file
-system version in the data set to aid in correlation.}  We also observe that
-\textbf{existing work in financial market analysis can be applied to
-time-varying performance data to attenuate noise and identify underlying
-trends.}
+system version in the data set to aid in correlation.}
 
 \subsection{Identifying regions of interest} \label{sec:features/partitioning}
 
-The above performance analysis, enabled by comparing a short-range SMA to a long-range summary statistic, can be generalized by superimposing a second SMA ($\textup{SMA}_{long}$) with a longer window (${w_{long} \sim O(\textup{weeks})}$) on top of $\textup{SMA}_{short}$ (which captures variations ${O(\textup{days})}$).
-Doing so allows us to examine short-term performance variations (e.g., a period of sustained bandwidth contention) in the context of longer-term trends (e.g., in the presence of a file system software regression) and determine the causes of variation \emph{within} different regions of divergence such as the period described in Section \ref{sec:features/timedependent}.
-The points at which $\textup{SMA}_{short}$ intersects $\textup{SMA}_{long}$, termed \emph{crossover points}, also conveniently establish the boundaries of regions where short-term performance has diverged from longer-term performance and anomalous performance is prevailing.
+We can generalize the analysis technique from
+Section~\ref{sec:features/timedependent} 
+by superimposing a second SMA ($\textup{SMA}_{long}$) with a longer window (${w_{long} \sim O(\textup{weeks})}$) on top of $\textup{SMA}_{short}$ (which captures variations ${O(\textup{days})}$).
+Doing so allows us to examine short-term performance variations (e.g., a
+period of sustained bandwidth contention) in the context of longer-term
+trends (e.g., in the presence of a file system software regression).  Once a
+region of interest has been defined, we can then constrain more detailed
+analysis techniques to that region to determine its cause.
+The points at which $\textup{SMA}_{short}$ intersects $\textup{SMA}_{long}$, termed \emph{crossover points}, conveniently establish the boundaries of regions where short-term performance has diverged from longer-term performance and anomalous performance is prevailing.
 We therefore introduce the notion of \emph{divergence regions} which are the periods of time bounded by two crossover points and capture correlated performance.
 
 For the remainder of this study, we apply the concept of \emph{divergence regions}, bounded by the crossovers between $\textup{SMA}_{short}$ and $\textup{SMA}_{long}$, to systematically identify and characterize periods in time where anomalous performance was observed by the active I/O probes running across all of the test systems.
 We define $\textup{SMA}_{short}$ to have $w_{short} = 2 \textup{ weeks}$ as in \ref{sec:features/timedependent} and $\textup{SMA}_{long}$ to have $w_{long} = 7 \textup{ weeks}$.
-$w$ was chosen to be a multiple of seven days to align with the U.S. work week and ensure that weekends and weekdays were equally represented both SMA calculations.
-That said, our choice of $w_{long} = 7 \textup{ weeks}$ was somewhat arbitrary, and the analysis and conclusions presented below were insensitive to changes of $\pm 1 \textup{ week}$.
+$w$ was chosen to be a multiple of seven days to align with the U.S. work
+week and ensure that weekends and weekdays were equally represented both SMA
+calculations.  $w_{long}$ was set to 7 weeks to span multiple $w_{short}$
+regions and at least one month boundary.  In our experience, the analysis
+presented in this work was insensitive to changes of $\pm 1 \textup{ week}$.
+\TODO{Possibly redundant, but reading to this point without having read the
+next section, it would be helpful to have the top half of Figure 5 here to
+illustrate a shaded region bounded by crossover points.  Maybe split it, or
+repeat it?}
+
+In general we find that \textbf{existing work in financial market technical
+analysis can be adapte to
+time-varying I/O performance data to attenuate noise and identify regions of
+interest based on performance trends.}
+In the context of financial markets, SMAs (and other more
+sophisticated related techniques) are used for predictive purposes to time
+the execution of market trades.  In this context we are not applying them to
+the task of predicting performance, but rather to identify regions of
+interest in behavior that has already been recorded.
+
