@@ -32,9 +32,20 @@
 
 % \TODO{Things that are important here: behavior over time, grouping data sources in a way that helps understand scope, focusing on fundamental \emph{changes} in performance rather than steady state, everything in one view.}
 
-I/O performance is known to vary as a function of (a) application I/O pattern, (b) whether I/Os read or write, and (c) the architecture of the system on which I/O is happening~\cite{Lockwood2017, Xie2012}.
-To remove the effects of these factors and enable us to focus on performance \emph{variation}, we express the performance of each of the 11,986 observations in terms of its \emph{fraction of peak performance}.
-This fraction of peak performance is defined as the absolute performance (in bytes/sec) of an observation divided by the maximum absolute performance observed across all jobs with a common (a), (b), and (c) above.
+Absolute I/O performance is influenced by many factors, most notably (a)
+application I/O pattern, (b) read/write ratio, and (c) I/O system
+architecture~\cite{Lockwood2017, Xie2012}.  This makes it difficult to
+reason about performance variation across benchmarks or across platforms,
+because each combination is capable of a different baseline performance
+level.  We
+address this problem by normalizing the
+performance of each of the 11,986 observations in terms of its
+\emph{fraction of peak performance}.
+The fraction of peak performance is defined as the absolute performance (in
+bytes/sec) of an observation divided by the maximum absolute performance
+observed across all jobs with a common (a), (b), and (c) above.  This
+approach allows us to focus on variability for different classes of I/O
+workloads rather than their relative performance.
 
 The distribution of the fraction of peak performance measurements for four of the five systems tested is shown in Fig. \ref{fig:summary-boxplots} and demonstrates that the performance of active I/O performance probes on production file systems is highly dynamic.
 However, visualizing the raw data of two of these performance distributions (Fig. \ref{fig:summary-heatmap}) reveals that performance variation is not randomly distributed over the year, and time-independent distributions of performance variation do not fully capture the nature of performance variability in production storage systems.
