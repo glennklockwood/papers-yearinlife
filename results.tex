@@ -28,31 +28,64 @@ divergence regions using the method described in
 Section~\ref{sec:features/partitioning}.  Using observations from \mira
 \mirafsone as an example, we set $w_{short} = 2 \textup{weeks}$ and $w_{long}
 = 7 \textup{ weeks}$ to identify divergence regions, and then discard any
-regions with fewer than three data points. The small regions are discarded
+regions with fewer than three data points.  Regions with few data points are discarded
 for two reasons: (a) intuitively, very short divergence regions occur
 when $\textup{SMA}_{short} \approx \textup{SMA}_{long}$ and there is
 minimal long-term variation, and (b) statistically, it is impossible
 to assert the statistical significance of a correlation with fewer than
 three data points.  This yields 32 divergence regions.
 
-We can now apply Pearson correlation to the feature vectors within a divergence
-region in order to identify factors that contributed to the performance
-trend in that region.
-The result of this process is a new feature vector for each divergence region which contains the correlation coefficients and p-values between the fraction of peak performance and every other attribute across all observations in that region.
-Considering only those regions and attributes whose correlations have extremely high significance ($\textup{p-value} < {1.0 \times 10^{-5}}$), we find that nine of the 32 regions exhibit moderate correlation ($R > 0.50$) between performance and any other attribute, and in fact, bandwidth coverage factor is the sole attribute with significant correlation.
-The correlation coefficients between performance and bandwidth coverage factor are all moderate to strong, though, and range from 0.507 to 0.884.
+We can then apply Pearson correlation to the feature vectors within
+each divergence region to identify the factors that contributed to its
+performance trend.  The result of this process is a new feature vector
+for each divergence region which contains the correlation coefficients
+and p-values between the fraction of peak performance and every other
+attribute across all observations in that region.  We also use the Pearson
+Correlation to further downselect the total set of regions to those 
+with extremely high significance
+($\textup{p-value} < {1.0 \times 10^{-5}}$).  This threshold yields a total
+of nine relevant divergence regions on \mira \mirafsone.  Each of these nine
+regions exhibits at least moderate correlation ($R$) ranging from 0.507 to
+0.884 with the bandwidth coverage factor feature.
+\TODO{In the above, would it be helpful (and/or possible without much work)
+to have a figure that highlights the 9 regions we found over the full year
+for Mira?  That's going to be a question in the minds of readers, of what
+these regions look like.}
+\TODO{Is the discarding of regions with less than 3 data points really
+necessary, or would they have been discarded by the p-value threshold
+anyway?}
 
-The region with the poorest correlation ($R = 0.507$) is shown in Fig. \ref{fig:mira-correlation-region}.
-As is evident from the raw data, the relatively poor correlation in this region is due to a cluster of very poorly performing jobs (${0.2 < \textup{fraction peak perf} < 0.4}$) that ran with a relatively high bandwidth coverage factor.
-Incidentally, this region is also the single largest divergence region observed on \mira with over 20\% difference between $\textup{SMA}_{short}$ and $\textup{SMA}_{long}$ observed during this time, distinguishing this particular region from the rest of the year.
+Figure~\ref{fig:mira-correlation-region} illustrates the correlation
+between bandwidth coverage factor and fraction peak performance for a
+divergence region in November 2017 on \mira \mirafsone.  This example
+exhibits the lowest correlation ($R = 0.507$) with bandwidth coverage
+factor of any of the selected regions, and the scatter plot of performance
+results shows why.  In this case there is a cluster of poorly performing
+jobs (${0.2 < \textup{fraction peak perf} < 0.4}$) that ran with a
+relatively high bandwidth coverage factor.  This region is also the
+single largest divergence region observed on \mira with over 20\%
+difference between $\textup{SMA}_{short}$ and $\textup{SMA}_{long}$
+observed during this time.  This divergence region example highlights the importance of not
+just identifying regions and calculating correlations, but identifying cases
+in which the analysis indicates the presence of an unknown factor that is
+not adequately captured by the instrumentation framework.
 
-Despite the unusual region shown in Fig. \ref{fig:mira-correlation-region} though, these data indicate that the time-dependent performance divergences observed on \mira show either moderate or strong coincidence with high degrees of bandwidth contention.
-Additionally, this correlation with performance degradation occurs across \emph{all} I/O motifs (similar to Figure \ref{fig:regions-heatmap}a) which distinguishes it from the motif-specific case discussed in Section \ref{sec:features/timedependent}.
-The region in Fig. \ref{fig:mira-correlation-region} exhibits a magnitude and relatively modest correlation with bandwidth contention relative to other regions that suggests that some other unmeasured attribute contributed to the observed performance loss.
+Despite the unusual region shown in Fig. \ref{fig:mira-correlation-region},
+however, these data indicate that the time-dependent performance divergences observed on \mira show either moderate or strong coincidence with high degrees of bandwidth contention.
+Additionally, this correlation with performance degradation occurs across
+\emph{all} I/O motifs (similar to Figure \ref{fig:regions-heatmap}a) which
+distinguishes it from the motif-specific case discussed in Section
+\ref{sec:features/timedependent}.  
 
-
-
-
+When the same Pearson correlation is calculated across the entire collection
+of \mira \mirafsone data, the correlation with bandwidth coverage factor
+yields an overall result of $R = 0.483380$ and $\textup{p-value} =
+2.247217\times 10^{-88}$.  \textbf{By focusing our analysis on divergence regions we not only
+draw attention to the most intuitively important trends in the data, but we
+also identify statistically stronger correlations that can be found via
+global analysis.}
+\TODO{We could use a plot for comparison if we have a lot of free time to
+kill.  I don't think it is critical though.}
 
 \subsection{Survey of divergence regions} \label{sec:results/correlate-all}
 
