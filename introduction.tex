@@ -15,17 +15,18 @@ however, how go best interpret this data to quickly for maximum production
 impact, and what types of instrumentation have the greatest return on
 investment.
 
-We investigate this issue by studying performance data collected from
-large parallel file systems at two leadership-class HPC centers over the course of
-a year of production use.  We capture not only system monitoring data, but also
-application-level instrumentation as well as daily performance results from a set of representative I/O benchmarks which we use as active file system performance probes. The breadth of
-this data set enables us to investigate performance variation over
-multiple time scales, ranging from days to weeks, and allows us insight
-into how often performance loss is observed over longer periods of time.
-The depth of this data set enables us to observe how system behavior is
-reflected in user-perceived performance and how combinations of factors
-contribute to overall performance.
+We investigate this issue by studying performance data collected
+from large parallel file systems at two leadership-class HPC centers
+over the course of a year of production use.  In addition to passive
+instrumentation, such as system monitoring and application profiling,
+we also employ active probing of I/O performance to record user-percieved
+performance over time.  The breadth of the data set enables investigation
+multiple time scales, ranging from days to months, to identify trends in
+both absolute performance and variability.  The depth of the data set
+enables correlation analysis to identify subtle relationships between
+performance and a variety of system-wide metrics.
 
+\TODO{reword below paragraph to shift focus away from methodology.}
 We also develop a methodology for identifying inflection points in
 long-term user-perceived performance due to factors beyond their control,
 such as hardware failures, software changes, capacity constraints, or
@@ -43,13 +44,9 @@ anomalous performance.
 %play less significant role in long-term performance variation.
 %Given this multiscale nature of I/O performance variation, we conclude that the probabilistic effects of transient interference \emph{and} the autocorrelative effects of long-term variation are required to capture the full picture of performance variation on parallel storage systems.
 
-The primary contributions of this paper are as follows:
-\begin{itemize}
-\item \TODO{fill in firm contributions as we nail down outcomes, see text in latex comments}
-\item \TODO{could be findings about the nature of file system performance
-(especially things that notably diverge from expectations),
-methodologies for analyzing data, recommendations for instrumentation
-techniques, or recommendations for system administration}
-\end{itemize}
+The primary contributions of this paper are as follows: \TODO{fill in
+contributions.  See bold findings in text plus any methods or
+recommendations that we want
+to call out.}
 
 %The remainder of the paper is organized as follows.  \TODO{Fill in}
