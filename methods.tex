@@ -31,7 +31,9 @@ production-quality file system monitoring tools for Lustre and GPFS deployments,
 \item \textbf{Job scheduler monitoring}: Job schedulers like Slurm~\cite{2003slurm} often keep a detailed accounting of all jobs that execute on a particular system, including useful details like the size of the job and its placement across available compute nodes.
 \end{itemize}
 
-\TODO{Worth giving the shoutout to the pytokio implementation here, or does that go in the reproducibility appendix?}
+%\TODO{Worth giving the shoutout to the pytokio implementation here, or does that go in the reproducibility appendix?} % I don't think that needs to go here --gkl
+
+\TODO{Define coverage factor and feature vector here.}
 
 \subsection{Platforms}\label{sec:methods/platforms}
 
@@ -44,11 +46,11 @@ production-quality file system monitoring tools for Lustre and GPFS deployments,
 \begin{tabular}{|c|c|c|c|c|}
 \hline
                                                                                    & \textbf{Platform}                                                              & \textbf{FS Name (Type)} & \textbf{Size} & \textbf{Peak Rate}     \\ \hline
-\multirow{3}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}\edison\\ (\nersc)\end{tabular}}} & \multirow{3}{*}{\begin{tabular}[c]{@{}c@{}}Cray XC30\\ 5,586 CNs\end{tabular}} & \scratchone                & 2.2 PiB       & 48 GB/sec              \\ \cline{3-5} 
-                                                                                   &                                                                                & \scratchtwo                & 2.2 PiB       & 48 GB/sec              \\ \cline{3-5} 
-                                                                                   &                                                                                & \scratchthree                & 3.3 PiB       & 72 GB/sec              \\ \hline
-\textbf{\begin{tabular}[c]{@{}c@{}}\cori\\ (\nersc)\end{tabular}}                    & \begin{tabular}[c]{@{}c@{}}Cray XC40\\ 12,076 CNs\end{tabular}                 & \cscratch                & 28 PiB      & 744 GB/sec \\ \hline
-\textbf{\begin{tabular}[c]{@{}c@{}}\mira\\ (\alcf)\end{tabular}}                     & \begin{tabular}[c]{@{}c@{}}IBM BG/Q\\ 49,152 CNs\end{tabular}                  & \mirafsone                & 7.0 PiB       & 90 GB/sec              \\ \hline
+\multirow{3}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}\edison\\ (\nersc)\end{tabular}}} & \multirow{3}{*}{\begin{tabular}[c]{@{}c@{}}Cray XC30\\ 5,586 CNs\end{tabular}} & \scratchone (Lustre)               & 2.2 PiB       & 48 GB/sec              \\ \cline{3-5} 
+                                                                                   &                                                                                & \scratchtwo (Lustre)               & 2.2 PiB       & 48 GB/sec              \\ \cline{3-5} 
+                                                                                   &                                                                                & \scratchthree (Lustre)               & 3.3 PiB       & 72 GB/sec              \\ \hline
+\textbf{\begin{tabular}[c]{@{}c@{}}\cori\\ (\nersc)\end{tabular}}                    & \begin{tabular}[c]{@{}c@{}}Cray XC40\\ 12,076 CNs\end{tabular}                 & \cscratch (Lustre)               & 28 PiB      & 744 GB/sec \\ \hline
+\textbf{\begin{tabular}[c]{@{}c@{}}\mira\\ (\alcf)\end{tabular}}                     & \begin{tabular}[c]{@{}c@{}}IBM BG/Q\\ 49,152 CNs\end{tabular}                  & \mirafsone (GPFS)               & 7.0 PiB       & 90 GB/sec              \\ \hline
 \end{tabular}
 \end{table}
 
@@ -76,13 +78,17 @@ We additionally deployed \tokio on each of these systems, configuring it to leve
 
 To measure the performance variation on the systems described in Section \ref{sec:methods/platforms}, we ran four I/O-intensive benchmarks on a daily basis from February 14, 2017 to February 15, 2018.
 We utilize these benchmarking runs as another ad-hoc monitoring source for this study, actively probing the I/O performance of each analyzed file system on a daily basis across a range of representative I/O motifs.
-The four underlying benchmarks (VPIC, BDCATS, HACC, and IOR) were configured to run identically to previous work~\cite{Lockwood2017} with the goal of using a substantial fraction of the I/O subsystem's peak bandwidth while using minimal production cycles.
-These performance probes were chosen to exercise a variety of I/O workloads and covered the four I/O motifs listed in Table \ref{tab:benchmark-motifs} in both read and write modes.
+The four underlying benchmarks (VPIC, BDCATS, HACC, and IOR) were chosen to exercise a variety of I/O workloads and covered the four I/O motifs listed in Table \ref{tab:benchmark-motifs} in both read and write modes.
+Each application was configured to run identically to previous work~\cite{Lockwood2017} with the goal of using a substantial fraction of the I/O subsystem's peak bandwidth while using minimal production cycles.
+All probes ran using 256 nodes (4,096 processes) on \cori, 128 nodes (2,048 processes) on \edison, and 1,024 nodes (16,384 processes) on \mira.
+Data was striped as widely as possible in all cases; this corresponds to striping over every OST (for \cori and \edison) or every LUN and using the eight I/O nodes allocated to each job (for \mira).
+
 The resulting 366-day experiment generated 11,986 performance observations across \mira, \cori, and \edison, reflecting 81.9\% of the intended probes having generated results.
 The remaining 18.1\% of missing probes resulted from system downtime, malfunctions of component-level monitoring tools or the automated test scheduling, queue wait times that exceeded 24 hours, and benchmarks exceeding their walltime.
 The fact that no results were obtained for jobs that ran so slowly that they exceeded their reserved walltime is significant in that this dataset does not capture the absolute worst performance observed.
 Although not ideal, this reflects the realities of daily testing on production systems.
-\TODO{Add details of the number of processes the benchmarks ran with, and how the file systems are set up, i.e., number of OSTs on \cori, number of I/O nodes used on \mira 
-\\
-\edison was mentioned in the previous paragraph; Figure 1 doesn't have the results. -- Suren}
 
+%\TODO{Add details of the number of processes the benchmarks ran with, and how the file systems are set up, i.e., number of OSTs on \cori, number of I/O nodes used on \mira 
+%\\
+%\edison was mentioned in the previous paragraph; Figure 1 doesn't have the results. -- Suren}
+% DONE - 2018-03-26 gkl

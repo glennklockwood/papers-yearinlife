@@ -7,15 +7,6 @@ In the following sections, we identify regions at different timescales and apply
 
 \subsection{Long-term performance evolution} \label{sec:results/longterm}
 
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=1.0\columnwidth]{longterm-cscratch-hacc}
-    \vspace{-.35in}
-    \caption{Performance evolution of HACC file-per-process workload on \cori.  Red line is the overall mean (298 GiB/sec write, 204 GiB/sec read) and blue bars are raw performance measurements.}
-    \label{fig:timeseries-baseline}
-    % source: sc18_segments.ipynb
-\end{figure}
-
 The overview of performance observations in Figures \ref{fig:summary-heatmap} shows that performance degradation is often correlated in time, and these correlations can last anywhere from days to months.
 Among the most striking cases of sustained performance degradation are the long periods of reduced performance for the file-per-process write workloads, depicted as dark horizontal bands, between April and August on the \cori dataset.
 To characterize the extent and possible sources of these long-term abnormalities, we compare $\textup{SMA}_{short}$ to the global mean performance for each set of $J_{app, rw, sys}$ to define divergence regions where performance remained below the time-independent peak capability of the affected applications.
@@ -198,3 +189,7 @@ For the analysis in Section \ref{sec:results/longterm} changing $\textup{SMA}_{s
 The principal effect of changing $\textup{w}_{short}$ is the number of short regions that arise from the higher-frequency oscillations of $\textup{SMA}_{short}$ around $\textup{SMA}_{long}$.
 
 \TODO{This is where a discussion about performance models having to account for long-term changes to baseline performance should go.  That doesn't seem to fit well into the rest of the narrative though.}
+
+We found the exact choice of $w_{short}$ and $w_{long}$ to be somewhat arbitrary; adjusting these values by as much as $\pm 50\%$ did not affect the identification of the most significant events presented here.
+In addition, a specific choice of $w$ does not preclude analyzing events longer or shorter than $w$, and we demonstrate methods to address this in Sections \ref{sec:results/longterm} and \ref{sec:results/shortterm}.
+
