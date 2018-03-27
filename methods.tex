@@ -3,10 +3,16 @@
 Previous studies have demonstrated the feasibility of 
 holistic HPC I/O analysis and used it to observe anomalous I/O behavior and
 contributing factors over short time scales\cite{Lockwood2017}. This methodology was later formalized in the specification of the \tokio (\tokiolong) framework~\cite{Lockwood2018tokio}. 
-In this work, we use the \tokio methodology to collect and analyze a complete
+In this work, we use 
+%the \tokio 
+a similar
+methodology to collect and analyze a complete
 year of I/O metrics on multiple production platforms.
 
-In the following sections, we provide an overview of \tokio, describe the production HPC platforms we have deployed it on, and describe our methodology for using a suite of daily I/O performance probes for active sampling of file system performance.
+In the following sections, we provide a brief  overview of \tokio, describe the production HPC platforms we have 
+%deployed it on, 
+used in this study,
+and describe our methodology for using a suite of daily I/O performance probes for active sampling of file system performance.
 
 \subsection{Data collection framework}\label{sec:methods/tokio}
 
