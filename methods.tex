@@ -82,12 +82,15 @@ executed.
 \end{tabular}
 \end{table}
 
-For this study, we deployed \tokio on the \edison and \cori systems at \nersc and the \mira system at the \alcf. Each of these platforms, along with their corresponding file systems analyzed as part of this study, are briefly described in Table~\ref{tab:platform-descriptions}.
+We deployed \tokio on the \edison and \cori systems at \nersc and the \mira system at the \alcf. Each of these platforms, along with their corresponding file systems analyzed as part of this study, are briefly described in Table~\ref{tab:platform-descriptions}.
 
 Darshan is installed and automatically enabled on each of these systems, transparently characterizing the I/O workloads of a large portion of  each system's job population. 
-\nersc has deployed LMT for full-time monitoring of the Lustre scratch volumes on both \edison and \cori, while the \alcf has deployed ggiostat to do the same with numerous GPFS volumes on \mira.
+\nersc has deployed LMT for full-time monitoring of the Lustre scratch
+volumes on both \edison and \cori, while the \alcf has deployed ggiostat to
+do the same for the GPFS volumes on \mira.
 \nersc systems additionally utilize the Slurm job scheduler, which allows for the capture of detailed metadata for every job executed on \edison or \cori.
-We additionally deployed \tokio on each of these systems, configuring it to leverage these existing monitoring sources in-place to provide a holistic view of I/O performance on each system.
+\tokio uses these data sources in-place to provide a unified holistic view
+of I/O performance without copying data to a dedicated database facility.
 
 \subsection{I/O Performance Probes}\label{sec:methods/benchmarks}
 
