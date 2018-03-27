@@ -47,8 +47,17 @@ observed across all jobs with a common (a), (b), and (c) above.  This
 approach allows us to focus on variability for different classes of I/O
 workloads rather than their relative performance.
 
-The distribution of the fraction of peak performance measurements for four of the five systems tested is shown in Fig. \ref{fig:summary-boxplots} and demonstrates that the performance of active I/O performance probes on production file systems is highly dynamic.
-However, visualizing the raw data of two of these performance distributions (Fig. \ref{fig:summary-heatmap}) reveals that performance variation is not randomly distributed over the year, and time-independent distributions of performance variation do not fully capture the nature of performance variability in production storage systems.
+The distribution of the fraction of peak performance measurements for four
+of the five systems tested is shown in Fig. \ref{fig:summary-boxplots}.
+This figure illustrates that the performance of active I/O performance
+probes on production file systems is highly dynamic over the course of a
+year.  It does not provide any insight into the temporal nature of the
+performance fluctuations, however.
+
+Figure~\ref{fig:summary-heatmap} visualizes the same data in the form of a
+heatmap over time.  This shows that performance variation is not randomly
+distributed over the year; a key characteristic that is not captured by
+time-independent performance distributions.
 Several archetypical forms of correlated performance degradation observed in Fig. \ref{fig:summary-heatmap} are highlighted in Fig. \ref{fig:summary-heatmap} and fall into three broad categories of variation:
 
 \begin{enumerate}[leftmargin=*]
