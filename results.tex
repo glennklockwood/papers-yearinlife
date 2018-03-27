@@ -1,7 +1,11 @@
 \section{Investigating Trends}\label{sec:results}
 
-SMA-based partitioning of performance observations provides a systematic method for grouping time-correlated performance events.
-Once a set of divergence regions has been identified based on crossovers, any number of statistical analyses can be performed on the performance measurements to gain broad but statistically significant correlations between I/O performance and other aspects of the I/O subsystem's utilization and health.
+SMA crossover-based partitioning of performance observations provides
+a systematic method for grouping time-correlated performance events.
+Once a divergence region (i.e., a performance trend) has been identified,
+more focused statistical analyses can then be applied within the region
+to gain insight the factors that contributed to that trend.  Examples of
+contributing factors may include utilization, system health, and component performance.
 In the following analyses, we separate our 11,986 performance observations into sets of observations that all ran on the same test platform (as described in Table \ref{tab:platform-descriptions}) to characterize the factors that contribute to time-dependent performance variation across different file systems and architectures.
 
 \subsection{Correlative analysis} \label{sec:results/correlate-mira}
@@ -19,7 +23,9 @@ In the following analyses, we separate our 11,986 performance observations into 
 
 % Bandwidth, IOPS, and metadata contention are confidently correlated with I/O performance at both long. 
 
-To identify the factors that contribute to time-dependent performance variation, our approach is to apply Pearson correlation to the feature vectors within a divergence region and identify those attributes which correlate with the fraction of peak performance.
+We apply Pearson correlation to the feature vectors within a divergence
+region in order to identify factors that contributed to the performance
+trend in that region.
 
 Using the entirety of observations generated on \mira \mirafsone as an example, we first calculate ${SMA}_{short}$ and ${SMA}_{long}$ for all benchmark applications and both read and write modes over the year.  
 The resulting 34 crossover points define the extents of 33 divergence regions, and one of these regions is depicted in Figure \ref{fig:mira-correlation-region}a.
