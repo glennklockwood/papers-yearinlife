@@ -79,7 +79,7 @@ This is particularly relevant to the increasing fraction of experimental and obs
 
 % - The sign and magnitude of the correlations changes over time.
 
-Another noteworthy feature that this method reveals is the bimodality of correlation between performance and the CPU load of the file system data servers ("Data Server Load" in Figure \ref{fig:trend-correlations}) on the Lustre-based test platforms.
+Another noteworthy feature that this method reveals is the bimodality of correlation between performance and the CPU load of the file system data servers (``Data Server Load'' in Fig. \ref{fig:trend-correlations}) on the Lustre-based test platforms.
 A time-resolved view of the regions where performance correlates with data server CPU loads (Fig. \ref{fig:cscratch-bimodal-fsaveosscpu}) reveals that the bimodality of the correlation matches the biomodality observed in the HACC write workload on the affected storage systems.
 During the long-term performance regression discussed in Section \ref{sec:features/timedependent}, high CPU load on the Lustre OSSs coincided with low performance of the I/O performance probes.
 As soon as performance was restored on August 10, the relationship reversed, and high CPU load was observed favorably with respect to performance.
@@ -87,14 +87,13 @@ The positive correlation between performance and CPU load is consistent with the
 From this, we conclude that not only does baseline I/O performance vary with time, but \textbf{the nature and magnitude of how different attributes correlate with I/O performance also change over time}.
 Had this correlation analysis been performed without partitioning over divergence regions, the regions of positive and negative correlation would have obfuscated each other in the net result.
 
-The remaining two attributes that were found to correlate with performance are \texttt{open(2)} coverage factor, which is a measure of metadata resource contention, and file system fullness.
-The two divergence regions that demonstrate high metadata coverage factors correlating positively with performance is intuitive, {\color{red}but why was metadata coverage factor so out of whack for so long?}.
-% in march 29 case, CF(opens) wasn't high so much as performance was in the toilet
-% in nov 26 case,
-However, the two instances of file system fullness correlating with negatively with performance occurred at times when their respective file systems approached 90\% full for a period of several days.
+The remaining two attributes that were found to correlate with performance are \texttt{open(2)} coverage factor (a measure of metadata resource contention) and file system fullness.
+Two divergence regions demonstrate high metadata coverage factors correlating positively with performance which is an intuitive relationship because high coverage factor indicates low contention for metadata resources.
+That said, the reason these two regions on the \edison \scratchtwo file system ever showed moderate correlation but the other Lustre file systems did not is unclear.
+% The above statement is not very satisfying, but we don't have time to do more detailed analysis.
+However, understanding the two instances of file system fullness correlating with negatively with performance is much more obvious.
+These two regions encapsulate periods when their respective file systems approached 90\% full for a period of several days.
 The observed loss of performance is consistent with Lustre's known susceptibility to significant performance degradation as OSTs approach 90\% fullness~\cite{oral2014best,Lockwood2017}.
-
-\TODO{Glenn: draw UMAMIs of the metadata rates diagrams to see what's going on.  That result doesn't make any sense.}
 
 
 
@@ -102,7 +101,10 @@ The observed loss of performance is consistent with Lustre's known susceptibilit
 
 \subsection{Transient performance loss} \label{sec:results/shortterm}
 
+\TODO{Do not edit -- Glenn is working on this Mar 27 @ 9:30a}
+
 \begin{figure}
+
     \centering
     \includegraphics[width=1.0\columnwidth]{contributors-bad-by-system}
     \vspace{-.35in}
@@ -112,13 +114,35 @@ The observed loss of performance is consistent with Lustre's known susceptibilit
     Percentages do not add up to 100\% because multiple attributes are often classified as contributors for a single anomalous job.
     }
     \label{fig:contributors-bad-by-system}
-    % source: sc18_umamify-2.0.ipynb
+    % source: sc18_umamify-all.ipynb
 \end{figure}
 
-In addition to characterizing long-term performance issues, it is advantageous to determine the reasons why I/O performance is severely degraded for one and only one day in an otherwise unremarkable period of time.
-Such performance losses may only be observed in one of the I/O motifs tested on that day, suggesting a very short-lived issue that disappeared over the course of one or two of the eight daily performance probes.
-The lack of a consistent performance trend surrounding these transients makes them difficult to correlate with other metrics as was done in the previous section, a different approach will be required.
-Understanding the contributors to these transients is critical to informing the design of storage system hardware and software as well, eventually, mitigating them. 
+In addition to characterizing long-term performance issues, it is also advantageous to determine the reasons why I/O performance is severely degraded for one and only one day in an otherwise unremarkable period of time.
+Such performance losses, exemplified as isolated dark blocks in Fig. \ref{fig:regions-heatmap}, may only be observed in one of the I/O motifs probed on that day, suggesting a very short-lived issue that disappeared over the course of one or two of the eight daily performance probes.
+The lack of a consistent performance trend surrounding these transients makes them difficult to correlate with other metrics as was done in the previous section, necessitating a different approach to characterizing them.
+
+To address this need to characterize isolated performance anomalies, we apply the same strategy of partitioning performance observations into divergence regions and then performing statistical analysis within each region.
+The observations are grouped into sets of data by the test platform on which they ran as was done in Section \ref{sec:results/correlate-mira}.
+In addition, these sets are further subdivided according to the test application and the read-or-write behavior that resulted in each specific observation.
+The net result are $5 \times 4 \times 2 = 40$ sets of data, each representing a unique combination of test platform ($5 \times$, as listed in Table \ref{tab:platform-descriptions}), I/O motif ($4 \times$, per Table \ref{tab:benchmark-motifs}), and whether the probe was reading or writing ($2 \times$).
+Schematically, each horizontal row in Figure \ref{fig:summary-heatmap} represents a single set.
+For each set of observations, SMAs are calculated, crossover points are defined, and the set is partitioned into a set of divergence regions.
+
+For each divergence region in each of the 40 sets of observations, when then identify and classify individual performance anomalies using the following method:
+
+\begin{enumerate}[leftmargin=*]
+
+\item We examine the feature vector for every observation in the divergence region, and for each attribute $a$, determine the observation where that attribute's measured value was at its lowest $\min(a)$.
+
+\item We then define the \emph{anomalous observation} as the observation whose feature vector contains $\min(a)$ for fraction peak performance.
+Because divergence regions contain observations of similarly divergent performance by definition, this anomalous observation is truly anomalous--not only is it in a region of performance divergence, but it is divergent from that divergence.
+
+\item Finally, we determine which other $\min(a)$ values also fell in this anomalous observation's feature vector and classify those attributes $a$ as contributors to the anomalous observation's anomalous performance.
+
+\end{enumerate}
+
+Qualitatively, this process formalizes the conjecture that if I/O performance is anomalous on a specific day, the other measured attributes which were also anomalous at that time contributed to that anomalous performance.
+Quantitatively, we define the statistical significance of each classification using a p-value w
 
 The performance of a particular performance result (hereafter referred to as the anomalous job) is first contextualized with respect its neighboring jobs, where neighboring jobs are those that
 \begin{enumerate}[leftmargin=*]
