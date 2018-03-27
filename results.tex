@@ -130,17 +130,21 @@ The positive correlation between performance and CPU load is consistent with the
 From this, we conclude that not only does baseline I/O performance vary with time, but \textbf{the nature and magnitude of how different attributes correlate with I/O performance also change over time}.
 Had this correlation analysis been performed without partitioning over divergence regions, the regions of positive and negative correlation would have obfuscated each other in the net result.
 
-The remaining two attributes that were found to correlate with performance are \texttt{open(2)} coverage factor (a measure of metadata resource contention) and file system fullness.
-Two divergence regions demonstrate high metadata coverage factors correlating positively with performance which is an intuitive relationship because high coverage factor indicates low contention for metadata resources.
-That said, the reason these two regions on the \edison \scratchtwo file system ever showed moderate correlation but the other Lustre file systems did not is unclear.
+The remaining two attributes that were found to correlate with performance
+are file system fullness and \texttt{open(2)} coverage factor (a
+measure of metadata resource contention).  The two instances of file
+system fullness correlating negatively with performance are clear
+and can be corroborated with independent observations from facilities
+staff.  These two regions encapsulate periods when their respective
+file systems approached 90\% full for a period of several days.
+The observed loss of performance is consistent with Lustre's known
+susceptibility to significant performance degradation as OSTs approach
+90\% fullness~\cite{oral2014best,Lockwood2017}.  The correlation with
+\texttt{open(2)} coverage factor is intuitive because this metric acts as a
+proxy for metadata contention.  However, it is unclear at this time why this
+correlation only appears on the \edison \scratchtwo file system but not the
+other Lustre file systems in the study.
 % The above statement is not very satisfying, but we don't have time to do more detailed analysis.
-However, understanding the two instances of file system fullness correlating with negatively with performance is much more obvious.
-These two regions encapsulate periods when their respective file systems approached 90\% full for a period of several days.
-The observed loss of performance is consistent with Lustre's known susceptibility to significant performance degradation as OSTs approach 90\% fullness~\cite{oral2014best,Lockwood2017}.
-
-
-
-
 
 \subsection{Transient performance loss} \label{sec:results/shortterm}
 
