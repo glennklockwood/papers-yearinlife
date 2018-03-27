@@ -81,6 +81,31 @@ Both of these cases justify the need for a systematic approach for identifying d
 
 \subsection{Time-dependent analysis} \label{sec:features/timedependent}
 
+Section~\ref{sec:features/summary} clearly illustrates the presence of
+time-varying behavior, but quantitative methods are needed to extract 
+actionable insight from these observations.  The main challenge that these
+methods face is differentating performance trends from individual short-term
+fluctuations in timeseries data.
+This problem is not unique to I/O performance or even computer science,
+however.  Notably, financial market technical analysis techniques are
+routinely used for a similar purpose: attenuating day-to-day volatility in
+the price of assets and identifying price movement
+trends~\cite{james1968monthly,gunasekarage2001profitability}.  
+
+The most straightforward initial technique to apply from this domain is
+the use of Simple Moving Averages (SMAs) over the performance observations.
+Given a time window of width $w$, the SMA for performance at time $t$ is the arithmetic mean of the fraction peak performance over ${-0.5w <= t < +0.5w}$.
+When chosen to be sufficiently short (${w_{short} \sim O(\textup{days})}$),
+the resulting $\textup{SMA}_{short}$ provides a rapid visual means to
+identify performance degradation or recovery that lasts for
+$O(\textup{days})$.  Multiple SMAs can be plotted simultaneously over the
+same data set to differentiate short and long term trends and identify key
+crossover points. In the context of financial markets, SMAs (and other more
+sophisticated related techniques) are used for predictive purposes to time
+the execution of market trades.  In the context of I/O performance
+monitoring they more readily applicable to identifying regions of interest in past
+behavior rather than predicting future behavior.
+
 \begin{figure}[t]
     \centering
     \includegraphics[width=1.0\columnwidth]{longterm-cscratch-hacc}
@@ -91,7 +116,6 @@ Both of these cases justify the need for a systematic approach for identifying d
 \end{figure}
 
 To address this need for systematic partitioning of performance regions, we apply Simple Moving Averages (SMAs) to the data collected from active I/O performance.
-This approach is often used in financial market technical analysis to attenuate the day-to-day volatility in the price of various assets and help identify larger trends in the price movements of the underlying assets~\cite{james1968monthly,gunasekarage2001profitability}.
 Given a time window of width $w$, the SMA for performance at time $t$ is the arithmetic mean of the fraction peak performance over ${-0.5w <= t < +0.5w}$.
 When chosen to be sufficiently short (${w_{short} \sim O(\textup{days})}$), the resulting $\textup{SMA}_{short}$ provides a rapid visual means to identify performance degradation or recovery that lasts for $O(\textup{days})$.
 
@@ -105,11 +129,17 @@ Curiously, the performance of HACC read workload (Figure \ref{fig:timeseries-bas
 This asymmetry, in combination with the bounding dates of this divergent region, allowed us to trace this specific issue to unintentional behavior introduced (and later fixed) in the Lustre software running on \cori during the system upgrades.
 Although this particular case of long-term performance divergence was caused by an unexpected bug in system software, the reality of most production storage systems is that they are regularly patched and upgraded.
 At minimum, the security requirements of the centers which run them drive system updates, and as exemplified by the widely publicized Spectre and Meltdown patches, such updates can have non-trivial effects on certain types of I/O.
-Thus, \textbf{performance-impacting bugs and patches represent a significant source of time-dependent, long-term performance variation that must be accounted for in both retrospective performance analyses and forward-looking performance modeling parameterization.}
-
-
-
-
+Thus, \textbf{administrative activities such as maintenance patches and
+software updates represent a significant source of time-dependent, long term performance
+variation.}  This must be accounted for in both retrospective performance
+analysis and forward looking performance modeling parameterization.  The
+ramifications I/O research practitioners is that \textbf{holistic I/O monitoring
+should incorporate provinence
+information, such as kernel version, operating system version, and file
+system version in the data set to aid in correlation.}  We also observe that
+\textbf{existing work in financial market analysis can be applied to
+time-varying performance data to attenuate noise and identify underlying
+trends.}
 
 \subsection{Partitioning divergent behavior} \label{sec:features/partitioning}
 
