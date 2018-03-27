@@ -116,10 +116,11 @@ The observed loss of performance is consistent with Lustre's known susceptibilit
 \begin{figure}
 
     \centering
-    \includegraphics[width=1.0\columnwidth]{contributors-bad-by-system}
+    \includegraphics[width=1.0\columnwidth]{contributors-bad-by-system-grey}
     \vspace{-.35in}
     \caption{Attributes that correlated with poor I/O performance across all file systems and benchmarks tested normalized to the number of probes during which each attribute was measured.
     \mira was the only system for which IOPS coverage factor was measured.
+    Greyed bars are attributes whose aggregate contributions were not statistically significant.
     Percentages do not add up to 100\% because multiple attributes are often classified as contributors for a single anomalous job.
     }
     \label{fig:contributors-bad-by-system}
@@ -151,8 +152,6 @@ To assess the statistical significance of each classification, we calculate the 
 The result of this process is zero or more attributes being positively classified as contributors to anomalous performance.
 For example, if the lowest values of the bandwidth coverage factor and IOPS coverage factor attributes occur in the same feature vector as the lowest value for performance, we classify both bandwidth and IOPS coverage factors as contributors to that anomalous observation's behavior.
 
-% ...
-
 To apply this method to our performance probes, we first group observations into sets of data by the test platform on which they ran as was done in Section \ref{sec:results/correlate-mira}.
 In addition, these sets are further subdivided according to I/O motif and read/write character of the performance probe to classify anomalies at full temporal resolution and motif-level granularity.
 The net result are $5 \times 4 \times 2 = 40$ sets of data, each representing a unique combination of test platform ($5 \times$, as listed in Table \ref{tab:platform-descriptions}), I/O motif ($4 \times$, per Table \ref{tab:benchmark-motifs}), and whether the probe was reading or writing ($2 \times$).
@@ -168,24 +167,36 @@ As described in Section \ref{sec:methods/tokio}, not every observation's feature
 So as not to bias our results away from those attributes that were only measured for a subset of observations (e.g., IOPS coverage factor was only collected on \mira), we express the frequency of each attribute as the ratio of observations where it was defined \emph{and} classified to the number of observations where it was defined.
 The result of this aggregated summary is shown in Figure \ref{fig:contributors-bad-by-system}.
 
+
+
+
+
 As with the longer-term performance divergence characterized in Section \ref{sec:results/correlate-all}, high contention for bandwidth is found to also cause short-term performance transients.
 However, contention for IOPS is also positively classified in a significant fraction of anomalous observations despite it not arising as a factor in longer-term performance divergence.
 This contrast demonstrates that IOPS contention only becomes a statistically significant attribute related to performance degradation in short-term transients, and there are no sustained periods of high IOPS on \mirafsone.
-Furthermore, 
-From this, it follows that the long-term bandwidth contention revealed in Figure \ref{fig:trend-correlations} is a statistically distinct phenomenon from transient bandwidth contention, and it is not simply 
+This also distinguishes this utility of this transient classification from the longer-term correlative analysis and underscores the fact that the sustained bandwidth contention identified in Section \ref{sec:results/correlate-all} is indeed a distinct phenomenon from the transient contention identified here.
+
+
+
+
 
 Contention on metadata servers and CPU load on data servers was also observed during anomalous jobs to a less significant degree, consistent with the correlation coefficients shown in Figure \ref{fig:trend-correlations}.
-Unlike the correlative analysis, though these data speak directly to the conditions that are present during abnormally poor I/O performance rather than summarize conditions during longer trend periods.
-Although the statistical significance of individual metric classifications is relatively high (${\textup{p-value} < 0.10}$), aggregating the classified metrics over all abnormal jobs reveals significantly greater degrees of significance.
-For example, the findings shown in Figure \ref{fig:contributors-bad-by-system} all demonstrate p-values of $10^{-4}$ or lower.
+Unlike the correlative analysis though, metadata contention was found to impact individual jobs on every test platform and occurred at much higher frequency.
+These findings indicate that metadata contention is much more likely to coincide with transient performance loss than a long-term and sustained divergence of performance.
 
-Two factors of this method are worth noting:
 
-\begin{itemize}
-\item Although the statistical significance of each individual classification is generally poor due to our generous choice of $\textup{p-value} < 0.10$, expressing the positively classified attributes as aggregate fractions allows us to assert much greater statistical significance.
-Since we have a number of positive and negative classifications as well as a p-value for each divergence region, we can apply the binomial test to each fraction expressed in Fig. \ref{fig:contributors-bad-by-system} to calculate a p-value
+Metadata server CPU load, file system fullness, and maximum job radius were also positively classified as contributors to anomalous performance in a small fraction of anomalous observations.
+To ascertain whether the rate at which these three attributes were classified is statistically significant, we can assign p-values to the frequency of occurrence stated for each attribute in Figure \ref{fig:contributors-bad-by-system}.
 
-\end{itemize}
+% leverage the fact that we have a number of positive and negative classifications and p-values for each divergence region to 
+
+we calculate the probability of reaching that result 
+
+, we can apply the binomial test to each fraction expressed in Fig. \ref{fig:contributors-bad-by-system} to calculate p-values for those distributions.
+
+% Although the statistical significance of each individual classification is generally poor due to our generous choice of $\textup{p-value} < 0.10$, 
+
+% For example, the findings shown in Figure \ref{fig:contributors-bad-by-system} all demonstrate p-values of $10^{-4}$ or lower.
 
 
 
