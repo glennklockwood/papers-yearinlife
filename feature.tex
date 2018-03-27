@@ -141,7 +141,7 @@ system version in the data set to aid in correlation.}  We also observe that
 time-varying performance data to attenuate noise and identify underlying
 trends.}
 
-\subsection{Partitioning divergent behavior} \label{sec:features/partitioning}
+\subsection{Identifying regions of interest} \label{sec:features/partitioning}
 
 The above performance analysis, enabled by comparing a short-range SMA to a long-range summary statistic, can be generalized by superimposing a second SMA ($\textup{SMA}_{long}$) with a longer window (${w_{long} \sim O(\textup{weeks})}$) on top of $\textup{SMA}_{short}$ (which captures variations ${O(\textup{days})}$).
 Doing so allows us to examine short-term performance variations (e.g., a period of sustained bandwidth contention) in the context of longer-term trends (e.g., in the presence of a file system software regression) and determine the causes of variation \emph{within} different regions of divergence such as the period described in Section \ref{sec:features/timedependent}.
