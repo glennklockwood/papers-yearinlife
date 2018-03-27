@@ -9,7 +9,6 @@
 %   \vspace{-.3in}
 \end{figure}
 
-
 \begin{figure*}
     \centering
     \includegraphics[width=0.90\linewidth]{summary-heatmap}
@@ -26,6 +25,9 @@
     \label{fig:regions-heatmap}
 \end{figure}
 
+
+
+
 \subsection{Statistical overview} \label{sec:features/summary}
 
 % \TODO{Things that are important here: behavior over time, grouping data sources in a way that helps understand scope, focusing on fundamental \emph{changes} in performance rather than steady state, everything in one view.}
@@ -36,7 +38,7 @@ This fraction of peak performance is defined as the absolute performance (in byt
 
 The distribution of the fraction of peak performance measurements for four of the five systems tested is shown in Fig. \ref{fig:summary-boxplots} and demonstrates that the performance of active I/O performance probes on production file systems is highly dynamic.
 However, visualizing the raw data of two of these performance distributions (Fig. \ref{fig:summary-heatmap}) reveals that performance variation is not randomly distributed over the year, and time-independent distributions of performance variation do not fully capture the nature of performance variability in production storage systems.
-Several archetypical types of correlated performance degradation observed in Fig. \ref{fig:summary-heatmap} are highlighted in Fig. \ref{fig:summary-heatmap} and fall into three broad categories of variation:
+Several archetypical forms of correlated performance degradation observed in Fig. \ref{fig:summary-heatmap} are highlighted in Fig. \ref{fig:summary-heatmap} and fall into three broad categories of variation:
 
 \begin{enumerate}[leftmargin=*]
 \item Dark vertical bands, exemplified in the \mira data in Fig. \ref{fig:regions-heatmap}, represent transient system-wide issues that resulted in a uniform loss of performance for all applications tested that day.
@@ -54,6 +56,10 @@ For system architects and operators, identifying and remedying the root causes o
 For users and application developers, it follows that the accuracy of parameterized I/O performance models~\cite{Xie2012,Madireddy2017} will degrade unless they are reparameterized as the I/O subsystem they model evolves.
 Both of these cases justify the need for a systematic approach for identifying different regions of I/O performance to differentiate long-term factors and phenomena from short-term transients.
 
+
+
+
+
 \subsection{Time-dependent analysis} \label{sec:features/timedependent}
 
 \begin{figure}[t]
@@ -65,58 +71,35 @@ Both of these cases justify the need for a systematic approach for identifying d
     % source: sc18_segments.ipynb
 \end{figure}
 
-
-
-
-% \begin{figure}[t]
-%     \centering
-%     \includegraphics[width=1.0\columnwidth]{segment-explain}
-%     \vspace{-.35in}
-%     \caption{Example of overlaying two simple moving averages (SMAs) to identify (a) \emph{divergence regions} and (c) \emph{trend regions} in the \edison \scratchtwo IOR/fpp write dataset.  Middle pane (b) includes raw performance measurements (blue bars) with both SMA crossovers (black dashed lines) and divergence region centroids (red dashed lines).}
-%     \label{fig:segment-explain}
-    % source: sc18_segments-explain.ipynb
-% \end{figure}
-
-To address this need for systematic partitioning of performance regions, we propose applying Simple Moving Averages (SMAs) to the data collected from active I/O performance.
-Given a time window of width $w$, the SMA for performance at time $t$ as the arithmetic mean of the fraction peak performance over ${-0.5w <= t < +0.5w}$.
+To address this need for systematic partitioning of performance regions, we apply Simple Moving Averages (SMAs) to the data collected from active I/O performance.
+This approach is often used in financial market technical analysis to attenuate the day-to-day volatility in the price of various assets and help identify larger trends in the price movements of the underlying assets~\cite{james1968monthly,gunasekarage2001profitability}.
+Given a time window of width $w$, the SMA for performance at time $t$ is the arithmetic mean of the fraction peak performance over ${-0.5w <= t < +0.5w}$.
 When chosen to be sufficiently short (${w_{short} \sim O(\textup{days})}$), the resulting $\textup{SMA}_{short}$ provides a rapid visual means to identify performance degradation or recovery that lasts for $O(\textup{days})$.
 
+An example of an SMA ($w_{short}$ = two weeks) applied to the performance data collected from HACC tests run on \cori is shown in Fig. \ref{fig:timeseries-baseline}.
+When contrasted with a time-independent summary statistic such as the overall mean performance of the entire year, the SMA clearly identifies the long period of degraded HACC write performance on \cori that was qualitatively shown in the bottom half of Fig. \ref{fig:summary-heatmap}.
+The points at which the SMA rise above or below the global mean performance also provide quantitative measurements of the region of time when an underlying issue manifested;
+in Fig. \ref{fig:timeseries-baseline}, these \emph{crossover points} fall on March 24 and August 10.
+Cross-referencing these dates with the service history of \cori retrospectively revealed that the beginning and end of this long-term region of divergent performance coincided with major system software upgrades that also happened on March 24 and August 10.
+
+Curiously, the performance of HACC read workload (Figure \ref{fig:timeseries-baseline}b) was unaffected during this time, demonstrating that not all workloads are affected by long-term variation equally.
+This asymmetry, in combination with the bounding dates of this divergent region, allowed us to trace this specific issue to unintentional behavior introduced (and later fixed) in the Lustre software running on \cori during the system upgrades.
+Although this particular case of long-term performance divergence was caused by an unexpected bug in system software, the reality of most production storage systems is that they are regularly patched and upgraded.
+At minimum, the security requirements of the centers which run them drive system updates, and as exemplified by the widely publicized Spectre and Meltdown patches, such updates can have non-trivial effects on certain types of I/O.
+Thus, \textbf{performance-impacting bugs and patches represent a significant source of time-dependent, long-term performance variation that must be accounted for in both retrospective performance analyses and forward-looking performance modeling parameterization.}
 
 
 
 
 
+\subsection{Partitioning divergent behavior} \label{sec:features/partitioning}
 
-Superimposing a second SMA with a longer window ($\textup{SMA}_{long}$, where ${w_{short} \sim O(\textup{weeks})}$) then allows us to compare short-term performance variations to the longer-term average, effectively distinguishing anomalies that last for $O(\textup{days})$ from longer-term performance evolution that occurs over $O(\textup{weeks})$.
-The points at which $\textup{SMA}_{short}$ intersects $\textup{SMA}_{long}$, termed \emph{crossover points}, also conveniently establish the boundaries of regions where short-term performance has diverged from longer-term performance.
+The above performance analysis, enabled by comparing a short-range SMA to a long-range summary statistic, can be generalized by superimposing a second SMA ($\textup{SMA}_{long}$) with a longer window (${w_{long} \sim O(\textup{weeks})}$) on top of $\textup{SMA}_{short}$ (which captures variations ${O(\textup{days})}$).
+Doing so allows us to examine short-term performance variations (e.g., a period of sustained bandwidth contention) in the context of longer-term trends (e.g., in the presence of a file system software regression) and determine the causes of variation \emph{within} different regions of divergence such as the period described in Section \ref{sec:features/timedependent}.
+The points at which $\textup{SMA}_{short}$ intersects $\textup{SMA}_{long}$, termed \emph{crossover points}, also conveniently establish the boundaries of regions where short-term performance has diverged from longer-term performance and anomalous performance is prevailing.
+We therefore introduce the notion of \emph{divergence regions} which are the periods of time bounded by two crossover points and capture correlated performance.
 
-We borrow this approach from financial market technical analysis, where moving averages are used to attenuate the day-to-day volatility in price movements and help identify larger trends in the price of different underlying assets~\cite{james1968monthly,gunasekarage2001profitability}.
-SMA crossover points are, again, a popular tool in technical analysis of financial markets, used to detect trend shifts in asset prices, often for predictive purposes\footnote{Though we note that the predictive capability of SMA crossovers is a source of controversy even in the financial community, and thus, we focus solely on using them as tools for managing volatility and detecting trends in historical datasets.} (e.g., as signals to buy or sell an asset based on the direction of the short and long-term SMAs at the time they crossover)~\cite{brock1992simple}.
-
-
-
-% In the following analysis, we apply this SMA-based approach to procedurally identify and classify performance variation at all time scales, ranging from long-term system health issues to transient performance loss due to probabilistic contention.
-
-
-%We define $\textup{SMA}_{short}$ and $\textup{SMA}_{long}$ as simple moving averages of widths $w_{short}$ and $w_{long}$, and for this study, chose $w_{short} = 14$ days and $w_{long} = 49$ days as a reasonable choice to focus on correlated performance events that occurred over $O(\textup{weeks})$.
-
-% J_{app, rw, sys}
-
-
-After calculating $\textup{SMA}_{short}$ and $\textup{SMA}_{long}$ for each of the set of performance observations $J_{app, rw, sys}$, we identify \emph{divergence regions}. These are defined as non-overlapping subsets of $J_{app, rw, sys}$ that are bounded by the crossover points between $\textup{SMA}_{long}$ and $\textup{SMA}_{short}$.
-
-
-
-
-%Figure \ref{fig:segment-explain}a illustrates this partitioning of the IOR/fpp write workload measurements on \edison's \scratchtwo file system;
-%dashed lines represent the crossover points of $\textup{SMA}_{long}$ and $\textup{SMA}_{short}$, and divergence regions are shaded in alternating gray and white.
-%As Figure \ref{fig:segment-explain}a illustrates, using SMA crossovers to identify divergence regions results in temporally contiguous subsets of performance measurements that capture a period of time with consistently good (${\textup{SMA}_{short} > \textup{SMA}_{long}}$) or bad (${\textup{SMA}_{short} < \textup{SMA}_{long}}$) performance.
-
-%Figure~\ref{fig:segment-explain}a shows 8 distinct divergence regions, but does not provide any insight into the causes of the transitions. To understand the causes of these transitions, we also partition $J_{app, rw, sys}$ into \emph{trend regions}.
-%For each divergence region, we identify the temporally center-most observation as the centroid of that region, as illustrated in Figure \ref{fig:segment-explain}b, as red dashed lines.
-%We then define trend regions as those regions bounded by centroids (Figure \ref{fig:segment-explain}c), and each trend region overlaps with exactly two divergence regions and vice versa.
-%The principal difference between the two is that divergence regions contain observations that are uniformly good or uniformly bad, and trend regions capture performance transitioning from bad to good or vice versa. Divergence regions are used to group measurements which are similar, trend regions are used to understand the reasons for transition between different performance regimes.
-
-%\TODO{Can we say more here about what we learned from Figure 3?}
-
-
+For the remainder of this study, we apply the concept of \emph{divergence regions}, bounded by the crossovers between $\textup{SMA}_{short}$ and $\textup{SMA}_{long}$, to systematically identify and characterize periods in time where anomalous performance was observed by the active I/O probes running across all of the test systems.
+We define $\textup{SMA}_{short}$ to have $w_{short} = 2 \textup{ weeks}$ as in \ref{sec:features/timedependent} and $\textup{SMA}_{long}$ to have $w_{long} = 7 \textup{ weeks}$.
+$w$ was chosen to be a multiple of seven days to align with the U.S. work week and ensure that weekends and weekdays were equally represented both SMA calculations.
+That said, our choice of $w_{long} = 7 \textup{ weeks}$ was somewhat arbitrary, and the analysis and conclusions presented below were insensitive to changes of $\pm 1 \textup{ week}$.

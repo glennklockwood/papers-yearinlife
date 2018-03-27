@@ -31,9 +31,13 @@ production-quality file system monitoring tools for Lustre and GPFS deployments,
 \item \textbf{Job scheduler monitoring}: Job schedulers like Slurm~\cite{2003slurm} often keep a detailed accounting of all jobs that execute on a particular system, including useful details like the size of the job and its placement across available compute nodes.
 \end{itemize}
 
-%\TODO{Worth giving the shoutout to the pytokio implementation here, or does that go in the reproducibility appendix?} % I don't think that needs to go here --gkl
+The telemetric data from these monitoring modules are aggregated into \emph{attributes} associated with each job, and all of the attributes associated with a job are represented as \emph{feature vectors}.
+Wherever possible, attributes are also represented as \emph{coverage factors}~\cite{Lockwood2017} which quantify the fraction of system-wide activity that can be attributed to the job of interest.
+For example, a job's \emph{bandwidth coverage factor} is the number of bytes read and written by that job's application (measured by Darshan) divided by the number of bytes read and written across the entire parallel file system (measured by LMT or ggiostat) while that job was running.
+A coverage factor of 1.0 indicates that a job was the exclusive consumer of a resource, while a coverage factor of 0.4 indicates that other competing jobs consumed 60\% of the total delivered resources.
 
-\TODO{Define coverage factor and feature vector here.}
+In this study, each job has a feature vector of 220 attributes, although some attributes are derived from others and therefore degenerate.
+In addition, some attributes are not defined on some systems due to those systems' monitoring modules not reporting certain metrics.
 
 \subsection{Platforms}\label{sec:methods/platforms}
 
