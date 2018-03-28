@@ -127,14 +127,14 @@ Curiously, the performance of HACC read workload (Figure \ref{fig:timeseries-bas
 This asymmetry, in combination with the bounding dates of this divergent region, allowed us to trace this specific issue to unintentional behavior introduced (and later fixed) in the Lustre software running on \cori between the system upgrades.
 Although this particular case of long-term performance divergence was caused by an unexpected bug in system software, the reality of most production storage systems is that they are regularly patched and upgraded.
 At minimum, the security requirements of the centers which run them drive system updates, and as exemplified by the widely publicized Spectre and Meltdown patches, such updates can have non-trivial effects on certain types of I/O.
-Thus, \textbf{administrative activities such as maintenance patches and
+Thus, administrative activities such as maintenance patches and
 software updates are a significant source of time-dependent, long term performance
-variation.}  This must be accounted for in both retrospective performance
-analysis and forward looking performance modeling parameterization.  The
-ramifications I/O research practitioners is that \textbf{holistic I/O monitoring
-should incorporate environmental provinence
+variation. This must be accounted for in both retrospective performance
+analysis and forward looking performance modeling parameterization activities.  The
+ramifications for I/O research practitioners is that holistic I/O monitoring
+must incorporate environmental provenance
 information, such as kernel, operating system, and file
-system version, to aid in correlation.}
+system version, to aid in correlation.
 
 \subsection{Regions of interest} \label{sec:features/partitioning}
 
