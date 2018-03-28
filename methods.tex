@@ -66,8 +66,8 @@ A coverage factor of 1.0 indicates that a job was the exclusive consumer of
 a resource, while a coverage factor of 0.4 indicates that other competing
 jobs consumed 60\% of the total delivered resources.  Each job in this study
 typically produces a feature vector with 220 attributes including derived
-values.  The exact size of the feature vector depends on what monitoring
-modules are available on the target platform at the time the job is
+values.  The exact size of the feature vector depends on what connectors
+are available on the target platform at the time the job is
 executed.
 
 \subsection{Platforms}\label{sec:methods/platforms}
@@ -89,7 +89,7 @@ executed.
 \end{tabular}
 \end{table}
 
-We deployed \tokio on the \edison and \cori systems at \nersc and the \mira system at the \alcf. Each of these platforms, along with their corresponding file systems analyzed as part of this study, are briefly described in Table~\ref{tab:platform-descriptions}.
+We leveraged the \tokio framework on the \edison and \cori systems at \nersc and the \mira system at the \alcf. Each of these platforms, along with their corresponding file systems analyzed as part of this study, are briefly described in Table~\ref{tab:platform-descriptions}.
 
 Darshan is installed and automatically enabled on each of these systems, transparently characterizing the I/O workloads of a large portion of  each system's job population. 
 \nersc has deployed LMT for full-time monitoring of the Lustre scratch
@@ -118,11 +118,11 @@ To measure the performance variation on the systems described in Section \ref{se
 We utilize these benchmarking runs as another monitoring source for this
 study, actively probing the user-perceived I/O performance of each analyzed file system on a daily basis across a range of representative I/O motifs.
 The four underlying benchmarks (VPIC, BDCATS, HACC, and IOR) were chosen to exercise a variety of I/O workloads and covered the four I/O motifs listed in Table \ref{tab:benchmark-motifs} in both read and write modes.
-Each application was configured to run identically to previous work~\cite{Lockwood2017} with the goal of using a substantial fraction of the I/O subsystem's peak bandwidth while using minimal production cycles.
+Each probe was configured to run identically to previous work~\cite{Lockwood2017} with the goal of using a substantial fraction of the I/O subsystem's peak bandwidth while using minimal production cycles.
 All probes ran using 256 nodes (4,096 processes) on \cori, 128 nodes (2,048 processes) on \edison, and 1,024 nodes (16,384 processes) on \mira.
 Data was striped as widely as possible in all cases; this corresponds to
 striping over every OST (for \cori and \edison) or every LUN (for \mira).
-In the case of \cori and \edison, each job had access to the full I/O bandwidth its I/O nodes as well, but due to the way in which I/O nodes are allocated in a fixed ratio to job size on Blue Gene/Q systems, \mira jobs were restricted to the bandwidth provided by eight I/O nodes.
+In the case of \cori and \edison, each job had access to the full I/O bandwidth of its I/O nodes as well, but due to the way in which I/O nodes are allocated in a fixed ratio to job size on Blue Gene/Q systems, \mira jobs were restricted to the bandwidth provided by eight I/O nodes.
 \TODO{What does that last sentence above mean?  First half is about FS striping, second half is about forwarding layer resources?
 \\
 gkl- hopefully the revised sentence addresses this without fully explaining the BG/Q and XC30 I/O forwarding architectures.}
@@ -131,8 +131,7 @@ gkl- hopefully the revised sentence addresses this without fully explaining the 
 11,986 performance observations across \mira, \cori, and \edison over the
 course of a year.
 The remaining 18.1\% of potential probes failed due to system downtime, malfunctions of component-level monitoring tools or the automated test scheduling, queue wait times that exceeded 24 hours, and benchmarks exceeding their walltime.
-The fact that no results were obtained for jobs that ran so slowly that they exceeded their reserved walltime is significant in that this dataset does not capture the absolute worst performance observed.
-Although not ideal, this reflects the realities of daily testing on production systems.
+
 
 %\TODO{Add details of the number of processes the benchmarks ran with, and how the file systems are set up, i.e., number of OSTs on \cori, number of I/O nodes used on \mira 
 %\\

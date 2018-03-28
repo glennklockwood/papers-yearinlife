@@ -4,7 +4,7 @@ I/O performance variation has been studied extensively, and a variety of conditi
 %
 Overall performance (and thus scientific productivity) can be improved for a
 wide range of users if these deviations can be identified and attributed
-quickly in production.
+quickly in production. Additionally, the determination of the reasons for the performance slowdowns can be fed into the design of future file systems. 
 
 %Such systematic, long-term I/O performance variation remains much less well understood despite its relevance to scientific campaigns that may experience uneven throughput or resource consumption over the course of months or years.  In this work, we differentiate \emph{long-term performance variation} from \emph{short-term performance variation} and characterize the factors that contribute to long-term performance variation on a diverse range of large-scale production parallel storage systems.
 
@@ -21,21 +21,20 @@ over the course of a year of production use.  In addition to passive
 instrumentation, such as system monitoring and application profiling,
 we also employ active probing of I/O performance to record user-perceived
 performance over time.  The breadth of the data set enables investigation
-multiple time scales, ranging from days to months, to identify trends in
+over multiple time scales, ranging from days to months, to identify trends in
 both absolute performance and variability.  The depth of the data set
 enables correlation analysis to identify subtle relationships between
 performance and a variety of system-wide metrics.
 
-\TODO{reword below paragraph to shift focus away from methodology.}
-We also develop a methodology for identifying inflection points in
-long-term user-perceived performance due to factors beyond their control,
-such as hardware failures, software changes, capacity constraints, or
-contention.  These trends are easily overlooked or misattributed given the
-complexity and inherent variability of the I/O system itself, but can have a
-significant long term impact on efficiency.  Once an inflection point has
-been found, we investigate methods for guiding administrators to likely
-contributing factors if not outright identifying definitive root causes for
-anomalous performance.
+%We also develop a methodology for identifying inflection points in
+%long-term user-perceived performance due to factors beyond their control,
+%such as hardware failures, software changes, capacity constraints, or
+%contention.  These trends are easily overlooked or misattributed given the
+%complexity and inherent variability of the I/O system itself, but can have a
+%significant long term impact on efficiency.  Once an inflection point has
+%been found, we investigate methods for guiding administrators to likely
+%contributing factors if not outright identifying definitive root causes for
+%anomalous performance.
 
 %By integrating holistic I/O monitoring throughout the
 %year-long experiment, we then quantitatively show
@@ -44,12 +43,20 @@ anomalous performance.
 %play less significant role in long-term performance variation.
 %Given this multiscale nature of I/O performance variation, we conclude that the probabilistic effects of transient interference \emph{and} the autocorrelative effects of long-term variation are required to capture the full picture of performance variation on parallel storage systems.
 
-The primary contributions of this paper are as follows: \TODO{fill in
-contributions.  See bold findings in text plus any methods or
-recommendations that we want
-to call out.}
-\TODO{Is simply the collection of an unprecedented year long, multi-facility
-I/O performance data set a contribution too?}
-\TODO{Is the method for actively probing performance a contribution too?}
+The primary contributions of this work are as follows: 
+\begin{itemize}[leftmargin=*]
+\item We have collected, and will make publicly available, an unprecedented year long, multi-facility
+I/O performance data set containing performance measurements for a suite of I/O benchmarks run daily and their associated telemetry data.
+\item We have shown that the baseline performance and the performance variation changes over time.
+Factors such as system software updates and sustained workloads motivated by external factors such as end of allocation year contribute to the long term variations observed. 
+% * <glennklockwood@gmail.com> 2018-03-28T04:34:39.025Z:
+% 
+% > end of allocation year
+% We don't ever make this assertion to my knowledge.
+% 
+% ^.
+\item At different times measured metrics associated with I/O performance  can have different characteristics. We demonstrate that high CPU load can correlate with favorable performance under healthy file system conditions, and it can coincide with unfavorable performance when non-I/O workloads are impacting storage servers.
+\item We show that contention for bandwidth, IOPS, and metadata resources can be confidently determined to be the sources of transient I/O performance problems.
+\end{itemize}
+Overall we show that a great deal of information about I/O performance variation can be quantified using holistic I/O analysis and simple statistical methods. This paper is organized as follows \S~\ref{sec:related} contains related work, \S~\ref{sec:methods} describes the data collection framework, the benchmarks used and the HPC platforms studied, \S~\ref{sec:features} describes our methodology for determining regions of similar I/O performance, \S~\ref{sec:results} contains the results of our statistical analysis of the data and \S~\ref{sec:conclusions} concludes. 
 
-%The remainder of the paper is organized as follows.  \TODO{Fill in}

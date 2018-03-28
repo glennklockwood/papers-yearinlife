@@ -1,4 +1,4 @@
-\section{Conclusion}
+\section{Conclusion} \label{sec:conclusions}
 
 % 
 % - baseline I/O performance and variability are not constant over time
@@ -17,12 +17,29 @@
 % 
 % - attributes that correlate with transient performance problems (IOPS and metadata contention) often differ from those that correlate with long-term performance problems (bandwidth contention).
 % 
-
 \TODO{Make sure to sync up with abstract and introduction.  What are
 implications for the state of the practice?  What are our next steps for
 future work?}
 
-\TODO{Convert to prose:}
+
+In this work we have gained numerous insights into I/O performance variation in production on three leadership-class HPC resources. By collecting performance data for one-year we were able observe both short-term and long-term effects upon I/O performance. We also developed a set of best practices for others looking to monitor and understand the performance of their HPC I/O systems in production.
+
+Our results show that the baseline I/O performance changes over time. The baseline peak performance for a given I/O motif on a file systems can change as a result of factors such as system software updates and sustained workloads motivated by external factors such as end of allocation year. By introducing a SMA's as a mechanism of analyzing the time series data we were able to identify transitions between these regions of differing baseline I/O performance and gain insight into the cause of the performance change. 
+
+The identification of such regions was essential to gain a good understanding of the causes of performance changes between regions. Our results showed that the magnitude and sign of correlation between performance and other measured metrics can vary between different performance regions.
+We demonstrated that high CPU load can correlate with favorable performance under healthy file system conditions, and it can coincide with unfavorable performance when non-I/O workloads are impacting storage servers.
+
+We showed that contention for bandwidth, IOPS, and metadata resources can be confidently determined to be the sources of transient I/O performance  problems.
+That said, 16\% of the transient I/O performance issues defied classification using our binary classification method.
+This indicates that we are still missing telemetry from important components of the I/O subsystem that contribute to performance variation. Addressing this need will be the subject of future work. 
+
+The methods presented here are not dependent on SMAs, and alternative approaches for both partitioning time series data and classifying the measurements within regions can be replaced with more sophisticated methods. Our hope is that the simple statistical methods presented here will ensure that the state of the practice is advanced across the whole HPC community as we have shown that a great deal of information about I/O performance variation can be quantified using holistic I/O analysis and these simple statistical methods.
+
+In future work we plan to develop methods to mathematically begin to classify the similarity of different regions from one another to enable the determination of broad classes of performance regions. We also plan to use the measured data as input to simulation frameworks to enable the design of potential new file system features or policies to reduce the  amount of I/O performance variation seen in production. 
+
+
+
+\endinput
 
 \begin{enumerate}
 \item \textbf{Baseline performance and performance variation changes over time.}
