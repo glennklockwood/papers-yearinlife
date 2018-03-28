@@ -180,9 +180,9 @@ To identify individual performance anomalies in a divergence region and classify
 \item We examine the feature vector for every observation in the divergence region, and for each attribute $a$, determine the observation where that attribute's measured value was at its lowest, $\min(a)$.
 
 \item We then define the \emph{anomalous observation} for the divergence region as the observation whose feature vector contains $\min(a)$ for fraction peak performance.
-Because divergence regions contain observations of similaperformance by definition, this anomalous observation is truly anomalous--it is in a region where the typical performance is defined, but it is also divergent from that.
+As divergence regions contain observations of similar performance by definition, this anomalous observation is truly anomalous-- it is differentiated from the long-term performance trends described in Sec.~\ref{sec:features} as well as the ones within its own divergence region.
 
-\item Finally, we determine which other $\min(a)$ values also fell in this anomalous observation's feature vector and classify those attributes $a$ as contributors to the anomalous observation's anomalous performance.
+\item Finally, we determine which other $\min(a)$ values also fell in this anomalous observation's feature vector and classify those attributes $a$ as contributors to the anomalous observation's performance.
 
 \end{enumerate}
 
