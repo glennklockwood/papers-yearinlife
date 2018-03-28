@@ -23,6 +23,8 @@ In the following analyses, we separate our 11,986 performance observations into 
 
 % Bandwidth, IOPS, and metadata contention are confidently correlated with I/O performance at both long. 
 
+\TODO{add a footnote explaining p-value}
+\TODO{add citation (or something) for Pearson}
 We begin our correlative analysis by partitioning a year-long data set into
 divergence regions using the method described in
 Section~\ref{sec:features/partitioning}.  Using observations from \mira
@@ -56,7 +58,7 @@ regions exhibits at least moderate correlation ($R$) ranging from 0.507 to
 % \\
 % gkl- I asked myself the same Q.  It turns out that a correlation between exactly two data points produces a perfect p-value of 0.0 because you can draw a straight line through those two points.  This passes the significance filter but royally messes up the results.}
 
-\TODO{I'm not sure I understand why we're aggregating trend regions from different motifs here, since everywhere else our analysis is applied to these independently. For one, different motifs could have different trend regions by definition. If the results hold over just one motif, maybe just use those, or something? -SS}
+\TODO{I'm not sure I understand why we're aggregating divergence regions from different motifs here, since everywhere else our analysis is applied to these independently. For one, different motifs could have different trend regions by definition. If the results hold over just one motif, maybe just use those, or something? -SS}
 Fig.~\ref{fig:mira-correlation-region} illustrates the correlation
 between bandwidth coverage factor and fraction peak performance for a
 particular divergence region in November 2017 on \mira \mirafsone.  This example
@@ -178,7 +180,7 @@ The lack of a consistent performance trend surrounding these transients makes th
 
 To address this need, we apply the same strategy of partitioning performance observations into divergence regions and then performing statistical analysis within each region.
 To identify individual performance anomalies in a divergence region and classify the factors which contributed to them, we apply the following binary classification method:
-\TODO{Are we sure we only want to determine one and only one anomalous observation in each trend region? -SS}
+\TODO{Are we sure we only want to determine one and only one anomalous observation in each divergence region? -SS}
 
 \begin{enumerate}[leftmargin=*]
 
@@ -221,8 +223,8 @@ This contrast demonstrates that IOPS contention only becomes a statistically sig
 This also distinguishes this utility of this transient classification from
 the longer-term correlative analysis.
 % Intuitively this result makes sense, as a job running on the machine performing I/O only places load on the metadata server during short duration events (eg. file open/close), whereas the load when the data is being read or written is likely to occur over much longer time periods.
-Intuitively, this result makes sense; a job performing I/O nominally places load on the metadata server only at the start and end of of reading and writing, while the process of reading and writing occurs over much longer time periods.
-\TODO{gkl: Phil/Shane, please review above line with your I/O expert hat on}
+% Intuitively, this result makes sense; a job performing I/O nominally places load on the metadata server only at the start and end of of reading and writing, while the process of reading and writing occurs over much longer time periods.
+% \TODO{gkl: Phil/Shane, please review above line with your I/O expert hat on}
 
 We also observe the coincidence of anomalous jobs and anomalous metadata coverage factor and CPU load on
 data servers to a less significant degree.  This is
@@ -238,6 +240,10 @@ performance problems (IOPS and
     long-term performance problems (bandwidth contention).} These are two distinct forms of performance variation that
 require unique investigation techniques.
 
+\TODO{Simplify our motivation for doing this bimodal stuff--we saw some metrics that correlated infrequently.  Are these statistically significant?
+\\
+"frequency of attributes" should go away--we're talking about how often a pops up in "instance of slowdowns"
+}
 Metadata server CPU load, file system fullness, and maximum job radius were also positively classified as contributors to anomalous performance in a small fraction of anomalous observations.
 To ascertain whether the frequency with which these three attributes were classified is statistically significant, we assign p-values to aggregate fraction of anomalous observations where each attribute was positively classified in Figure \ref{fig:contributors-bad-by-system}.
 We leverage the fact that we have a raw count of positive and negative classifications and their p-values to apply a one-tailed binomial test
