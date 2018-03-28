@@ -39,9 +39,10 @@ three data points.  This yields 32 divergence regions.
 We then apply Pearson correlation~\cite{Falk97manyfaces} to the feature vectors within each divergence region to identify the factors that correlate with its
 performance trend.
 The result of this process is a new feature vector for each divergence region which contains the correlation coefficients between the fraction of peak performance and every other attribute across all observations in that region.
-We then use the p-value of each correlation coefficient
-\footnote{The p-value of a correlation coefficient is the probability of observing that correlation coefficient in the absence of any real relationship between the underlying metrics.
-A low p-value indicates that it is extremely unlikely that the calculated correlation coefficient would be observed if the variables being examined aren't really correlated.}
+We then use the p-value of each correlation coefficient\footnote{
+The p-value of a correlation coefficient is the probability of observing data that would show the same correlation coefficient in the absence of any real relationship between the underlying metrics.
+A low p-value indicates that it is extremely unlikely that the calculated correlation coefficient would be observed if the metrics being compared had no real correlation.
+As such, p-values represent the statistical significance of a statistical measurement.}
 to further downselect the total set of regions to those with extremely high significance
 ($\textup{p-value} < {1.0 \times 10^{-5}}$).
 This threshold yields a total of nine relevant divergence regions on \mira \mirafsone which are all depicted as shaded extents in Figure \ref{fig:mira-regions-overview}.
@@ -174,8 +175,10 @@ As divergence regions contain observations of similar performance by definition,
 \end{enumerate}
 
 Qualitatively, this process codifies the conjecture that if I/O performance is anomalous on a specific day, the other measured attributes which were also anomalous at that time are what contributed to that behavior.
-Quantitatively, this simple classification scheme allows us to identify relationships and quantify the statistical significance of each classification for individual anomalous observations.
-To establish the statistical significance, we calculate the p-value of each classification in a divergence region to be $\textup{p-value} = \frac{1}{N}$, where $N$ is the number of observations in the region; intuitively, this value is the probability of a random variable being positively classified.
+Quantitatively, this simple classification scheme allows us to identify relationships and quantify the statistical significance of each classification for individual anomalous observations using p-values\footnote{
+The p-value is the probability of making a positive classification in the absence of an underlying relationship.
+As such, it is equivalent to the probability of making a positive classification with a random value. 
+Since there is only one $\min(a)$ in each region of $N$ observations, the p-value for our classifications is simply $\frac{1}{N}$}.
 \TODO{Please clarify above if possible. Why are we dividing the p-value by N? Or do I have to do more stats homework? -SS}
 
 The result of this process is zero or more attributes being positively classified as contributors to anomalous performance.
