@@ -179,16 +179,9 @@ Quantitatively, this simple classification scheme allows us to identify relation
 The p-value is the probability of making a positive classification in the absence of an underlying relationship or, equivalently, the probability of positively classifying a random value.
 Since there is only one $\min(a)$ in each region of $N$ observations, the p-value for our classifications is thus $\frac{1}{N}.$}.
 
-\TODO{Please clarify above if possible. Why are we dividing the p-value by N? Or do I have to do more stats homework? -SS
-\\
-gkl: shane, does the footnote help?  if so, kill this TODO}
-
 The result of this process is zero or more attributes being positively classified as contributors to anomalous performance.
 For example, if the lowest values of the bandwidth coverage factor and IOPS coverage factor attributes occur in the same feature vector as the lowest value for performance, we classify both bandwidth and IOPS coverage factors as contributors to that anomalous observation's performance.
 
-\TODO{Seems like this whole paragraph could be moved to 5a, if that section wasn't aggregating all motifs in a trend region. This text is very helpful for understanding how we partition our data, and the reader would be better served encountering it early on. -SS
-\\
-gkl: the first sentence calls out to 5a.  The rest of the per-motif decomposition does not apply to 5a/5b, which is why it's only appearing here.}
 To apply this method, we first group observations into sets of data by the test platform on which they ran as was done in Section \ref{sec:results/correlate-mira}.
 These sets are then further subdivided according to I/O motif and read/write mode of the probe to classify anomalies at full temporal resolution and motif-level granularity.
 The net result are $5 \times 4 \times 2 = 40$ sets of data, each representing a unique combination of test platform ($5 \times$, as listed in Table \ref{tab:platform-descriptions}), I/O motif ($4 \times$, per Table \ref{tab:benchmark-motifs}), and whether the probe was reading or writing ($2 \times$).
@@ -232,15 +225,13 @@ require unique investigation techniques.
 \\
 "frequency of attributes" should go away--we're talking about how often $a$ pops up in "instance of slowdowns"
 }
-Metadata server CPU load, file system fullness, and maximum job radius also appeared in a small fraction of anomalous observations.
+Metadata server CPU load, file system fullness, and maximum job radius were also classified in some anomalous observations.
 However, the low number of anomalous observations in which they appeared calls into question the statistical significance of these three findings.
-To address this, we calculate the probability of observing the results in Fig. \ref{fig:contributors-bad-by-system} in the absence of any underlying relationship using a one-tailed binomial test\footnote{
-This probability is the p-value of the distribution
-We use the number of positive and negative classifications and the assumption that.
-   Given our dataset was filtered to only include regions with $\textup{p-value} < 0.10$, we used 0.10 as the most conservative value for this binomial test probability.}
-and calculate the probability of observing the stated distributions in random variables.
+To address this, we calculate the p-values, or the probability of observing the same number of classifications in the absence of a true underlying relationship, for each metric\footnote{
+To calculate these p-values, we use one-tailed binomial tests using the number of positive classifications observed for each metric.
+The fact that our dataset was filtered to only include regions with ${\textup{p-value} < 0.10}$ also establishes 0.10 as the most conservative value for the binomial test probability.}.
 
-The result of these significance tests reveal that the rates at which these three low-frequency attributes (metadata server load, file system fullness, and maximum job radius) were positively classified are statistically insignificant.
+The result of these significance tests reveal that the number of times metadata server load, file system fullness, and maximum job radius were classified is statistically insignificant.
 Whereas the leftmost five attributes in Fig. \ref{fig:contributors-bad-by-system} all have p-values of ${5 \times 10^{-5}}$ or lower, the insignificant metrics' are 0.15 or higher.
 Qualitatively, these negative findings are not unreasonable; for example, file system fullness is most often a degenerative, long-term health problem as was identified in Section \ref{sec:results/correlate-all} and prior work~\cite{oral2014best,Lockwood2017}.
 
