@@ -175,11 +175,13 @@ As divergence regions contain observations of similar performance by definition,
 \end{enumerate}
 
 Qualitatively, this process codifies the conjecture that if I/O performance is anomalous on a specific day, the other measured attributes which were also anomalous at that time are what contributed to that behavior.
-Quantitatively, this simple classification scheme allows us to identify relationships and quantify the statistical significance of each classification for individual anomalous observations using p-values\footnote{
-The p-value is the probability of making a positive classification in the absence of an underlying relationship.
-As such, it is equivalent to the probability of making a positive classification with a random value. 
-Since there is only one $\min(a)$ in each region of $N$ observations, the p-value for our classifications is simply $\frac{1}{N}$}.
-\TODO{Please clarify above if possible. Why are we dividing the p-value by N? Or do I have to do more stats homework? -SS}
+Quantitatively, this simple classification scheme allows us to identify relationships and define the statistical significance of each classification for individual anomalous observations using p-values\footnote{
+The p-value is the probability of making a positive classification in the absence of an underlying relationship or, equivalently, the probability of positively classifying a random value.
+Since there is only one $\min(a)$ in each region of $N$ observations, the p-value for our classifications is thus $\frac{1}{N}.$}.
+
+\TODO{Please clarify above if possible. Why are we dividing the p-value by N? Or do I have to do more stats homework? -SS
+\\
+gkl: shane, does the footnote help?  if so, kill this TODO}
 
 The result of this process is zero or more attributes being positively classified as contributors to anomalous performance.
 For example, if the lowest values of the bandwidth coverage factor and IOPS coverage factor attributes occur in the same feature vector as the lowest value for performance, we classify both bandwidth and IOPS coverage factors as contributors to that anomalous observation's performance.
