@@ -125,13 +125,13 @@ This asymmetry, in combination with the bounding dates of this divergent region,
 Although this particular case of long-term performance divergence was caused by an unexpected bug in system software, the reality of most production storage systems is that they are regularly patched and upgraded.
 At minimum, the security requirements of the centers which run them drive system updates, and as exemplified by the widely publicized Spectre and Meltdown patches, such updates can have non-trivial effects on certain types of I/O.
 Thus, \textbf{administrative activities such as maintenance patches and
-software updates represent a significant source of time-dependent, long term performance
+software updates are a significant source of time-dependent, long term performance
 variation.}  This must be accounted for in both retrospective performance
 analysis and forward looking performance modeling parameterization.  The
 ramifications I/O research practitioners is that \textbf{holistic I/O monitoring
 should incorporate environmental provinence
-information, such as kernel version, operating system version, and file
-system version in the data set to aid in correlation.}
+information, such as kernel, operating system, and file
+system version, to aid in correlation.}
 
 \subsection{Regions of interest} \label{sec:features/partitioning}
 
@@ -159,10 +159,9 @@ presented in this work was insensitive to changes of $\pm 1 \textup{ week}$.
 \\
 gkl-hopefully Fig. \ref{fig:mira-regions-overview} addresses this}
 
-In general we find that \textbf{existing work in financial market technical
-analysis can be adapted to
-time-varying I/O performance data to attenuate noise and identify regions of
-interest based on performance trends.}
+In general we find that \textbf{financial market technical
+analysis techniques can be adapted to
+timeseries I/O performance data to attenuate noise and identify underlying trends.}
 In the context of financial markets, SMAs (and other more
 sophisticated related techniques) are used for predictive purposes to time
 the execution of market trades.  In this context we are not applying them to

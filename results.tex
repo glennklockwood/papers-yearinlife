@@ -83,10 +83,10 @@ distinguishes it from the motif-specific case discussed in Section
 When the same Pearson correlation is calculated across the entire collection
 of \mira \mirafsone data, the correlation with bandwidth coverage factor
 yields an overall result of $R = 0.483$ and $\textup{p-value} =
-2.25\times 10^{-88}$.  \textbf{By focusing our analysis on divergence regions we not only
-draw attention to the most intuitively important trends in the data, but we
-also identify statistically stronger correlations that can be found via
-global analysis.}
+2.25\times 10^{-88}$.  \textbf{We identify significantly stronger
+correlations by focusing analysis on algorithmically identified regions of
+interest in the data.}
+
 \TODO{We could use a plot for comparison if we have a lot of free time to
 kill.  I don't think it is critical though.}
 
@@ -224,10 +224,10 @@ Unlike the correlative analysis, however, metadata contention was found to impac
 These findings indicate that metadata contention is much more likely to coincide with transient performance loss than a long-term and sustained divergence of performance.
 
 In general, the contrast in correlations between transient events and
-long-term trends shows that \textbf{transient
-problems correlate with different attributes (such as IOPS and
-metadata contention) those found in analysis of long-term problems (such
-as sustained bandwidth contention).} These are distinct conditions that
+long-term trends shows that \textbf{the attributes that correlate with transient
+performance problems (IOPS and
+  metadata contention) often differ from those that correlate with
+    long-term performance problems (bandwidth contention).} These are distinct conditions that
 require unique investigation techniques.
 
 Metadata server CPU load, file system fullness, and maximum job radius were also positively classified as contributors to anomalous performance in a small fraction of anomalous observations.
