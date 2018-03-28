@@ -24,10 +24,10 @@ expectations of system performance.  It is unrealistic to assume that
 benchmarks performed upon system delivery will accurately represent
 performance over time, and performance expectations must be recalibrated as storage systems age.
 
-\item \textbf{Attributes that correlate with transient performance problems (IOPS
-and metadata contention) often differ from those that correlate with
-long-term performance problems (bandwidth contention):}  I/O-intensive workloads in HPC
-are widely known to be unusually bursty compared to other I/O-intensive markets, but this finding reveals that some aspects of HPC I/O workloads are burstier than others.  Performance degradation that results from metadata or IOPS contention is unlikely to persist for days or weeks, while bandwidth contention can result in variation at all time scales.
+\item \textbf{Attributes that correlate with transient performance problems  often differ from those that correlate with
+long-term performance problems:}  I/O-intensive workloads in HPC
+are widely known to be unusually bursty compared to other I/O-intensive markets, but this finding reveals that some aspects of HPC I/O workloads (such as IOPS
+and metadata contention) are burstier than others (such as bandwidth contention).  Performance degradation that results from metadata or IOPS contention is unlikely to persist for days or weeks, while bandwidth contention can result in variation at all time scales.
 
 \end{itemize}
 
@@ -36,9 +36,9 @@ are widely known to be unusually bursty compared to other I/O-intensive markets,
 
 The following findings motivate further advances in how large-scale storage systems are monitored and what data sources are required:
 
-\TODO{where does this go?
-Furthermore, 16\% of the transient I/O performance issues defied classification using our binary classification method.
-This indicates that we are still missing telemetry from important components of the I/O subsystem that contribute to performance variation.}
+% \TODO{\textbf{where does this go?  tempted to drop it since it's specific to our results, not the state of the practice}
+% Furthermore, 16\% of the transient I/O performance issues defied classification using our binary classification method.
+% This indicates that we are still missing telemetry from important components of the I/O subsystem that contribute to performance variation.}
 
 \begin{itemize}[leftmargin=*]
 
@@ -58,14 +58,14 @@ provenance information, such as kernel, operating system, and file system
 versions, to aid in correlation}: 
 This is an obvious finding in retrospect, but is not widely taken into
 account in current instrumentation tools.  Tools such as Darshan and
-TOKIO should capture some degree of environmental information 
-to store alongside conventional performance measurements in order to
-simplify the task of aligning those pieces of information.
+LMT should capture sufficient environmental information 
+alongside conventional performance measurements to
+simplify the task of identifying performance losses due to environmental changes.
 
-\item \textbf{Bandwidth contention from sustained workloads often accompany
+\item \textbf{Bandwidth contention from sustained, long-term workloads often accompanies
 sustained performance losses}: The impact of bandwidth contention on I/O
-performance is widely supported in the literature.  This study highlights
-subtleties in that observation however; namely that detremental contention
+performance is widely supported in the literature, but this study demonstrates
+time-dependent behavior not previously acknowledged. Specifically, detrimental contention
 can occur over time spans lasting several weeks (e.g., aggregate
 workload due to project allocation timing) and may be driven by factors 
 not captured by conventional HPC monitoring (e.g., wide area transfers or 
@@ -78,13 +78,13 @@ stack, but also the auxiliary resources that utilize the storage system.
 
 \subsection{Analyzing evolving storage systems}
 
-Finally, the following findings point out ways in which we can improve
-I/O analysis and modeling methodology:
+Finally, the following findings highlight ways in which the accuracy and significance of 
+I/O analysis and modeling methodologies can be improved:
 
 \begin{itemize}[leftmargin=*]
 
 \item \textbf{Financial market technical analysis techniques can be adapted
-to time series I/O performance data to attenuate noise and identify
+to I/O performance time series data to attenuate noise and identify
 underlying trends}: Processing a large, continuously expanding, and noisy
 time series data set is a daunting task, but one that is not unique to I/O
 performance characterization.  We found similarities
@@ -100,14 +100,14 @@ extract meaning from it. From a practical point of view, however, a systems
 practitioner will gain more benefit from targeted analysis of relevant regions of
 interest.  The region identification method need not depend on SMAs, and alternative
 approaches for both partitioning time series data and classifying the
-measurements within regions could be replaced with more sophisticated methods.
+measurements within regions can be easily improved with more sophisticated methods.
 %Our hope is that the simple statistical methods presented here will advance
 %the state of the practice across the HPC community by encouraging
 %straightforward methods that improve the efficacy of quantitative I/O analysis.
 
 \item \textbf{The nature and magnitude of how different attributes correlate
-with I/O performance also change over time}  This observation has critical
-ramifications for I/O modeling techniques.  A model derived from a given training set
+with I/O performance also change over time:}  This observation has critical
+ramifications for developing and applying I/O performance models.  Models developed from a training set without temporal context
 will produce incorrect predictions, even on the same target system, if
 external factors have caused the performance of that system to evolve over
 time. For example, we demonstrated that high CPU load can correlate with favorable performance under healthy file system conditions, and it can coincide with unfavorable performance when non-I/O workloads are impacting storage servers.
