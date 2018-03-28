@@ -4,7 +4,7 @@
     \centering
     \includegraphics[width=0.9\columnwidth]{summary-boxplots}
     \vspace{-.15in}
-    \caption{I/O performance grouped by I/O motifs and read(R)/write(W) mode.  Whiskers represent the 5th and 95th percentiles.}
+    \caption{I/O performance grouped by I/O motifs and read(R)/write(W) mode on different file systems.  Whiskers represent the 5th and 95th percentiles.}
     \label{fig:summary-boxplots}
 \end{figure}
 
@@ -152,12 +152,12 @@ calculations. $w_{long}$ was set to seven weeks to span multiple $w_{short}$
 regions and at least one month boundary.  In our experience, the analysis
 presented in this work was insensitive to changes of $\pm 1 \textup{ week}$.
 
-In general we find that \textbf{financial market technical
+In general, we find that \textbf{financial market technical
 analysis techniques can be adapted to
 timeseries I/O performance data to attenuate noise and identify underlying trends.}
 In the context of financial markets, SMAs (and other more
 sophisticated related techniques) are used for predictive purposes to time
-the execution of market trades.  In this context we are not applying them to
+the execution of market trades.  In this study, we are not applying them to
 the task of predicting performance, but rather to identify regions of
 interest in behavior that has already been recorded.
 
