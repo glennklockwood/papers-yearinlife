@@ -103,7 +103,9 @@ the resulting $\textup{SMA}_{short}$ provides a rapid visual means to
 identify performance degradation or recovery that lasts for
 $O(\textup{days})$.  Multiple SMAs can be plotted simultaneously over the
 same data set to differentiate short and long term trends and identify key
-crossover points. 
+crossover points.
+\textcolor{blue}{We further note that SMAs can be calculated across individual workloads or across a set of workloads by simply calculating the arithmetic mean of all relevant performance observations falling within $w$.
+The former is useful for identifying motif-specific or transient performance issues, while the latter is helpful for detecting more systemic performance issues.}
 
 \begin{figure}[t]
     \centering
@@ -115,7 +117,7 @@ crossover points.
 \end{figure}
 
 
-An example of an SMA ($w_{short}$ = two weeks) applied to the performance data collected from HACC tests run on \cori is shown in Fig. \ref{fig:timeseries-baseline}.
+An example of an SMA ($w_{short}$ = two weeks) applied to the performance data collected from the HACC workloads run on \cori is shown in Fig. \ref{fig:timeseries-baseline}.
 When contrasted with a time-independent summary statistic such as the overall mean performance of the entire year, the SMA clearly identifies the long period of degraded HACC write performance on \cori that was qualitatively shown in the bottom half of Fig. \ref{fig:summary-heatmap}.
 The points at which the SMA rise above or below the global mean performance also provide quantitative measurements of the region of time when an underlying issue manifested;
 in Fig. \ref{fig:timeseries-baseline}, these \emph{crossover points} fall on March 24 and August 10.
@@ -147,9 +149,8 @@ analysis techniques to that region to determine its cause.
 The points at which $\textup{SMA}_{short}$ intersects $\textup{SMA}_{long}$, termed \emph{crossover points}, conveniently establish the boundaries of regions where short-term performance has diverged from longer-term performance and anomalous performance is prevailing.
 We therefore introduce the notion of \emph{divergence regions} which are the periods of time bounded by two crossover points and capture correlated performance.
 Fig. \ref{fig:mira-regions-overview} illustrates how these concepts are applied to partition data.
-\TODO{Phil - Shane - Glenn to clarify that SMAs can be for a single motif, or aggregate of multiple motifs.  We need to make clear that we apply both in this paper.}
 
-For the remainder of this study, we apply the concept of \emph{divergence regions}, bounded by the crossovers between $\textup{SMA}_{short}$ and $\textup{SMA}_{long}$, to systematically identify and characterize periods in time where anomalous performance was observed by the active I/O performance probes running across all of the test systems.
+For the remainder of this study, we apply the concept of \emph{divergence regions}, bounded by the crossovers between $\textup{SMA}_{short}$ and $\textup{SMA}_{long}$, to systematically identify and characterize periods in time where anomalous performance was observed by the active I/O performance probes running across the test systems.
 We define $\textup{SMA}_{short}$ to have ${w_{short} = \textup{two weeks}}$ as in \ref{sec:features/timedependent} and $\textup{SMA}_{long}$ to have ${w_{long} = \textup{seven weeks}}$.
 $w$ was chosen to be a multiple of seven days to align with one
 week and ensure that weekends and weekdays were equally represented in both SMA

@@ -1,14 +1,44 @@
 \section{Findings and Implications for State of the Practice}
 \label{sec:findings}
 
-The key findings of this study have been presented thus far in an
-order dictated by a hierarchical, data-driven investigation of our
-I/O performance data set.  We can now revisit those findings, however,
-and reclassify them according to their impact the state of
-the practice.
+% The key findings of this study have been presented thus far in an
+% order dictated by a hierarchical, data-driven investigation of our
+% I/O performance data set.  We can now revisit those findings, however,
+% and reclassify them according to their impact the state of
+% the practice.
 
-The following findings motivate further advances in the characterization of
-large-scale storage systems:
+This study has revealed a number of novel insights into the nature of I/O performance using holistic I/O analysis and active I/O performance probes.
+In addition, our findings have significance beyond the scope of the specific systems evaluated, and they collectively constitute an advancement to the greater state of the practice.
+In this section, we revisit the most significant outcomes and provide corollaries that will improve our ability to contextualize, quantify, and analyze I/O performance variability on large-scale storage systems.
+
+\subsection{Understanding large-scale storage system behavior}
+
+The following findings serve to refine our understanding of how large-scale storage
+systems behave at a high level: 
+
+\begin{itemize}[leftmargin=*]
+
+\item \textbf{Baseline I/O performance and variability are not constant over
+time:} This observation has direct implications for our specifications and
+expectations of system performance.  It is unrealistic to assume that
+benchmarks performed upon system delivery will accurately represent
+performance over time, and performance expectations must be recalibrated as storage systems age.
+
+\item \textbf{Attributes that correlate with transient performance problems (IOPS
+and metadata contention) often differ from those that correlate with
+long-term performance problems (bandwidth contention):}  I/O-intensive workloads in HPC
+are widely known to be unusually bursty compared to other I/O-intensive markets, but this finding reveals that some aspects of HPC I/O workloads are burstier than others.  Performance degradation that results from metadata or IOPS contention is unlikely to persist for days or weeks, while bandwidth contention can result in variation at all time scales.
+
+\end{itemize}
+
+
+\subsection{Improving monitoring and telemetric coverage}
+
+The following findings motivate further advances in how large-scale storage systems are monitored and what data sources are required:
+
+\TODO{where does this go?
+Furthermore, 16\% of the transient I/O performance issues defied classification using our binary classification method.
+This indicates that we are still missing telemetry from important components of the I/O subsystem that contribute to performance variation.}
 
 \begin{itemize}[leftmargin=*]
 
@@ -16,11 +46,11 @@ large-scale storage systems:
 software updates are a significant source of time-dependent, long term
 performance variation}: HPC systems are complex, and their upgrades may be
 dictated by a variety of external factors including maintenance schedules,
-vendor release cycles, and security concerns.  Because of this, it is often
-implausible to capture explicit before and after measurements as part of the
+vendor release cycles, and security concerns.  Because of this, it may not be
+possible to capture explicit before and after measurements as part of the
 upgrade process.  Continuous monitoring and active probing of performance
 can mitigate this problem by making such measurements a routine procedure regardless of upgrade
-schedule, much in the same way that continuous integration  testing is used
+schedule, much in the same way that continuous integration testing is used
 to automatically monitor software development processes.
 
 \item \textbf{Holistic I/O monitoring should incorporate environmental
@@ -45,27 +75,8 @@ stack, but also the auxiliary resources that utilize the storage system.
 
 \end{itemize}
 
-The following findings serve to refine our understanding of how large-scale storage
-systems behave at a high level: 
 
-\begin{itemize}[leftmargin=*]
-
-\item \textbf{Baseline I/O performance and variability are not constant over
-time}: This observation has direct impliciations for our specifications and
-expectations of system performance.  It is unrealistic to assume that
-benchmarks performed upon system delivery will accurately represent
-performance over time.
-
-\item \textbf{Attributes that correlate with transient performance problems (IOPS
-and metadata contention) often differ from those that correlate with
-long-term performance problems (bandwidth contention).} HPC I/O workloads
-are widely known to be unusually bursty compared to other types of storage
-system. This finding suggests that this can be further refined, however:
-some aspects of I/O workloads are burstier than others, and that those
-will affect performance in different ways.  Furthermore, 16\% of the transient I/O performance issues defied classification using our binary classification method.
-This indicates that we are still missing telemetry from important components of the I/O subsystem that contribute to performance variation. 
-
-\end{itemize}
+\subsection{Analyzing evolving storage systems}
 
 Finally, the following findings point out ways in which we can improve
 I/O analysis and modeling methodology:
@@ -86,7 +97,7 @@ analysis on algorithmically identified regions of interest in the data}:
 There is considerable temptation with the emergence of machine learning and
 deep learning to apply unguided techniques to a large data set in a bid to
 extract meaning from it. From a practical point of view, however, a systems
-practitioner will gain more benefit from targeted analyis of relevant regions of
+practitioner will gain more benefit from targeted analysis of relevant regions of
 interest.  The region identification method need not depend on SMAs, and alternative
 approaches for both partitioning time series data and classifying the
 measurements within regions could be replaced with more sophisticated methods.
