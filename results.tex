@@ -177,6 +177,7 @@ The lack of a consistent performance trend surrounding these transients makes th
 
 To address this need, we apply the same strategy of partitioning performance observations into divergence regions and then performing statistical analysis within each region.
 To identify individual performance anomalies in a divergence region and classify the factors which contributed to them, we apply the following binary classification method:
+\TODO{Are we sure we only want to determine one and only one anomalous observation in each trend region? -SS}
 
 \begin{enumerate}[leftmargin=*]
 
@@ -196,6 +197,7 @@ To establish the statistical significance, we calculate the p-value of each clas
 The result of this process is zero or more attributes being positively classified as contributors to anomalous performance.
 For example, if the lowest values of the bandwidth coverage factor and IOPS coverage factor attributes occur in the same feature vector as the lowest value for performance, we classify both bandwidth and IOPS coverage factors as contributors to that anomalous observation's performance.
 
+\TODO{Seems like this whole paragraph could be moved to 5a, if that section wasn't aggregating all motifs in a trend region. This text is very helpful for understanding how we partition our data, and the reader would be better served encountering it early on. -SS}
 To apply this method, we first group observations into sets of data by the test platform on which they ran as was done in Section \ref{sec:results/correlate-mira}.
 These sets are then further subdivided according to I/O motif and read/write mode of the probe to classify anomalies at full temporal resolution and motif-level granularity.
 The net result are $5 \times 4 \times 2 = 40$ sets of data, each representing a unique combination of test platform ($5 \times$, as listed in Table \ref{tab:platform-descriptions}), I/O motif ($4 \times$, per Table \ref{tab:benchmark-motifs}), and whether the probe was reading or writing ($2 \times$).
