@@ -1,16 +1,15 @@
 \section{Findings and Implications for State of the Practice}
 \label{sec:findings}
 
-In this section we recap the specific findings from our study and discuss
-how they impact the state of the practice for management of large-scale
-storage systems.
+The order in which findings were discovered in our study was largely
+dictated by the logical order of how the data was gradually explored in
+greater resolution.  We can now revisit those findings, however, and
+classify them according to their ramifications on the state of the practice.  
+
+The following findings motivate further advances in the characterization of
+large-scale storage systems:
 
 \begin{itemize}
-
-\item \textbf{Baseline I/O performance and variability are not constant over
-time}: This observation has direct impliciations for specification and
-expectations of performance.  It is unrealistic to benchmark a new storage
-system upon delivery and assume constant performance from that point on.
 
 \item \textbf{Administrative activities such as maintenance patches and
 software updates are a significant source of time-dependent, long term
@@ -32,6 +31,46 @@ TOKIO should capture some degree of environmental information (kernel
 versions etc.) to store alongside performance measurements in order to
 simplify the task of aligning those pieces of information.
 
+\item \textbf{Bandwidth contention from sustained workloads often accompany
+sustained performance losses}: The impact of bandwidth contention on I/O
+performance is widely supported in the literature.  This study highlights
+subtleties in that observation however; namely that detremental contention
+can occur time spans lasting as much as several weeks (e.g., aggregate
+workload arising from project allocation timing) and may be driven by factors 
+not capture by conventional HPC monitoring (e.g., wide area transfer or 
+archival traffic).  This calls for a broadening of the definition of
+``holistic I/O characterization'' to include not just the full HPC I/O
+stack, but also the auxiliary resources that utilize the storage system.
+
+\end{itemize}
+
+The following findings refine our high-level understanding of how
+large-scale storage systems behave:
+
+\begin{itemize}
+
+\item \textbf{Baseline I/O performance and variability are not constant over
+time}: This observation has direct impliciations for specification and
+expectations of performance.  It is unrealistic to benchmark a new storage
+system upon delivery and assume constant performance from that point on.
+
+\item \textbf{Attributes that correlate with transient performance problems (IOPS
+and metadata contention) often differ from those that correlate with
+long-term performance problems (bandwidth contention).} HPC I/O workloads
+are widely known to be unusually bursty compared to other types of storage
+system. This finding suggests that this can be further refined to indicate
+that some aspects of I/O activity are burstier than others, and that those
+will affect performance in different ways.  We see distinctly different
+trends and correlations for sustained bandwidth contention than we do for
+IOPs and metadata contention.
+
+\end{itemize}
+
+Finally, the following findings indicate ways in which we can improve
+I/O analysis and modeling methodology:
+
+\begin{itemize}
+
 \item \textbf{Financial market technical analysis techniques can be adapted
 to time series I/O performance data to attenuate noise and identify
 underlying trends}: Processing a large, continuously expanding, and noisy
@@ -50,33 +89,12 @@ practitioner will get more benefit from focused analyis of urgent regions of
 interest.  Such regions can be identified algorithmicly with simple
 analytical techniques.
 
-\item \textbf{Bandwidth contention from sustained workloads often accompany
-sustained performance losses}: The impact of bandwidth contention on I/O
-performance is widely supported in the literature.  This study highlights
-subtleties in that observation however; namely that detremental contention
-can occur time spans lasting as much as several weeks (e.g., aggregate
-workload arising from project allocation timing) and may be driven by factors 
-not capture by conventional HPC monitoring (e.g., wide area transfer or 
-archival traffic).  This calls for a broadening of the definition of
-``holistic I/O characterization'' to include not just the full HPC I/O
-stack, but also the auxiliary resources that utilize the storage system.
-
 \item \textbf{The nature and magnitude of how different attributes correlate
 with I/O performance also change over time}  This observation has critical
 ramifications for I/O modeling techniques.  A model derived from a training data set
 will produce incorrect predictions, even on the same target system, if
 external factors have caused the performance of that system to evolve over
 time. 
-
-\item \textbf{Attributes that correlate with transient performance problems (IOPS
-and metadata contention) often differ from those that correlate with
-long-term performance problems (bandwidth contention).} HPC I/O workloads
-are widely known to be unusually bursty compared to other types of storage
-system. This finding suggests that this can be further refined to indicate
-that some aspects of I/O activity are burstier than others, and that those
-will affect performance in different ways.  We see distinctly different
-trends and correlations for sustained bandwidth contention than we do for
-IOPs and metadata contention.
 
 \end{itemize}
 
