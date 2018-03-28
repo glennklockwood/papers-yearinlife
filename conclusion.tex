@@ -40,7 +40,12 @@ We showed that contention for bandwidth, IOPS, and metadata resources can be con
 That said, 16\% of the transient I/O performance issues defied classification using our binary classification method.
 This indicates that we are still missing telemetry from important components of the I/O subsystem that contribute to performance variation. Addressing this need will be the subject of future work. 
 
-The methods presented here are not dependent on SMAs, and alternative approaches for both partitioning time series data and classifying the measurements within regions can be replaced with more sophisticated methods. Our hope is that the simple statistical methods presented here will ensure that the state of the practice is advanced across the whole HPC community as we have shown that a great deal of information about I/O performance variation can be quantified using holistic I/O analysis and these simple statistical methods.
+The methods presented here are not dependent on SMAs, and alternative
+approaches for both partitioning time series data and classifying the
+measurements within regions can be replaced with more sophisticated methods.
+Our hope is that the simple statistical methods presented here will advance
+the state of the practice across the HPC community by encouraging
+straightforward methods that improve the efficacy of quantitative I/O analysis.
 
 In future work we plan to develop methods to mathematically classify the similarity of different regions from one another to enable the determination of broad classes of performance regions. We also plan to use the measured data as input to simulation frameworks to enable the design of potential new file system features or policies to reduce the  amount of I/O performance variation seen in production. 
 
