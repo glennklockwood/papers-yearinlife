@@ -205,21 +205,24 @@ For each set of observations, SMAs are calculated, crossover points are defined,
 This partitioning results in 1,146 divergence regions across 40 sets of observations, each containing one anomalous observation.
 For each divergence region, we then apply the aforementioned binary classification to generate positive classifications of attributes that affected performance and their p-values.
 We discard all statistically insignificant classifications ($\textup{p-value} > 0.10$) to eliminate divergence regions that are too small to make any meaningful classifications, positive or negative.
-The final product of this analysis are 490 anomalous observations, 410 of which have at least one attribute positively classified as a contributor.
+The final products are 490 anomalous observations, 410 of which have at least one attribute positively classified as a contributor.
 
 As described in Section \ref{sec:methods/tokio}, not every observation's feature vector has every feature defined.
-So as not to bias our results away from those attributes that were only measured for a subset of observations (e.g., IOPS coverage factor was only collected on \mira), we express the frequency of each attribute as the ratio of observations where it was defined \emph{and} classified to the number of observations where it was defined.
-The result of this aggregated summary is shown in Figure \ref{fig:contributors-bad-by-system}.
+So as not to bias our results away from those attributes that were only measured for a subset of observations (e.g., IOPS coverage factor was only collected on \mira), we calculate the frequency of each attribute as the ratio of observations where it was defined \emph{and} classified to the number of observations where it was defined.
+The result of this aggregate frequency summary is shown in Figure \ref{fig:contributors-bad-by-system}.
 
-As with the longer-term performance divergence characterized in Section \ref{sec:results/correlate-all}, high contention for bandwidth is found to also cause short-term performance transients.
+As with the longer-term performance divergence characterized in Section \ref{sec:results/correlate-all}, high contention for bandwidth is found to also coincide with short-term performance transients.
 However, contention for IOPS is also positively classified in a significant fraction of anomalous observations despite it not arising as a factor in longer-term performance divergence.
 This contrast demonstrates that IOPS contention only becomes a statistically significant attribute related to performance degradation in short-term transients, and there are no sustained periods of high IOPS on \mirafsone.
 This also distinguishes this utility of this transient classification from
-the longer-term correlative analysis. Intuitively this result makes sense, a job running on the machine performing I/O only places load on the metadata server during short duration events  eg. file open/close, whereas the load when the data is being read or written is likely to occur over much longer time periods. 
+the longer-term correlative analysis.
+% Intuitively this result makes sense, as a job running on the machine performing I/O only places load on the metadata server during short duration events (eg. file open/close), whereas the load when the data is being read or written is likely to occur over much longer time periods.
+Intuitively, this result makes sense; a job performing I/O nominally places load on the metadata server only at the start and end of of reading and writing, while the process of reading and writing occurs over much longer time periods.
+\TODO{gkl: Phil/Shane, please review above line with your I/O expert hat on}
 
-We also observed correlations with metadata coverage factor and CPU load on
-data servers during anomalous jobs to a less significant degree.  This is
-consistent with the correlation coefficients shown in
+We also observe the coincidence of anomalous jobs and anomalous metadata coverage factor and CPU load on
+data servers to a less significant degree.  This is
+consistent with the moderate correlations shown in
 Figure~\ref{fig:trend-correlations}.
 Unlike the correlative analysis, however, metadata contention was found to impact individual jobs on every test platform and occurred at much higher frequency.
 These findings indicate that metadata contention is much more likely to coincide with transient performance loss than a long-term and sustained divergence of performance.
@@ -228,22 +231,22 @@ In general, the contrast in correlations between transient events and
 long-term trends shows that \textbf{the attributes that correlate with transient
 performance problems (IOPS and
   metadata contention) often differ from those that correlate with
-    long-term performance problems (bandwidth contention).} These are distinct conditions that
+    long-term performance problems (bandwidth contention).} These are two distinct forms of performance variation that
 require unique investigation techniques.
 
 Metadata server CPU load, file system fullness, and maximum job radius were also positively classified as contributors to anomalous performance in a small fraction of anomalous observations.
-To ascertain whether the rate at which these three attributes were classified is statistically significant, we can assign p-values to aggregate fraction of anomalous observations where each attribute was positively classified in Figure \ref{fig:contributors-bad-by-system}.
-We leverage the fact that we have a raw count of classifications (positive and negative) for each anomalous observation and p-values for each divergence region to apply a one-tailed binomial test
+To ascertain whether the frequency with which these three attributes were classified is statistically significant, we assign p-values to aggregate fraction of anomalous observations where each attribute was positively classified in Figure \ref{fig:contributors-bad-by-system}.
+We leverage the fact that we have a raw count of positive and negative classifications and their p-values to apply a one-tailed binomial test
    \footnote{For the binomial test, we assume a constant probability of positively classifying a random variable in each divergence region.
    Given our dataset was filtered to only include regions with $\textup{p-value} < 0.10$, we used 0.10 as the most conservative value for this binomial test probability.}
 and calculate the probability of observing the stated distributions in random variables.
 
-The result of this significance analysis is the finding that the rates at which these three low-frequency attributes (metadata server load, file system fullness, and maximum job radius) were classified as contributors to anomalous performance are statistically insignificant.
+The result of these significance tests reveal that the rates at which these three low-frequency attributes (metadata server load, file system fullness, and maximum job radius) were positively classified are statistically insignificant.
 Whereas the leftmost five attributes in Fig. \ref{fig:contributors-bad-by-system} all have p-values of ${5 \times 10^{-5}}$ or lower, the insignificant metrics' are 0.15 or higher.
 Qualitatively, these negative findings are not unreasonable; for example, file system fullness is most often a degenerative, long-term health problem as was identified in Section \ref{sec:results/correlate-all} and prior work~\cite{oral2014best,Lockwood2017}.
 
 The classification process and analysis described here demonstrates that it is possible to apply statistical analysis to fine-grained divergence regions and still obtain statistically significant insight into the causes of transient performance degradation.
-While we chose a very simple classification criteria based on $\min{a}$, this process could be applied using any classification methodology that identifies relationships between feature vectors in a divergence region and quantifies the associated statistical significance.
+While we chose a very simple binary classification criteria based on $\min{a}$, this process could be applied using any classification methodology that identifies relationships between feature vectors in a divergence region and quantifies the associated statistical significance.
 
 
 \endinput
