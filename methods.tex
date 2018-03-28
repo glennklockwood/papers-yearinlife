@@ -36,11 +36,11 @@ specification for system monitoring data, simplifying portability to new HPC
 platforms. Software modularity is accomplished by defining abstract
 \textit{connectors} to monitoring sources; these connectors then expose interfaces for
 extracting relevant data in a format suitable for \tokio.  A generic
-timeseries format is used for semantically consistent access to data
+time series format is used for semantically consistent access to data
 originating from distinct monitoring tools, even though each tool uses its
 own underlying data format with its own scope and granularity.
 \TODO{make sure time series is consistently spelled throughout}
-The timeseries data format designates a number of metrics
+The time series data format designates a number of metrics
 that are common to classes of monitoring components.  For example, file system
 monitoring tools often gather common metrics such as read/write bandwidths
 and operation counts. \tokio connectors can convert the native data formats
