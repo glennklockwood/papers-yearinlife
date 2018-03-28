@@ -203,6 +203,7 @@ The final products are 490 anomalous observations, 410 of which have at least on
 As described in Section \ref{sec:methods/tokio}, not every observation's feature vector has every feature defined.
 So as not to bias our results away from those attributes that were only measured for a subset of observations (e.g., IOPS coverage factor was only collected on \mira), we calculate the frequency of each attribute as the ratio of observations where it was defined \emph{and} classified to the number of observations where it was defined.
 The result of this aggregate frequency summary is shown in Figure \ref{fig:contributors-bad-by-system}.
+\TODO{Glenn to clean up above paragraph}
 
 As with the longer-term performance divergence characterized in Section \ref{sec:results/correlate-all}, high contention for bandwidth is found to also coincide with short-term performance transients.
 However, contention for IOPS is also positively classified in a significant fraction of anomalous observations despite it not arising as a factor in longer-term performance divergence.
@@ -231,8 +232,8 @@ require unique investigation techniques.
 \\
 "frequency of attributes" should go away--we're talking about how often a pops up in "instance of slowdowns"
 }
-Metadata server CPU load, file system fullness, and maximum job radius were also positively classified as contributors to anomalous performance in a small fraction of anomalous observations.
-To ascertain whether the frequency with which these three attributes were classified is statistically significant, we assign p-values to aggregate fraction of anomalous observations where each attribute was positively classified in Figure \ref{fig:contributors-bad-by-system}.
+Metadata server CPU load, file system fullness, and maximum job radius also appeared in a small fraction of anomalous observations.
+%To ascertain whether the frequency with which these three attributes were classified is statistically significant, we assign p-values to aggregate fraction of anomalous observations where each attribute was positively classified in Figure \ref{fig:contributors-bad-by-system}.
 We leverage the fact that we have a raw count of positive and negative classifications and their p-values to apply a one-tailed binomial test
    \footnote{For the binomial test, we assume a constant probability of positively classifying a random variable in each divergence region.
    Given our dataset was filtered to only include regions with $\textup{p-value} < 0.10$, we used 0.10 as the most conservative value for this binomial test probability.}
