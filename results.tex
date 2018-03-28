@@ -148,7 +148,7 @@ However, it is unclear at this time what caused the other correlated divergence 
     \vspace{-.35in}
     \caption{Attributes that correlated with poor I/O performance across all file systems and benchmarks tested normalized to the number of probes during which each attribute was measured.
     \mira was the only system for which IOPS coverage factor was measured.
-    Greyed bars are attributes whose aggregate contributions were not statistically significant.
+    Greyed bars are attributes whose rate of classification were not statistically significant.
     Percentages do not add up to 100\% because multiple attributes are often classified as contributors for a single anomalous observation.
     }
     \label{fig:contributors-bad-by-system}
@@ -161,7 +161,6 @@ The lack of a consistent performance trend surrounding these transients makes th
 
 To address this need, we apply the same strategy of partitioning performance observations into divergence regions and then performing statistical analysis within each region.
 To identify individual performance anomalies in a divergence region and classify the factors which contributed to them, we apply the following binary classification method:
-\TODO{Are we sure we only want to determine one and only one anomalous observation in each divergence region? -SS}
 
 \begin{enumerate}[leftmargin=*]
 
@@ -221,19 +220,16 @@ performance problems (IOPS and
     long-term performance problems (bandwidth contention).} These are two distinct forms of performance variation that
 require unique investigation techniques.
 
-\TODO{Simplify our motivation for doing this bimodal stuff--we saw some metrics that correlated infrequently.  Are these statistically significant?
-\\
-"frequency of attributes" should go away--we're talking about how often $a$ pops up in "instance of slowdowns"
-}
 Metadata server CPU load, file system fullness, and maximum job radius were also classified in some anomalous observations.
 However, the low number of anomalous observations in which they appeared calls into question the statistical significance of these three findings.
-To address this, we calculate the p-values, or the probability of observing the same number of classifications in the absence of a true underlying relationship, for each metric\footnote{
-To calculate these p-values, we use one-tailed binomial tests using the number of positive classifications observed for each metric.
-The fact that our dataset was filtered to only include regions with ${\textup{p-value} < 0.10}$ also establishes 0.10 as the most conservative value for the binomial test probability.}.
+To address this, we calculate the p-values (the probability of observing the same number of classifications in the absence of a true underlying relationship) for each metric using binomial tests.\footnote{
+We use one-tailed binomial tests with the number of positive classifications ($k$) and total observations ($n$) for each metric.
+The fact that our dataset was filtered to only include regions with ${\textup{p-value} < 0.10}$ allows us to use 0.10 as a conservative value for the probability of success ($p$).}
 
-The result of these significance tests reveal that the number of times metadata server load, file system fullness, and maximum job radius were classified is statistically insignificant.
+These significance tests reveal that the number of times metadata server load, file system fullness, and maximum job radius were classified is statistically insignificant.
 Whereas the leftmost five attributes in Fig. \ref{fig:contributors-bad-by-system} all have p-values of ${5 \times 10^{-5}}$ or lower, the insignificant metrics' are 0.15 or higher.
 Qualitatively, these negative findings are not unreasonable; for example, file system fullness is most often a degenerative, long-term health problem as was identified in Section \ref{sec:results/correlate-all} and prior work~\cite{oral2014best,Lockwood2017}.
+Thus, while it may coincide with transient anomalies, it is unlikely to be the sole contributor to poor performance on a single day.
 
 The classification process and analysis described here demonstrates that it is possible to apply statistical analysis to fine-grained divergence regions and still obtain statistically significant insight into the causes of transient performance degradation.
 While we chose a very simple binary classification criteria based on $\min{a}$, this process could be applied using any classification methodology that identifies relationships between feature vectors in a divergence region and quantifies the associated statistical significance.
