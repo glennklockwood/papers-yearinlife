@@ -3,9 +3,26 @@
 \begin{abstract}
 
 \TODO{rewrite this to better reflect theme of paper.}
+% 
+% - baseline I/O performance and variability are not constant over time
+% 
+% - administrative activities such as maintenance patches and software updates are a significant source of time-dependent, long term performance variation
+%
+% - holistic I/O monitoring should incorporate environmental provenance information, such as kernel, operating system, and file system versions, to aid in correlation
+% 
+% - financial market technical analysis techniques can be adapted to timeseries I/O performance data to attenuate noise and identify underlying trends
+%
+% - Significantly stronger correlations can be found by focusing analysis on algorithmically identified regions of interest in the data.
+%
+% - bandwidth contention from sustained workloads often accompany sustained performance losses
+%
+% - the nature and magnitude of how different attributes correlate with I/O performance also change over time
+% 
+% - attributes that correlate with transient performance problems (IOPS and metadata contention) often differ from those that correlate with long-term performance problems (bandwidth contention).
+% 
 
-I/O performance is a critical part of data-intensive
-scientific computing, but it is notoriously difficult to understand
+I/O performance is a critical part of
+scientific computing, but its variability is notoriously difficult to understand
 and diagnose. This problem is exacerbated by the current trend towards
 deeper I/O hierarchies and more complex I/O architectures. Capturing
 and visualizing system-wide performance telemetry is a key step towards
@@ -19,9 +36,9 @@ I/O instrumentation.  We demonstrate our methodology on a full year's worth
 of telemetry data collected at two leading HPC
 facilities.  In doing so, we answer the following questions:
 %
-How do we detect critical inflection points in performance?
+How significant is performance variation on long time scales, and how do we detect critical inflection points in performance?
 %
-How do we assess the scope and contributing factors for a given inflection point?
+How do we assess the scope and contributing factors for a period of time when performance is diverging from a longer-term average?
 %
 Does intuition and methodology derived from individual application
 anecdotes match the reality of long-term production behavior? 
@@ -29,8 +46,8 @@ anecdotes match the reality of long-term production behavior?
 Can underlying trends be identified beyond the noise of day-to-day
 performance variability?
 
-Our analysis, and key case studies derived from that analysis, reveal the
-presence of both short-term and long-term performance deviations.  We also
+Our systematic analysis, and key case studies derived from that analysis, reveal the
+presence of both short-term and long-term performance deviations across different production parallel file systems.  We also
 find that the ramifications of these performance deviations are not uniform 
 across applications and can thus affect users in unexpected ways.
 
