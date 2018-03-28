@@ -189,34 +189,30 @@ For each set of observations, SMAs are calculated, crossover points are defined,
 This partitioning results in 1,146 divergence regions across 40 sets of observations.
 For each such region, we then apply the aforementioned binary classification to classify attributes that affected performance.
 All statistically insignificant classifications ($\textup{p-value} > 0.10$) are discarded to eliminate divergence regions that are too small to make any meaningful classifications, and the final products are 
-490 anomalous observations, of which 410 have at least one attribute positively classified.
+490 anomalous observations, 410 of which have at least one positively classified attribute.
 
 As described in Section \ref{sec:methods/tokio}, not every observation's feature vector has every feature defined.
-So as not to bias our results away from those attributes that were only measured for a subset of observations, we express the importance of each attribute as the number anomalous observations in which it was positively classified to the number of anomalous observations where it was measured.
+So as not to bias our results away from those attributes that were only measured for a subset of observations, we express the importance of each attribute as the number anomalous observations where it was positively classified to the number where it was measured.
 Figure \ref{fig:contributors-bad-by-system} enumerates the attributes that were positively classified the most times.
 
-As with the longer-term performance divergence characterized in Section \ref{sec:results/correlate-all}, high contention for bandwidth is found to also coincide with short-term performance transients.
-However, contention for IOPS is also positively classified in a significant fraction of anomalous observations despite it not arising as a factor in longer-term performance divergence.
-This contrast demonstrates that IOPS contention only becomes a statistically significant attribute related to performance degradation in short-term transients, and there are no sustained periods of high IOPS on \mirafsone.
-This also distinguishes this utility of this transient classification from
-the longer-term correlative analysis.
+As with the longer-term performance divergence characterized in Section \ref{sec:results/correlate-all}, high contention for bandwidth also coincides with short-term performance transients.
+On the contrary, contention for IOPS is also positively classified in a significant fraction of anomalous observations despite it not arising as a factor in longer-term performance divergence.
+This contrast suggests that IOPS contention only becomes a significant contributor to performance degradation in short-term transients.
+Conversely, we can conclude that periods of high IOPS contention do not last long enough to be implicated in long-term performance degradation on production file systems, whereas the same is not true of bandwidth contention.
 % Intuitively this result makes sense, as a job running on the machine performing I/O only places load on the metadata server during short duration events (eg. file open/close), whereas the load when the data is being read or written is likely to occur over much longer time periods.
-% Intuitively, this result makes sense; a job performing I/O nominally places load on the metadata server only at the start and end of of reading and writing, while the process of reading and writing occurs over much longer time periods.
-% \TODO{gkl: Phil/Shane, please review above line with your I/O expert hat on}
+This result also underscores the fact that this transient classification provides different insights into performance variation from the longer-term correlative analysis.
 
-We also observe the coincidence of anomalous jobs and anomalous metadata coverage factor and CPU load on
-data servers to a less significant degree.  This is
-consistent with the moderate correlations shown in
-Figure~\ref{fig:trend-correlations}.
-Unlike the correlative analysis, however, metadata contention was found to impact individual jobs on every test platform and occurred at much higher frequency.
-These findings indicate that metadata contention is much more likely to coincide with transient performance loss than a long-term and sustained divergence of performance.
+We also observe the coincidence of anomalous observations and anomalous metadata coverage factors and CPU load on data servers to a less significant degree.
+This is consistent with the moderate correlations shown in Figure~\ref{fig:trend-correlations}.
+Unlike the correlative analysis, though, this transient analysis shows that metadata contention impacts individual jobs on every test platform, and it is observed at much higher frequency on short time scales.
+These findings indicate that, like IOPS contention, metadata contention is much more likely to coincide with transient performance loss than a long-term and sustained divergence of performance.
 
 In general, the contrast in correlations between transient events and
 long-term trends shows that \textbf{the attributes that correlate with transient
 performance problems (IOPS and
   metadata contention) often differ from those that correlate with
     long-term performance problems (bandwidth contention).} These are two distinct forms of performance variation that
-require unique investigation techniques.
+require unique investigation techniques to uncover.
 
 Metadata server CPU load, file system fullness, and maximum job radius were also classified in some anomalous observations.
 However, the low number of anomalous observations in which they appeared calls into question the statistical significance of these three findings.

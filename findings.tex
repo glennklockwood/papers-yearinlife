@@ -1,0 +1,104 @@
+\section{Findings and Implications for State of the Practice}
+\label{sec:findings}
+
+The key findings of this study have been presented thus far in an
+order dictated by a hierarchical, data-driven investigation of our
+I/O performance data set.  We can now revisit those findings, however,
+and reclassify them according to their impact the state of
+the practice.
+
+The following findings motivate further advances in the characterization of
+large-scale storage systems:
+
+\begin{itemize}[leftmargin=*]
+
+\item \textbf{Administrative activities such as maintenance patches and
+software updates are a significant source of time-dependent, long term
+performance variation}: HPC systems are complex, and their upgrades may be
+dictated by a variety of external factors including maintenance schedules,
+vendor release cycles, and security concerns.  Because of this, it is often
+implausible to capture explicit before and after measurements as part of the
+upgrade process.  Continuous monitoring and active probing of performance
+can mitigate this problem by making such measurements a routine procedure regardless of upgrade
+schedule, much in the same way that continuous integration  testing is used
+to automatically monitor software development processes.
+
+\item \textbf{Holistic I/O monitoring should incorporate environmental
+provenance information, such as kernel, operating system, and file system
+versions, to aid in correlation}: 
+This is an obvious finding in retrospect, but is not widely taken into
+account in current instrumentation tools.  Tools such as Darshan and
+TOKIO should capture some degree of environmental information 
+to store alongside conventional performance measurements in order to
+simplify the task of aligning those pieces of information.
+
+\item \textbf{Bandwidth contention from sustained workloads often accompany
+sustained performance losses}: The impact of bandwidth contention on I/O
+performance is widely supported in the literature.  This study highlights
+subtleties in that observation however; namely that detremental contention
+can occur over time spans lasting several weeks (e.g., aggregate
+workload due to project allocation timing) and may be driven by factors 
+not captured by conventional HPC monitoring (e.g., wide area transfers or 
+archival traffic).  This calls for a broadening of the definition of
+``holistic I/O characterization'' to include not just the full HPC I/O
+stack, but also the auxiliary resources that utilize the storage system.
+
+\end{itemize}
+
+The following findings serve to refine our understanding of how large-scale storage
+systems behave at a high level: 
+
+\begin{itemize}[leftmargin=*]
+
+\item \textbf{Baseline I/O performance and variability are not constant over
+time}: This observation has direct impliciations for our specifications and
+expectations of system performance.  It is unrealistic to assume that
+benchmarks performed upon system delivery will accurately represent
+performance over time.
+
+\item \textbf{Attributes that correlate with transient performance problems (IOPS
+and metadata contention) often differ from those that correlate with
+long-term performance problems (bandwidth contention).} HPC I/O workloads
+are widely known to be unusually bursty compared to other types of storage
+system. This finding suggests that this can be further refined, however:
+some aspects of I/O workloads are burstier than others, and that those
+will affect performance in different ways.  Furthermore, 16\% of the transient I/O performance issues defied classification using our binary classification method.
+This indicates that we are still missing telemetry from important components of the I/O subsystem that contribute to performance variation. 
+
+\end{itemize}
+
+Finally, the following findings point out ways in which we can improve
+I/O analysis and modeling methodology:
+
+\begin{itemize}[leftmargin=*]
+
+\item \textbf{Financial market technical analysis techniques can be adapted
+to time series I/O performance data to attenuate noise and identify
+underlying trends}: Processing a large, continuously expanding, and noisy
+time series data set is a daunting task, but one that is not unique to I/O
+performance characterization.  We found similarities
+between our data set and financial market data that enabled straightforward
+adaptation of known techniques and terminology.  More advanced financial
+market technical analysis strategies or strategies from other similar fields would likely be even more effective.
+
+\item \textbf{Significantly stronger correlations can be found by focusing
+analysis on algorithmically identified regions of interest in the data}:
+There is considerable temptation with the emergence of machine learning and
+deep learning to apply unguided techniques to a large data set in a bid to
+extract meaning from it. From a practical point of view, however, a systems
+practitioner will gain more benefit from targeted analyis of relevant regions of
+interest.  The region identification method need not depend on SMAs, and alternative
+approaches for both partitioning time series data and classifying the
+measurements within regions could be replaced with more sophisticated methods.
+%Our hope is that the simple statistical methods presented here will advance
+%the state of the practice across the HPC community by encouraging
+%straightforward methods that improve the efficacy of quantitative I/O analysis.
+
+\item \textbf{The nature and magnitude of how different attributes correlate
+with I/O performance also change over time}  This observation has critical
+ramifications for I/O modeling techniques.  A model derived from a given training set
+will produce incorrect predictions, even on the same target system, if
+external factors have caused the performance of that system to evolve over
+time. For example, we demonstrated that high CPU load can correlate with favorable performance under healthy file system conditions, and it can coincide with unfavorable performance when non-I/O workloads are impacting storage servers.
+
+\end{itemize}
