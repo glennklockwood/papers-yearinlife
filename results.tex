@@ -212,7 +212,7 @@ As with the longer-term performance divergence characterized in Section \ref{sec
 However, contention for IOPS is also positively classified in a significant fraction of anomalous observations despite it not arising as a factor in longer-term performance divergence.
 This contrast demonstrates that IOPS contention only becomes a statistically significant attribute related to performance degradation in short-term transients, and there are no sustained periods of high IOPS on \mirafsone.
 This also distinguishes this utility of this transient classification from
-the longer-term correlative analysis.
+the longer-term correlative analysis. Intuitively this result makes sense, a job running on the machine performing I/O only places load on the metadata server during short duration events  eg. file open/close, whereas the load when the data is being read or written is likely to occur over much longer time periods. 
 
 We also observed correlations with metadata coverage factor and CPU load on
 data servers during anamolous jobs to a less significant degree.  This is
