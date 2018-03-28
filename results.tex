@@ -193,11 +193,8 @@ All statistically insignificant classifications ($\textup{p-value} > 0.10$) are 
 490 anomalous observations, of which 410 have at least one attribute positively classified.
 
 As described in Section \ref{sec:methods/tokio}, not every observation's feature vector has every feature defined.
-So as not to bias our results away from those attributes that were only measured for a subset of observations, we express the significance of each attribute as the number of times it was positively classified to the number of times it was observed.
-
-as the ratio of observations where it was defined \emph{and} classified to the number of observations where it was defined.
-The result of this aggregate frequency summary is shown in Figure \ref{fig:contributors-bad-by-system}.
-\TODO{Glenn to clean up above paragraph}
+So as not to bias our results away from those attributes that were only measured for a subset of observations, we express the importance of each attribute as the number anomalous observations in which it was positively classified to the number of anomalous observations where it was measured.
+Figure \ref{fig:contributors-bad-by-system} enumerates the attributes that were positively classified the most times.
 
 As with the longer-term performance divergence characterized in Section \ref{sec:results/correlate-all}, high contention for bandwidth is found to also coincide with short-term performance transients.
 However, contention for IOPS is also positively classified in a significant fraction of anomalous observations despite it not arising as a factor in longer-term performance divergence.
