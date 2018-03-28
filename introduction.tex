@@ -47,16 +47,19 @@ performance and a variety of system-wide metrics.
 The primary contributions of this work are as follows: 
 \begin{itemize}[leftmargin=*]
 \item We have collected, and will make publicly available, an unprecedented year long, multi-facility
-I/O performance data set containing performance measurements for a suite of I/O benchmarks run daily and their associated telemetry data.
-\item We show that the baseline performance and the performance variation changes over time.
-Factors such as system software updates and sustained workloads motivated by external factors such as end of allocation year contribute to the long term variations observed. 
+I/O performance data set. It includes the results of daily I/O performance
+probes and their associated telemetry data.
+\item We show that the baseline performance and variation change over time.
+Factors such as system software updates and sustained workloads brought on
+by external factors such as end of project allocation workloads contribute to long term variations. 
 % * <glennklockwood@gmail.com> 2018-03-28T04:34:39.025Z:
 % 
 % > end of allocation year
 % We don't ever make this assertion to my knowledge.
 % 
 % ^.
-\item Measured metrics associated with I/O performance can have different characteristics at different times. We demonstrate that high CPU load can correlate with favorable performance under healthy file system conditions, and it can coincide with unfavorable performance when non-I/O workloads are impacting storage servers.
+\item The nature of correlations between I/O performance and system metrics also change over
+time. For example, we demonstrate that high CPU load can correlate with favorable performance under healthy file system conditions, and it can coincide with unfavorable performance when non-I/O workloads are impacting storage servers.
 \item We show that contention for bandwidth, IOPS, and metadata resources can be confidently determined to be the sources of transient I/O performance problems.
 \end{itemize}
 Overall we show that a great deal of information about I/O performance variation can be quantified using holistic I/O analysis and simple statistical methods.
