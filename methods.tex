@@ -39,6 +39,7 @@ extracting relevant data in a format suitable for \tokio.  A generic
 timeseries format is used for semantically consistent access to data
 originating from distinct monitoring tools, even though each tool uses its
 own underlying data format with its own scope and granularity.
+\TODO{make sure time series is consistently spelled throughout}
 The timeseries data format designates a number of metrics
 that are common to classes of monitoring components.  For example, file system
 monitoring tools often gather common metrics such as read/write bandwidths
@@ -129,12 +130,14 @@ All probes ran using 256 nodes (4,096 processes) on \cori, 128 nodes (2,048 proc
 Data was striped as widely as possible in all cases; this corresponds to
 striping over every OST (for \cori and \edison) or every LUN (for \mira).
 In the case of \cori and \edison, each job had access to the full I/O bandwidth of its I/O nodes as well, but due to the way in which I/O nodes are allocated in a fixed ratio to job size on Blue Gene/Q systems, \mira jobs were restricted to the bandwidth provided by eight I/O nodes.
+\TODO{add OST information as a second row in Table \ref{tab:platform-descriptions}}
+\TODO{is there something we can reference out the BG/Q ION architecture?  UMAMI, an IBM Redbook, or footnotes + URLs to ALCF website}
 
 81.9\% of the intended probes successfully generated results, providing 
 11,986 performance observations across \mira, \cori, and \edison over the
 course of a year.
 The remaining 18.1\% of potential probes failed due to system downtime, malfunctions of component-level monitoring tools or the automated test scheduling, queue wait times that exceeded 24 hours, or using excessive walltime.
-
+\TODO{any way to cite the Fail Slow at Scale here without creating a new thread for reviewers to pull at?}
 
 %\TODO{Add details of the number of processes the benchmarks ran with, and how the file systems are set up, i.e., number of OSTs on \cori, number of I/O nodes used on \mira 
 %\\
