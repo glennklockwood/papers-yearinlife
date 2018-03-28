@@ -61,6 +61,9 @@ by external factors such as end of project allocation workloads contribute to lo
 \item We show that the nature of correlations between I/O performance and system metrics also change over
 time. For example, we demonstrate that high CPU load can correlate with favorable performance under healthy file system conditions, and it can coincide with unfavorable performance when non-I/O workloads are impacting storage servers.
 \item We show that contention for bandwidth, IOPS, and metadata resources can be confidently determined to be the sources of transient I/O performance problems.
+\item In the course of our study we develop methods for identifying
+underlying trends within noisy telemetry data, and show how analysis focused
+on these trends improves the quality of the analysis results.
 \end{itemize}
 Overall we show that a great deal of information about I/O performance variation can be quantified using holistic I/O analysis and simple statistical methods.
 This paper is organized as follows: \S~\ref{sec:related} contains related work, \S~\ref{sec:methods} describes the data collection framework, the benchmarks used, and the HPC platforms studied, \S~\ref{sec:features} describes our methodology for determining regions of similar I/O performance, \S~\ref{sec:results} contains the results of our statistical analysis of the data, and \S~\ref{sec:conclusions} concludes. 
