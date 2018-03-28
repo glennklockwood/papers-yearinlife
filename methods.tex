@@ -85,12 +85,12 @@ feature vector depends on what connectors are available on the target platform a
 \label{tab:platform-descriptions}
 \begin{tabular}{|c|c|c|c|c|}
 \hline
-                                                                                   & \textbf{Platform}                                                              & \textbf{FS Name (Type)} & \textbf{Size} & \textbf{Peak Rate}     \\ \hline
-\multirow{3}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}\edison\\ (\nersc)\end{tabular}}} & \multirow{3}{*}{\begin{tabular}[c]{@{}c@{}}Cray XC30\\ 5,586 CNs\end{tabular}} & \scratchone               & 2.2 PiB       & 48 GB/sec              \\ \cline{3-5} 
-                                                                                   &                                                                                & \scratchtwo (Lustre)               & 2.2 PiB       & 48 GB/sec              \\ \cline{3-5} 
-                                                                                   &                                                                                & \scratchthree (Lustre)               & 3.3 PiB       & 72 GB/sec              \\ \hline
-\textbf{\begin{tabular}[c]{@{}c@{}}\cori\\ (\nersc)\end{tabular}}                    & \begin{tabular}[c]{@{}c@{}}Cray XC40\\ 12,076 CNs\end{tabular}                 & \cscratch (Lustre)               & 28 PiB      & 744 GB/sec \\ \hline
-\textbf{\begin{tabular}[c]{@{}c@{}}\mira\\ (\alcf)\end{tabular}}                     & \begin{tabular}[c]{@{}c@{}}IBM BG/Q\\ 49,152 CNs\end{tabular}                  & \mirafsone (GPFS)               & 7.0 PiB       & 90 GB/sec              \\ \hline
+                                                                                   & \textbf{Platform}                                                              & \begin{tabular}[c]{@{}c@{}}\textbf{FS Name (Type)} \\ \textbf{Servers (LUNs)}\end{tabular} & \textbf{Size} & \textbf{Peak Rate}     \\ \hline
+\multirow{3}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}\edison\\ (\nersc)\end{tabular}}} & \multirow{3}{*}{\begin{tabular}[c]{@{}c@{}}Cray XC30\\ 5,586 CNs\end{tabular}} & \begin{tabular}[c]{@{}c@{}}\scratchone (Lustre) \\ 24 (24)\end{tabular}              & 2.2 PiB       & 48 GB/sec              \\ \cline{3-5} 
+                                                                                   &                                                                                & \begin{tabular}[c]{@{}c@{}}\scratchtwo (Lustre) \\ 24 (24)\end{tabular}               & 2.2 PiB       & 48 GB/sec              \\ \cline{3-5} 
+                                                                                   &                                                                                & \begin{tabular}[c]{@{}c@{}}\scratchthree (Lustre) \\ 36 (36)\end{tabular}               & 3.3 PiB       & 72 GB/sec              \\ \hline
+\textbf{\begin{tabular}[c]{@{}c@{}}\cori\\ (\nersc)\end{tabular}}                    & \begin{tabular}[c]{@{}c@{}}Cray XC40\\ 12,076 CNs\end{tabular}                 & \begin{tabular}[c]{@{}c@{}}\cscratch (Lustre) \\ 248 (248)\end{tabular}               & 28 PiB      & 744 GB/sec \\ \hline
+\textbf{\begin{tabular}[c]{@{}c@{}}\mira\\ (\alcf)\end{tabular}}                     & \begin{tabular}[c]{@{}c@{}}IBM BG/Q\\ 49,152 CNs\end{tabular}                  & \begin{tabular}[c]{@{}c@{}}\mirafsone (GPFS) \\ 48 (336)\end{tabular}               & 7.0 PiB       & 90 GB/sec              \\ \hline
 \end{tabular}
 \end{table}
 
@@ -128,9 +128,7 @@ Each probe was configured to run identically to previous work~\cite{Lockwood2017
 All probes ran using 256 nodes (4,096 processes) on \cori, 128 nodes (2,048 processes) on \edison, and 1,024 nodes (16,384 processes) on \mira.
 Data was striped as widely as possible in all cases; this corresponds to
 striping over every OST (for \cori and \edison) or every LUN (for \mira).
-In the case of \cori and \edison, each job had access to the full I/O bandwidth of its I/O nodes as well, but due to the way in which I/O nodes are allocated in a fixed ratio to job size on Blue Gene/Q systems, \mira jobs were restricted to the bandwidth provided by eight I/O nodes.
-\TODO{add OST information as a second row in Table \ref{tab:platform-descriptions}}
-\TODO{is there something we can reference out the BG/Q ION architecture?  UMAMI, an IBM Redbook, or footnotes + URLs to ALCF website}
+In the case of \cori and \edison, each job had access to the full I/O bandwidth of its I/O nodes as well, but due to the way in which I/O nodes are allocated in a fixed ratio to job size on Blue Gene/Q systems~\cite{Bui2014}, \mira jobs were restricted to the bandwidth provided by eight I/O nodes.
 
 81.9\% of the intended probes successfully generated results, providing 
 11,986 performance observations across \mira, \cori, and \edison over the
