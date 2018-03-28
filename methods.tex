@@ -2,7 +2,7 @@
 
 Previous studies have demonstrated the feasibility of 
 holistic HPC I/O analysis and used it to observe anomalous I/O behavior and
-contributing factors over short time scales\cite{Lockwood2017}. This methodology was later formalized in the specification of the \tokio (\tokiolong) framework~\cite{Lockwood2018tokio}. 
+contributing factors over short time scales~\cite{Lockwood2017}. This methodology was later formalized in the specification of the \tokio (\tokiolong) framework~\cite{Lockwood2018tokio}. 
 In this work, we use 
 %the \tokio 
 a similar
@@ -59,7 +59,7 @@ production-quality file system monitoring tools for Lustre and GPFS deployments,
 \item \textbf{Job scheduler monitoring}: Job schedulers like Slurm~\cite{2003slurm} often keep a detailed accounting of all jobs that execute on a particular system, including useful details like the size of the job and its placement across available compute nodes.
 \end{itemize}
 
-The telemetric data from these monitoring modules are aggregated into \emph{attributes} associated with each job, and all of the attributes associated with a job are represented as \emph{feature vectors}.
+The telemetric data from these connectors are aggregated into \emph{attributes} associated with each job, and all of the attributes associated with a job are represented as \emph{feature vectors}.
 Wherever possible, attributes are also represented as \emph{coverage factors}~\cite{Lockwood2017} which quantify the fraction of system-wide activity that can be attributed to the job of interest.
 For example, a job's \emph{bandwidth coverage factor} is the number of bytes read and written by that job's application (measured by Darshan) divided by the number of bytes read and written across the entire parallel file system (measured by LMT or ggiostat) while that job was running.
 A coverage factor of 1.0 indicates that a job was the exclusive consumer of
@@ -116,7 +116,7 @@ of I/O performance without copying data to a dedicated database facility.
 
 To measure the performance variation on the systems described in Section \ref{sec:methods/platforms}, we ran four I/O-intensive benchmarks on a daily basis from February 14, 2017 to February 15, 2018.
 We utilize these benchmarking runs as another monitoring source for this
-study, actively probing the user-percieved I/O performance of each analyzed file system on a daily basis across a range of representative I/O motifs.
+study, actively probing the user-perceived I/O performance of each analyzed file system on a daily basis across a range of representative I/O motifs.
 The four underlying benchmarks (VPIC, BDCATS, HACC, and IOR) were chosen to exercise a variety of I/O workloads and covered the four I/O motifs listed in Table \ref{tab:benchmark-motifs} in both read and write modes.
 Each application was configured to run identically to previous work~\cite{Lockwood2017} with the goal of using a substantial fraction of the I/O subsystem's peak bandwidth while using minimal production cycles.
 All probes ran using 256 nodes (4,096 processes) on \cori, 128 nodes (2,048 processes) on \edison, and 1,024 nodes (16,384 processes) on \mira.
