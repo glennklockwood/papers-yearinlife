@@ -110,9 +110,6 @@ crossover points.
     % source: sc18_segments.ipynb
 \end{figure}
 
-To address this need for systematic partitioning of performance regions, we apply Simple Moving Averages (SMAs) to the data collected from active I/O performance.
-Given a time window of width $w$, the SMA for performance at time $t$ is the arithmetic mean of the fraction peak performance over ${-0.5w <= t < +0.5w}$.
-When chosen to be sufficiently short (${w_{short} \sim O(\textup{days})}$), the resulting $\textup{SMA}_{short}$ provides a rapid visual means to identify performance degradation or recovery that lasts for $O(\textup{days})$.
 
 An example of an SMA ($w_{short}$ = two weeks) applied to the performance data collected from HACC tests run on \cori is shown in Fig. \ref{fig:timeseries-baseline}.
 When contrasted with a time-independent summary statistic such as the overall mean performance of the entire year, the SMA clearly identifies the long period of degraded HACC write performance on \cori that was qualitatively shown in the bottom half of Fig. \ref{fig:summary-heatmap}.
@@ -151,7 +148,7 @@ For the remainder of this study, we apply the concept of \emph{divergence region
 We define $\textup{SMA}_{short}$ to have $w_{short} = 2 \textup{ weeks}$ as in \ref{sec:features/timedependent} and $\textup{SMA}_{long}$ to have $w_{long} = 7 \textup{ weeks}$.
 $w$ was chosen to be a multiple of seven days to align with one
 week and ensure that weekends and weekdays were equally represented both SMA
-calculations.  $w_{long}$ was set to 7 weeks to span multiple $w_{short}$
+calculations. (The HPC resources e $w_{long}$ was set to 7 weeks to span multiple $w_{short}$
 regions and at least one month boundary.  In our experience, the analysis
 presented in this work was insensitive to changes of $\pm 1 \textup{ week}$.
 
