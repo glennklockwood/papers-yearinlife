@@ -187,10 +187,10 @@ The net result are $5 \times 4 \times 2 = 40$ sets of data, each representing a 
 Schematically, each horizontal row in Figure \ref{fig:summary-heatmap} represents a single set.
 For each set of observations, SMAs are calculated, crossover points are defined, and the set is partitioned into a set of divergence regions.
 
-This partitioning results in 1,146 divergence regions across 40 sets of observations, each containing one anomalous observation.
-For each divergence region, we then apply the aforementioned binary classification to generate positive classifications of attributes that affected performance and their p-values.
-We discard all statistically insignificant classifications ($\textup{p-value} > 0.10$) to eliminate divergence regions that are too small to make any meaningful classifications, positive or negative.
-The final products are 490 anomalous observations, 410 of which have at least one attribute positively classified as a contributor.
+This partitioning results in 1,146 divergence regions across 40 sets of observations.
+For each such region, we then apply the aforementioned binary classification to classify attributes that affected performance.
+All statistically insignificant classifications ($\textup{p-value} > 0.10$) are discarded to eliminate divergence regions that are too small to make any meaningful classifications, and the final products are 
+490 anomalous observations, 410 of which have at least one attribute positively classified as a contributor.
 
 As described in Section \ref{sec:methods/tokio}, not every observation's feature vector has every feature defined.
 So as not to bias our results away from those attributes that were only measured for a subset of observations (e.g., IOPS coverage factor was only collected on \mira), we calculate the frequency of each attribute as the ratio of observations where it was defined \emph{and} classified to the number of observations where it was defined.
