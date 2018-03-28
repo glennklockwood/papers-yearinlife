@@ -143,6 +143,8 @@ analysis techniques to that region to determine its cause.
 The points at which $\textup{SMA}_{short}$ intersects $\textup{SMA}_{long}$, termed \emph{crossover points}, conveniently establish the boundaries of regions where short-term performance has diverged from longer-term performance and anomalous performance is prevailing.
 We therefore introduce the notion of \emph{divergence regions} which are the periods of time bounded by two crossover points and capture correlated performance.
 Fig. \ref{fig:mira-regions-overview} depicts how these concepts are applied in a subset of the data collected from \mira.
+\TODO{Glenn to clarify what ``a subset'' is}.
+\TODO{Phil -> Shane -> Glenn to clarify that SMAs can be for a single motif, or aggregate of multiple motifs.  We need to make clear that we apply both in this paper.}
 
 For the remainder of this study, we apply the concept of \emph{divergence regions}, bounded by the crossovers between $\textup{SMA}_{short}$ and $\textup{SMA}_{long}$, to systematically identify and characterize periods in time where anomalous performance was observed by the active I/O performance probes running across all of the test systems.
 We define $\textup{SMA}_{short}$ to have ${w_{short} = \textup{two weeks}}$ as in \ref{sec:features/timedependent} and $\textup{SMA}_{long}$ to have ${w_{long} = \textup{seven weeks}}$.
