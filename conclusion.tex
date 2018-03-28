@@ -45,15 +45,16 @@ stack, but also the auxiliary resources that utilize the storage system.
 
 \end{itemize}
 
-The following findings refine our high-level understanding of how
-large-scale storage systems behave:
+The following findings serve to refine our understanding of how large-scale storage
+systems behave at a high level: 
 
 \begin{itemize}
 
 \item \textbf{Baseline I/O performance and variability are not constant over
-time}: This observation has direct impliciations for specification and
-expectations of performance.  It is unrealistic to benchmark a new storage
-system upon delivery and assume constant performance from that point on.
+time}: This observation has direct impliciations for our specifications and
+expectations of system performance.  It is unrealistic to assume that
+benchmarks performed upon system delivery will accurately represent
+performance over time.
 
 \item \textbf{Attributes that correlate with transient performance problems (IOPS
 and metadata contention) often differ from those that correlate with
