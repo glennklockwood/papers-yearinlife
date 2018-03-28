@@ -55,13 +55,13 @@ performance fluctuations, however.
 
 Figure~\ref{fig:summary-heatmap} visualizes the same data in the form of a
 heatmap over time.  This shows that performance variation is not randomly
-distributed over the year; a key characteristic that is not captured by
+distributed over the year; this is a key characteristic that is not captured by
 time-independent performance distributions.
 Several archetypical forms of correlated performance degradation observed in Fig. \ref{fig:summary-heatmap} are highlighted in Fig. \ref{fig:regions-heatmap} and fall into three broad categories of variation:
 
 \begin{enumerate}[leftmargin=*]
-\item Dark vertical bands, exemplified in the \mira data in Fig. \ref{fig:regions-heatmap}, represent transient system-wide issues that resulted in a uniform loss of performance for all probes executed that day.
-\item Dark horizontal bands, shown in the \cori data, indicate a long-term degradation in performance that disproportionately affects a specific I/O motif.
+\item Dark vertical bands, exemplified in the \mira data in Fig. \ref{fig:regions-heatmap}a, represent transient system-wide issues that resulted in a uniform loss of performance for all probes executed that day.
+\item Dark horizontal bands, shown in the \cori data in Fig. \ref{fig:regions-heatmap}b, indicate a long-term degradation in performance that disproportionately affects a specific I/O motif.
 \item Isolated dark blocks represent individual probes where performance was poor for a very short period of time within a day.
 \end{enumerate}
 
@@ -118,7 +118,7 @@ in Fig. \ref{fig:timeseries-baseline}, these \emph{crossover points} fall on Mar
 Cross-referencing these dates with the service history of \cori retrospectively revealed that the beginning and end of this long-term region of divergent performance coincided with major system software upgrades that also happened on March 24 and August 10.
 
 Curiously, the performance of HACC read workload (Figure \ref{fig:timeseries-baseline}b) was unaffected during this time, demonstrating that not all workloads are affected by long-term variation equally.
-This asymmetry, in combination with the bounding dates of this divergent region, allowed us to trace this specific issue to unintentional behavior introduced (and later fixed) in the Lustre software running on \cori during the system upgrades.
+This asymmetry, in combination with the bounding dates of this divergent region, allowed us to trace this specific issue to unintentional behavior introduced (and later fixed) in the Lustre software running on \cori between the system upgrades.
 Although this particular case of long-term performance divergence was caused by an unexpected bug in system software, the reality of most production storage systems is that they are regularly patched and upgraded.
 At minimum, the security requirements of the centers which run them drive system updates, and as exemplified by the widely publicized Spectre and Meltdown patches, such updates can have non-trivial effects on certain types of I/O.
 Thus, \textbf{administrative activities such as maintenance patches and
@@ -142,19 +142,15 @@ region of interest has been defined, we can then constrain more detailed
 analysis techniques to that region to determine its cause.
 The points at which $\textup{SMA}_{short}$ intersects $\textup{SMA}_{long}$, termed \emph{crossover points}, conveniently establish the boundaries of regions where short-term performance has diverged from longer-term performance and anomalous performance is prevailing.
 We therefore introduce the notion of \emph{divergence regions} which are the periods of time bounded by two crossover points and capture correlated performance.
-Fig. \ref{fig:mira-regions-overview} depicts how these concepts are combined in a subset of the data collected.
+Fig. \ref{fig:mira-regions-overview} depicts how these concepts are applied in a subset of the data collected from \mira.
 
 For the remainder of this study, we apply the concept of \emph{divergence regions}, bounded by the crossovers between $\textup{SMA}_{short}$ and $\textup{SMA}_{long}$, to systematically identify and characterize periods in time where anomalous performance was observed by the active I/O performance probes running across all of the test systems.
-We define $\textup{SMA}_{short}$ to have $w_{short} = 2 \textup{ weeks}$ as in \ref{sec:features/timedependent} and $\textup{SMA}_{long}$ to have $w_{long} = 7 \textup{ weeks}$.
+We define $\textup{SMA}_{short}$ to have ${w_{short} = \textup{two weeks}}$ as in \ref{sec:features/timedependent} and $\textup{SMA}_{long}$ to have ${w_{long} = \textup{seven weeks}}$.
 $w$ was chosen to be a multiple of seven days to align with one
-week and ensure that weekends and weekdays were equally represented both SMA
-calculations. $w_{long}$ was set to 7 weeks to span multiple $w_{short}$
+week and ensure that weekends and weekdays were equally represented in both SMA
+calculations. $w_{long}$ was set to seven weeks to span multiple $w_{short}$
 regions and at least one month boundary.  In our experience, the analysis
 presented in this work was insensitive to changes of $\pm 1 \textup{ week}$.
-
-\TODO{Possibly redundant, but reading to this point without having read the next section, it would be helpful to have the top half of Figure 5 here to illustrate a shaded region bounded by crossover points.  Maybe split it, or repeat it?
-\\
-gkl-hopefully Fig. \ref{fig:mira-regions-overview} addresses this}
 
 In general we find that \textbf{financial market technical
 analysis techniques can be adapted to

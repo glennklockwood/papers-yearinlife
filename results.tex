@@ -26,8 +26,8 @@ In the following analyses, we separate our 11,986 performance observations into 
 We begin our correlative analysis by partitioning a year-long data set into
 divergence regions using the method described in
 Section~\ref{sec:features/partitioning}.  Using observations from \mira
-\mirafsone as an example, we set $w_{short} = 2 \textup{ weeks}$ and $w_{long}
-= 7 \textup{ weeks}$ to identify divergence regions, and then discard any
+\mirafsone as an example, we set ${w_{short} = \textup{two weeks}}$ and ${w_{long}
+= \textup{seven weeks}}$ to identify divergence regions, and then discard any
 regions with fewer than three data points.  Regions with few data points are discarded
 for two reasons: (a) intuitively, very short divergence regions occur
 when $\textup{SMA}_{short} \approx \textup{SMA}_{long}$ and there is
@@ -35,46 +35,44 @@ minimal long-term variation, and (b) statistically, it is impossible
 to assert the statistical significance of a correlation with fewer than
 three data points.  This yields 32 divergence regions.
 
-We can then apply Pearson correlation to the feature vectors within
-each divergence region to identify the factors that contributed to its
+We then apply Pearson correlation to the feature vectors within
+each divergence region to identify the factors that correlate with its
 performance trend.  The result of this process is a new feature vector
-for each divergence region which contains the correlation coefficients
-and p-values between the fraction of peak performance and every other
-attribute across all observations in that region.  We also use Pearson
-correlation to further downselect the total set of regions to those 
+for each divergence region which contains the correlation coefficients between the fraction of peak performance and every other
+attribute across all observations in that region.  We then use the p-value of each correlation coefficient to further downselect the total set of regions to those 
 with extremely high significance
 ($\textup{p-value} < {1.0 \times 10^{-5}}$).  This threshold yields a total
 of nine relevant divergence regions on \mira \mirafsone which are all depicted as shaded extents in Figure \ref{fig:mira-regions-overview}.  Each of these nine
 regions exhibits at least moderate correlation ($R$) ranging from 0.507 to
 0.884 with the bandwidth coverage factor feature.
-\TODO{In the above, would it be helpful (and/or possible without much work)
-to have a figure that highlights the 9 regions we found over the full year
-for Mira?  That's going to be a question in the minds of readers, of what
-these regions look like.
-\\
-gkl- hopefully addressed in Fig \ref{fig:mira-regions-overview}}
+% \TODO{In the above, would it be helpful (and/or possible without much work)
+% to have a figure that highlights the 9 regions we found over the full year
+% for Mira?  That's going to be a question in the minds of readers, of what
+% these regions look like.
+% \\
+% gkl- hopefully addressed in Fig \ref{fig:mira-regions-overview}}
 
-\TODO{Is the discarding of regions with less than 3 data points really necessary, or would they have been discarded by the p-value threshold anyway?
-\\
-gkl- I asked myself the same Q.  It turns out that a correlation between exactly two data points produces a perfect p-value of 0.0 because you can draw a straight line through those two points.  This passes the significance filter but royally messes up the results.}
+% \TODO{Is the discarding of regions with less than 3 data points really necessary, or would they have been discarded by the p-value threshold anyway?
+% \\
+% gkl- I asked myself the same Q.  It turns out that a correlation between exactly two data points produces a perfect p-value of 0.0 because you can draw a straight line through those two points.  This passes the significance filter but royally messes up the results.}
 
 Fig.~\ref{fig:mira-correlation-region} illustrates the correlation
 between bandwidth coverage factor and fraction peak performance for a
-divergence region in November 2017 on \mira \mirafsone.  This example
+particular divergence region in November 2017 on \mira \mirafsone.  This example
 exhibits the lowest correlation ($R = 0.507$) with bandwidth coverage
 factor of any of the selected regions, and the scatter plot of performance
-results shows why: in this case there is a cluster of poorly performing
-jobs (${0.2 < \textup{fraction peak perf} < 0.4}$) that ran with a
+results shows why: this region contains a cluster of poorly performing
+probes (${0.2 < \textup{fraction peak perf} < 0.4}$) that ran with a
 relatively high bandwidth coverage factor.  This region is also the
-single largest divergence region observed on \mira with over 20\%
-difference between $\textup{SMA}_{short}$ and $\textup{SMA}_{long}$
+single largest divergence region observed on \mira; a difference of over 20\%
+ between $\textup{SMA}_{short}$ and $\textup{SMA}_{long}$ was
 observed during this time.  This divergence region example highlights the importance of not
 just identifying regions and calculating correlations, but identifying cases
 in which the analysis indicates the presence of an unknown factor that is
 not adequately captured by the instrumentation framework.
 
 Despite the unusual region shown in Fig. \ref{fig:mira-correlation-region},
-however, these data indicate that the time-dependent performance divergences observed on \mira show either moderate or strong correlation with high degrees of bandwidth contention.
+however, these data indicate that the time-dependent performance divergences observed on \mira show either moderate or strong correlation with bandwidth contention.
 Additionally, this correlation with performance degradation occurs across
 \emph{all} I/O motifs (similar to Figure \ref{fig:regions-heatmap}a) which
 distinguishes it from the motif-specific case discussed in Section
@@ -87,8 +85,8 @@ yields an overall result of $R = 0.483$ and $\textup{p-value} =
 correlations can be found by focusing analysis on algorithmically identified regions of
 interest in the data.}
 
-\TODO{We could use a plot for comparison if we have a lot of free time to
-kill.  I don't think it is critical though.}
+% \TODO{We could use a plot for comparison if we have a lot of free time to
+% kill.  I don't think it is critical though.}
 
 \subsection{Survey of divergence regions} \label{sec:results/correlate-all}
 
@@ -108,6 +106,14 @@ kill.  I don't think it is critical though.}
 \end{figure}
 
 
+
+Next we apply the same correlation analysis to the other test platforms in our study, again only keeping correlations with an extremely high significance ($\textup{p-value} < {1.0 \times 10^{-5}}$), and the results of this analysis are shown in Fig. \ref{fig:trend-correlations}.
+As was found with Mira in Section \ref{sec:results/correlate-mira}, there is moderate to strong correlation between I/O performance and the bandwidth coverage factor on the Lustre file systems of \cori and \edison.
+Although bandwidth contention resulting in performance loss is intuitive at the scale of a single performance transient, the fact that these correlations were found over longer-term divergence regions indicates that \textbf{bandwidth contention from \emph{sustained workloads} often accompanies sustained performance losses}.
+This is particularly relevant to the increasing fraction of experimental and observational data that is being processed on modern HPC platforms; as the volume of data being continually streamed from large-scale scientific instruments increases, the effects of sustained bandwidth contention are likely to become increasingly prominent.
+
+% - The sign and magnitude of the correlations changes over time.
+
 \begin{figure}
     \centering
     \includegraphics[width=1.0\columnwidth]{cscratch-bimodal-fsaveosscpu}
@@ -118,17 +124,12 @@ kill.  I don't think it is critical though.}
     % source: sc18_region-correlation-all.ipynb
 \end{figure}
 
-Next we apply the same correlation analysis to the other machines in our study, again only keeping correlations with an extremely high significance ($\textup{p-value} < {1.0 \times 10^{-5}}$), and the results of this analysis are shown in Fig. \ref{fig:trend-correlations}.
-As was found with Mira in Section \ref{sec:results/correlate-mira}, there is moderate to strong correlation between I/O performance and the bandwidth coverage factor on the Lustre file systems of \cori and \edison.
-Although bandwidth contention resulting in performance loss is intuitive at the scale of a single performance transient, the fact that these correlations were found over longer-term divergence regions indicates that \textbf{bandwidth contention from \emph{sustained workloads} often accompany sustained performance losses}.
-This is particularly relevant to the increasing fraction of experimental and observational data that is being processed on modern HPC platforms; as the volume of data being continually streamed from large-scale scientific instruments increases, the effects of sustained bandwidth contention are likely to become increasingly prominent.
-
-% - The sign and magnitude of the correlations changes over time.
 
 Another noteworthy feature that this method reveals is the bimodality of correlation between performance and the CPU load of the file system data servers (``Data Server Load'' in Fig. \ref{fig:trend-correlations}) on the Lustre-based test platforms.
 A time-resolved view of the regions where performance correlates with data server CPU loads (Fig. \ref{fig:cscratch-bimodal-fsaveosscpu}) reveals that the bimodality of the correlation matches the biomodality observed in the HACC write workload on the affected storage systems.
 During the long-term performance regression discussed in Section \ref{sec:features/timedependent}, high CPU load on the Lustre OSSs coincided with low performance of the I/O performance probes.
 As soon as performance was restored on August 10, the relationship reversed, and high CPU load was observed favorably with respect to performance.
+
 The positive correlation between performance and CPU load is consistent with the data servers using CPUs primarily to service incoming I/O requests, whereas the negative correlation indicates that another CPU load (as may be caused by an algorithmic bug) was present and competed with the data servers' ability to use CPU to service those same requests.
 From this, we conclude that not only does baseline I/O performance vary with time, but \textbf{the nature and magnitude of how different attributes correlate with I/O performance also change over time}.
 Had this correlation analysis been performed without partitioning over divergence regions, the regions of positive and negative correlation would have obfuscated each other in the net result.
@@ -139,10 +140,12 @@ measure of metadata resource contention).  The two instances of file
 system fullness correlating negatively with performance are clear
 and can be corroborated with independent observations from facilities
 staff.  These two regions encapsulate periods when their respective
-file systems approached 90\% full for a period of several days.
+file systems approached 90\% fullness for a period of several days.
 The observed loss of performance is consistent with Lustre's known
 susceptibility to significant performance degradation as OSTs approach
-90\% fullness~\cite{oral2014best,Lockwood2017}.  The correlation with
+90\% fullness~\cite{oral2014best,Lockwood2017}.
+
+The correlation with
 \texttt{open(2)} coverage factor is intuitive because this metric acts as a
 proxy for metadata contention.  
 One of these divergence regions was found to overlap with an unusually extensive, long-running multi-day purge of the \edison \scratchtwo file system.
@@ -162,7 +165,7 @@ However, it is unclear at this time what caused the other correlated divergence 
     \caption{Attributes that correlated with poor I/O performance across all file systems and benchmarks tested normalized to the number of probes during which each attribute was measured.
     \mira was the only system for which IOPS coverage factor was measured.
     Greyed bars are attributes whose aggregate contributions were not statistically significant.
-    Percentages do not add up to 100\% because multiple attributes are often classified as contributors for a single anomalous job.
+    Percentages do not add up to 100\% because multiple attributes are often classified as contributors for a single anomalous observation.
     }
     \label{fig:contributors-bad-by-system}
     % source: sc18_umamify-all.ipynb
@@ -173,7 +176,7 @@ Such performance losses, exemplified as isolated dark blocks in Fig. \ref{fig:re
 The lack of a consistent performance trend surrounding these transients makes them difficult to correlate with other metrics as was done in the previous section, necessitating a different approach to characterizing them.
 
 To address this need, we apply the same strategy of partitioning performance observations into divergence regions and then performing statistical analysis within each region.
-To identify individual performance anomalies in a divergence region and classify the factors which contributed to them, we apply the following method:
+To identify individual performance anomalies in a divergence region and classify the factors which contributed to them, we apply the following binary classification method:
 
 \begin{enumerate}[leftmargin=*]
 
@@ -182,25 +185,25 @@ To identify individual performance anomalies in a divergence region and classify
 \item We then define the \emph{anomalous observation} for the divergence region as the observation whose feature vector contains $\min(a)$ for fraction peak performance.
 As divergence regions contain observations of similar performance by definition, this anomalous observation is truly anomalous-- it is differentiated from the long-term performance trends described in Sec.~\ref{sec:features} as well as the ones within its own divergence region.
 
-\item Finally, we determine which other $\min(a)$ values also fell in this anomalous observation's feature vector and classify those attributes $a$ as contributors to the anomalous observation's performance.
+\item Finally, we determine which other $\min(a)$ values also fall in this anomalous observation's feature vector and classify those attributes as contributors to the anomalous observation's performance.
 
 \end{enumerate}
 
-Qualitatively, this process formalizes the conjecture that if I/O performance is anomalous on a specific day, the other measured attributes which were also anomalous at that time contributed to that behavior.
-Quantitatively, this simple classification scheme allows us to identify correlations and quantify the statistical significance of each classification for individual anomalous observations.
-To assess the statistical significance of each classification, we calculate the p-value of each classification in a divergence region of $N$ observations as $\textup{p-value} = \frac{1}{N}$; intuitively, this is the probability of a positive classification being applied to a random variable.
+Qualitatively, this process codifies the conjecture that if I/O performance is anomalous on a specific day, the other measured attributes which were also anomalous at that time are what contributed to that behavior.
+Quantitatively, this simple classification scheme allows us to identify relationships and quantify the statistical significance of each classification for individual anomalous observations.
+To establish the statistical significance, we calculate the p-value of each classification in a divergence region to be $\textup{p-value} = \frac{1}{N}$, where $N$ is the number of observations in the region; intuitively, this value is the probability of a random variable being positively classified.
 
 The result of this process is zero or more attributes being positively classified as contributors to anomalous performance.
 For example, if the lowest values of the bandwidth coverage factor and IOPS coverage factor attributes occur in the same feature vector as the lowest value for performance, we classify both bandwidth and IOPS coverage factors as contributors to that anomalous observation's performance.
 
-To apply this method to our performance probes, we first group observations into sets of data by the test platform on which they ran as was done in Section \ref{sec:results/correlate-mira}.
-In addition, these sets are further subdivided according to I/O motif and read/write mode of the probe to classify anomalies at full temporal resolution and motif-level granularity.
+To apply this method, we first group observations into sets of data by the test platform on which they ran as was done in Section \ref{sec:results/correlate-mira}.
+These sets are then further subdivided according to I/O motif and read/write mode of the probe to classify anomalies at full temporal resolution and motif-level granularity.
 The net result are $5 \times 4 \times 2 = 40$ sets of data, each representing a unique combination of test platform ($5 \times$, as listed in Table \ref{tab:platform-descriptions}), I/O motif ($4 \times$, per Table \ref{tab:benchmark-motifs}), and whether the probe was reading or writing ($2 \times$).
 Schematically, each horizontal row in Figure \ref{fig:summary-heatmap} represents a single set.
 For each set of observations, SMAs are calculated, crossover points are defined, and the set is partitioned into a set of divergence regions.
 
-The result of this partitioning are 1,146 divergence regions across 40 sets of observations, each containing one anomalous observation.
-For each divergence region, we then apply the classification procedure described and generate positive classifications of attributes that affected performance and the p-values of those classifications.
+This partitioning results in 1,146 divergence regions across 40 sets of observations, each containing one anomalous observation.
+For each divergence region, we then apply the aforementioned binary classification to generate positive classifications of attributes that affected performance and their p-values.
 We discard all statistically insignificant classifications ($\textup{p-value} > 0.10$) to eliminate divergence regions that are too small to make any meaningful classifications, positive or negative.
 The final product of this analysis are 490 anomalous observations, 410 of which have at least one attribute positively classified as a contributor.
 
