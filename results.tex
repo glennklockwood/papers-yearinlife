@@ -24,7 +24,6 @@ In the following analyses, we separate our 11,986 performance observations into 
 % Bandwidth, IOPS, and metadata contention are confidently correlated with I/O performance at both long. 
 
 \TODO{add a footnote explaining p-value}
-\TODO{add citation (or something) for Pearson}
 We begin our correlative analysis by partitioning a year-long data set into
 divergence regions using the method described in
 Section~\ref{sec:features/partitioning}.  Using observations from \mira
@@ -37,42 +36,23 @@ minimal long-term variation, and (b) statistically, it is impossible
 to assert the statistical significance of a correlation with fewer than
 three data points.  This yields 32 divergence regions.
 
-We then apply Pearson correlation to the feature vectors within
-each divergence region to identify the factors that correlate with its
-performance trend.  The result of this process is a new feature vector
-for each divergence region which contains the correlation coefficients between the fraction of peak performance and every other
-attribute across all observations in that region.  We then use the p-value of each correlation coefficient to further downselect the total set of regions to those 
-with extremely high significance
-($\textup{p-value} < {1.0 \times 10^{-5}}$).  This threshold yields a total
-of nine relevant divergence regions on \mira \mirafsone which are all depicted as shaded extents in Figure \ref{fig:mira-regions-overview}.  Each of these nine
-regions exhibits at least moderate correlation ($R$) ranging from 0.507 to
-0.884 with the bandwidth coverage factor feature.
-% \TODO{In the above, would it be helpful (and/or possible without much work)
-% to have a figure that highlights the 9 regions we found over the full year
-% for Mira?  That's going to be a question in the minds of readers, of what
-% these regions look like.
-% \\
-% gkl- hopefully addressed in Fig \ref{fig:mira-regions-overview}}
-
-% \TODO{Is the discarding of regions with less than 3 data points really necessary, or would they have been discarded by the p-value threshold anyway?
-% \\
-% gkl- I asked myself the same Q.  It turns out that a correlation between exactly two data points produces a perfect p-value of 0.0 because you can draw a straight line through those two points.  This passes the significance filter but royally messes up the results.}
+We then apply Pearson correlation~\cite{Falk97manyfaces} to the feature vectors within each divergence region to identify the factors that correlate with its
+performance trend.
+The result of this process is a new feature vector for each divergence region which contains the correlation coefficients between the fraction of peak performance and every other attribute across all observations in that region.
+We then use the p-value of each correlation coefficient
+\footnote{The p-value of a correlation coefficient is the probability of observing that correlation coefficient in the absence of any real relationship between the underlying metrics.
+A low p-value indicates that it is extremely unlikely that the calculated correlation coefficient would be observed if the variables being examined aren't really correlated.}
+to further downselect the total set of regions to those with extremely high significance
+($\textup{p-value} < {1.0 \times 10^{-5}}$).
+This threshold yields a total of nine relevant divergence regions on \mira \mirafsone which are all depicted as shaded extents in Figure \ref{fig:mira-regions-overview}.
+Each of these nine regions exhibits at least moderate correlation ($R$) ranging from 0.507 to 0.884 with the bandwidth coverage factor feature.
 
 \TODO{I'm not sure I understand why we're aggregating divergence regions from different motifs here, since everywhere else our analysis is applied to these independently. For one, different motifs could have different trend regions by definition. If the results hold over just one motif, maybe just use those, or something? -SS}
-Fig.~\ref{fig:mira-correlation-region} illustrates the correlation
-between bandwidth coverage factor and fraction peak performance for a
-particular divergence region in November 2017 on \mira \mirafsone.  This example
-exhibits the lowest correlation ($R = 0.507$) with bandwidth coverage
-factor of any of the selected regions, and the scatter plot of performance
-results shows why: this region contains a cluster of poorly performing
-probes (${0.2 < \textup{fraction peak perf} < 0.4}$) that ran with a
-relatively high bandwidth coverage factor.  This region is also the
-single largest divergence region observed on \mira; a difference of over 20\%
- between $\textup{SMA}_{short}$ and $\textup{SMA}_{long}$ was
-observed during this time.  This divergence region example highlights the importance of not
-just identifying regions and calculating correlations, but identifying cases
-in which the analysis indicates the presence of an unknown factor that is
-not adequately captured by the instrumentation framework.
+Fig.~\ref{fig:mira-correlation-region} illustrates the correlation between bandwidth coverage factor and fraction peak performance for a particular divergence region in November 2017 on \mira \mirafsone.
+This example exhibits the lowest correlation ($R = 0.507$) with bandwidth coverage factor of any of the selected regions, and the scatter plot of performance results shows why:
+this region contains a cluster of poorly performing probes (${0.2 < \textup{fraction peak perf} < 0.4}$) that ran with a relatively high bandwidth coverage factor.
+This region is also the single largest divergence region observed on \mira; a difference of over 20\% between $\textup{SMA}_{short}$ and $\textup{SMA}_{long}$ was observed during this time.
+This divergence region example highlights the importance of not just identifying regions and calculating correlations, but identifying cases in which the analysis indicates the presence of an unknown factor that is not adequately captured by the instrumentation framework.
 
 Despite the unusual region shown in Fig. \ref{fig:mira-correlation-region},
 however, these data indicate that the time-dependent performance divergences observed on \mira show either moderate or strong correlation with bandwidth contention.
