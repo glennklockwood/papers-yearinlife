@@ -67,7 +67,7 @@ This indicates that we are still missing telemetry from important components of 
 
 \end{itemize}
 
-Finally, the following findings indicate ways in which we can improve
+Finally, the following findings point out ways in which we can improve
 I/O analysis and modeling methodology:
 
 \begin{itemize}
@@ -76,30 +76,30 @@ I/O analysis and modeling methodology:
 to time series I/O performance data to attenuate noise and identify
 underlying trends}: Processing a large, continuously expanding, and noisy
 time series data set is a daunting task, but one that is not unique to I/O
-performance capture by any means.  In our study we found similarities
+performance characterization.  We found similarities
 between our data set and financial market data that enabled straightforward
 adaptation of known techniques and terminology.  More advanced financial
-market technical analysis strategies would likely be even more effective.
+market technical analysis strategies or strategies from other similar fields would likely be even more effective.
 
 \item \textbf{Significantly stronger correlations can be found by focusing
 analysis on algorithmically identified regions of interest in the data}:
 There is considerable temptation with the emergence of machine learning and
 deep learning to apply unguided techniques to a large data set in a bid to
 extract meaning from it. From a practical point of view, however, a systems
-practitioner will get more benefit from focused analyis of urgent regions of
+practitioner will gain more benefit from targeted analyis of relevant regions of
 interest.  The region identification method need not depend on SMAs, and alternative
 approaches for both partitioning time series data and classifying the
-measurements within regions can be replaced with more sophisticated methods.
-Our hope is that the simple statistical methods presented here will advance
-the state of the practice across the HPC community by encouraging
-straightforward methods that improve the efficacy of quantitative I/O analysis.
+measurements within regions could be replaced with more sophisticated methods.
+%Our hope is that the simple statistical methods presented here will advance
+%the state of the practice across the HPC community by encouraging
+%straightforward methods that improve the efficacy of quantitative I/O analysis.
 
 \item \textbf{The nature and magnitude of how different attributes correlate
 with I/O performance also change over time}  This observation has critical
-ramifications for I/O modeling techniques.  A model derived from a training data set
+ramifications for I/O modeling techniques.  A model derived from a given training set
 will produce incorrect predictions, even on the same target system, if
 external factors have caused the performance of that system to evolve over
-time. We demonstrated that high CPU load can correlate with favorable performance under healthy file system conditions, and it can coincide with unfavorable performance when non-I/O workloads are impacting storage servers.
+time. For example, we demonstrated that high CPU load can correlate with favorable performance under healthy file system conditions, and it can coincide with unfavorable performance when non-I/O workloads are impacting storage servers.
 
 \end{itemize}
 
