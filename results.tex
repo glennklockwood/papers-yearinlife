@@ -129,11 +129,10 @@ However, it is unclear at this time what caused the other correlated divergence 
 \subsection{Transient performance loss} \label{sec:results/shortterm}
 
 \begin{figure}
-
     \centering
     \includegraphics[width=1.0\columnwidth]{contributors-bad-by-system-grey}
     \vspace{-.35in}
-    \caption{Attributes that correlated with poor I/O performance across all file systems and benchmarks tested normalized to the number of probes during which each attribute was measured.
+    \caption{Attributes that correlated with poor I/O performance across all file systems and benchmarks tested, normalized to the number of probes during which each attribute was measured.
     \mira was the only system for which IOPS coverage factor was measured.
     Gray bars are attributes whose rate of classification were not statistically significant.
     Percentages do not add up to 100\% because multiple attributes are often classified as contributors for a single anomalous observation.
@@ -143,7 +142,7 @@ However, it is unclear at this time what caused the other correlated divergence 
 \end{figure}
 
 In addition to characterizing long-term performance issues, it is also advantageous to determine the reasons why I/O performance is severely degraded for one and only one day in an otherwise unremarkable period of time.
-Such performance losses, exemplified as isolated dark blocks in Fig. \ref{fig:regions-heatmap}, may only be observed in one of the I/O performance probes issued on that day, suggesting a very short-lived issue that disappeared over the course of one or two of the eight daily probes.
+Such performance losses, indicated by isolated dark blocks in Fig. \ref{fig:regions-heatmap}, may only be observed in one of the I/O performance probes issued on a given day and suggest a very short-lived issue that disappeared over the course of one or two of the eight daily probes.
 The lack of a consistent performance trend surrounding these transients makes them difficult to correlate with other metrics as was done in the previous section, necessitating a different approach to characterizing them.
 
 To address this need, we apply the same strategy of partitioning performance observations into divergence regions and then performing statistical analysis within each region.
@@ -175,16 +174,16 @@ Schematically, each horizontal row in Figure \ref{fig:summary-heatmap} represent
 For each set of observations, SMAs are calculated, crossover points are defined, and the set is partitioned into a set of divergence regions.
 
 This partitioning results in 1,146 divergence regions across 40 sets of observations.
-For each such region, we then apply the aforementioned binary classification to classify attributes that affected performance.
+For each such region, we then apply the aforementioned binary classification to identify anomalous observations and classify attributes that affected performance.
 All statistically insignificant classifications ($\textup{p-value} > 0.10$) are discarded to eliminate divergence regions that are too small to make any meaningful classifications, and the final products are 
-490 anomalous observations, 410 of which have at least one positively classified attribute.
+490 anomalous observations, 410 (84\%) of which have at least one positively classified attribute.
 
 As described in Section \ref{sec:methods/tokio}, not every observation's feature vector has every feature defined.
-So as not to bias our results away from those attributes that were only measured for a subset of observations, we express the importance of each attribute as the number anomalous observations where it was positively classified to the number where it was measured.
-Figure \ref{fig:contributors-bad-by-system} enumerates the attributes that were positively classified the most times.
+So as not to bias our results away from those attributes that were only measured for a subset of observations, we express the importance of each attribute as the number anomalous observations where it was positively classified divided by the total number of observations where it was measured.
+Fig. \ref{fig:contributors-bad-by-system} enumerates the attributes that were positively classified the most times.
 
 As with the longer-term performance divergence characterized in Section \ref{sec:results/correlate-all}, high contention for bandwidth also coincides with short-term performance transients.
-On the contrary, contention for IOPS is also positively classified in a significant fraction of anomalous observations despite it not arising as a factor in longer-term performance divergence.
+On the contrary, contention for IOPS is positively classified in a significant fraction of anomalous observations despite it not arising as a factor in longer-term performance divergence.
 This contrast suggests that IOPS contention only becomes a significant contributor to performance degradation in short-term transients.
 Conversely, we can conclude that periods of high IOPS contention do not last long enough to be implicated in long-term performance degradation on production file systems, whereas the same is not true of bandwidth contention. These are two distinct forms of performance variation that
 require unique investigation techniques to uncover.
@@ -203,7 +202,7 @@ The fact that our dataset was filtered to only include regions with ${\textup{p-
 These significance tests reveal that the number of times metadata server load, file system fullness, and maximum job radius were classified is statistically insignificant.
 Whereas the leftmost five attributes in Fig. \ref{fig:contributors-bad-by-system} all have p-values of ${5 \times 10^{-5}}$ or lower, the insignificant metrics' are 0.15 or higher.
 Qualitatively, these negative findings are not unreasonable; for example, file system fullness is most often a degenerative, long-term health problem as was identified in Section \ref{sec:results/correlate-all} and prior work~\cite{oral2014best,Lockwood2017}.
-Thus, while it may coincide with transient anomalies, it is unlikely to be the sole contributor to poor performance on a single day.
+Thus, while it may coincide with transient anomalies, it is unlikely to be the sole contributor to poor performance for a transient anomaly.
 
-The classification process and analysis described here demonstrates that it is possible to apply statistical analysis to fine-grained divergence regions and still obtain statistically significant insight into the causes of transient performance degradation.
-While we chose a very simple binary classification criteria based on $\min{a}$, this process could be applied using any classification methodology that identifies relationships between feature vectors in a divergence region and quantifies the associated statistical significance.
+The classification process and analysis described here demonstrate that it is possible to apply statistical analysis to fine-grained divergence regions and still obtain statistically significant insight into the causes of transient performance degradation.
+While we chose a very simple binary classification criteria based on $\min(a)$, this process could be applied using any classification methodology that identifies relationships between feature vectors and quantifies the associated statistical significance.
