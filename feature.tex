@@ -78,7 +78,6 @@ facility operators, it indicates that performance anomalies and their root
 causes should not be assessed in isolation. By integrating broader spatial and
 temporal context into the analysis, facility operators can more accurately
 discriminate between application problems and environmental factors.
-% From Phil: In the prose we can site several predictive model papers (Bing Xie's papers, Sandeep's papers, and others) and point out that the implication is that these models aren't just "set it and forget it."  Not knocking them or even saying they can't do it, but just pointing out it's not covered yet.
 For users and application developers, it follows that the accuracy of parameterized I/O performance models~\cite{Xie2012,Madireddy2017} will degrade unless they are reparameterized as the I/O subsystem they model evolves.
 Both of these cases justify the need for a systematic approach for identifying different regions of I/O performance to differentiate long-term factors and phenomena from short-term transients.
 
@@ -87,7 +86,7 @@ Both of these cases justify the need for a systematic approach for identifying d
 Section~\ref{sec:features/summary} clearly illustrates the presence of
 time-varying behavior, but quantitative methods are needed to extract 
 actionable insight from these observations.  The main challenge that these
-methods face is differentating performance trends from individual short-term
+methods face is differentiating performance trends from individual short-term
 fluctuations in time series data.
 This problem is not unique to I/O performance or even computer science,
 however.  Notably, financial market technical analysis techniques are
@@ -172,7 +171,7 @@ interest in behavior that has already been recorded.
     \includegraphics[width=1.0\columnwidth]{mira-regions-overview}
     \vspace{-.15in}
     \caption{Schematic depicting the relationship between SMAs, crossover points, and divergence regions on \mira.
-    Both white and grey regions between crossovers are divergence regions, but only a subset of divergence regions are shaded for clarity.
+    Both white and gray regions between crossovers are divergence regions, but only a subset of divergence regions are shaded for clarity.
     The significance of the divergence region highlighted in red is discussed in Section \ref{sec:results/correlate-mira}.}
     \label{fig:mira-regions-overview}
     % source: sc18_region-correlation.ipynb

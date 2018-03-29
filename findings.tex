@@ -1,12 +1,6 @@
 \section{Findings and Implications for State of the Practice}
 \label{sec:findings}
 
-% The key findings of this study have been presented thus far in an
-% order dictated by a hierarchical, data-driven investigation of our
-% I/O performance data set.  We can now revisit those findings, however,
-% and reclassify them according to their impact the state of
-% the practice.
-
 This study has revealed a number of novel insights into the nature of I/O performance in production using holistic I/O analysis and active I/O performance probes.
 In addition, our findings have significance beyond the scope of the specific systems evaluated, and they collectively constitute an advancement to the greater state of the practice.
 In this section, we revisit the most significant outcomes and provide corollaries that improve the ability to contextualize, quantify, and analyze I/O performance variability on large-scale storage systems.
@@ -24,7 +18,7 @@ This observation has direct implications for our specifications and expectations
 It is unrealistic to assume that benchmarks performed upon system delivery will accurately represent performance over time, and performance expectations must be re-calibrated as storage systems age.
 
 \item \textbf{Attributes that correlate with transient performance problems often differ from those that correlate with long-term performance problems:}
-I/O-intensive workloads in HPC are widely known to be unusually bursty compared to other I/O-intensive computing workloads, but this finding reveals that some aspects of HPC I/O workloads (such as IOPS and metadata contention) are burstier than others (such as bandwidth contention).
+I/O-intensive workloads in HPC are widely known to be unusually bursty compared to other I/O-intensive computing workloads, but this finding reveals that some aspects of HPC I/O workloads (such as IOPS and metadata contention) are more consistently bursty than others (such as bandwidth contention).
 Performance degradation that results from metadata or IOPS contention is unlikely to persist for days, while bandwidth contention can result in performance degradation at all time scales.
 
 \end{itemize}

@@ -2,16 +2,18 @@
 
 Several recent studies have contributed techniques to combine
 system-wide HPC instrumentation data for integrated
-analysis~\cite{Lockwood2017,Vazhkudai2017guide,Agelastos2014ldms,Kunkel2014siox,RIOT_2013}
-. Vazhkudai et al. notably used a Splunk data warehouse to analyze system
-logs and perform operational analytics on a large-scale storage system.
+analysis~\cite{Lockwood2017,Vazhkudai2017guide,Agelastos2014ldms,Kunkel2014siox,RIOT_2013}.
+Vazhkudai et al. notably used a Splunk data warehouse to analyze system
+logs and perform operational analytics on a large-scale storage system~\cite{Vazhkudai2017guide}.
 The cloud computing community has also identified the need to to unify
-analysis capabilities across diverse environments~\cite{Vazhkudai2017guide}. The Dapper system
+analysis capabilities across diverse environments.
+The Dapper system
 developed by Sigelman et al. combines comprehensive tracing with a novel
 sampling method to observe critical paths in large cloud environments in great
 detail~\cite{Sigelman2010dapper}.
 
-Luu et al.~\cite{Luu:2015:HPDC} studied application I/O logs from multiple platforms to derive conclusions on I/O system utilization and library usage. Di et al.~\cite{7973730} and Park et al.~\cite{Park2017BigDM} have
+Luu et al.~\cite{Luu:2015:HPDC} studied application I/O logs from multiple platforms to derive conclusions on I/O system utilization and library usage.
+Di et al.~\cite{7973730} and Park et al.~\cite{Park2017BigDM} have
 investigated performing correlation analysis on HPC log data once it has been
 collected.  Their analyses included compute and network resources, with a
 particular emphasis on event logs. Inacio et al. analyzed performance variability using statistical analysis of file system read/write operations to conclude experimental environment and Lustre stripe settings impact performance applications. 
@@ -21,9 +23,8 @@ systems~\cite{Lofstead2010,Yildiz2016,carns2011understanding} and proposed
 methods to combat it.  
 
 However, these studies of application I/O and parallel file system performance and variability are based either on a small set of applications or on observations over a short duration.
-Furthermore, examining how performance and variation may change over time is relatively unexplored, with the existing body of work being largely anecdotal~\cite{Haryadi2018fail}.
+Furthermore, examining how performance and variation may change over time remains relatively unexplored, with the existing body of work being largely anecdotal~\cite{Haryadi2018fail}.
 In this work, we build upon best-in-class previous efforts by combining system monitoring, application monitoring, and active performance probing
 to holistically quantify how I/O performance variation manifests across many dimensions over a year-long period.
-%into a portable, holistic framework without the need for additional database infrastructure, and by 
-To this end, we also introduce systematic methods to help automate the task of deriving actionable insight from these data sources.
+To this end, we also introduce systematic methods to help automate the task of deriving actionable insight from these data sources over multiple time scales.
 We have analyzed these holistic data sets for an entire year on multiple parallel file systems and present a broad statistical analysis that provides an unprecedented advancement in our understanding of HPC I/O performance variability.

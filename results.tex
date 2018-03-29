@@ -207,29 +207,3 @@ Thus, while it may coincide with transient anomalies, it is unlikely to be the s
 
 The classification process and analysis described here demonstrates that it is possible to apply statistical analysis to fine-grained divergence regions and still obtain statistically significant insight into the causes of transient performance degradation.
 While we chose a very simple binary classification criteria based on $\min{a}$, this process could be applied using any classification methodology that identifies relationships between feature vectors in a divergence region and quantifies the associated statistical significance.
-
-
-\endinput
-
-% NJW - this sentence adds too much complexity to end the section with
-% 
-%%%For example, classifying attributes based on quartiles rather than minima would be feasible with more coarse-grained divergence regions to offset the decrease in significance inherent in the selection criteria.
-
-\subsection {Discussion}
-\label{sec:results/discussion}
-
-\TODO{This is where interesting dribs and drabs are winding up.  Do we carve out a separate section about this stuff, or just drop it?}
-
-Our choice of averaging $\textup{SMA}_{short}$ over ${-0.5w_{short} <= t < +0.5w_{short}}$ makes it insensitive to choice of $w_{short}$.
-For the analysis in Section \ref{sec:features/timedependent} changing $\textup{SMA}_{short}$ from $\textup{w}_{14}$ to both $\textup{w}_{7}$ and $\textup{w}_{28}$ resulted in no change to the dates bounding the 139-day divergence region.
-The principal effect of changing $\textup{w}_{short}$ is the number of short regions that arise from the higher-frequency oscillations of $\textup{SMA}_{short}$ around $\textup{SMA}_{long}$.
-
-\TODO{This is where a discussion about performance models having to account for long-term changes to baseline performance should go.  That doesn't seem to fit well into the rest of the narrative though.}
-
-We found the exact choice of $w_{short}$ and $w_{long}$ to be somewhat arbitrary; adjusting these values by as much as $\pm 50\%$ did not affect the identification of the most significant events presented here.
-In addition, a specific choice of $w$ does not preclude analyzing events longer or shorter than $w$, and we demonstrate methods to address this in Sections XYZ.
-
-Although SMA crossover points are also applied in market analysis for detecting trends in prices and predicting when to buy or sell an asset based on the direction of the crossover~\cite{brock1992simple}.
-However, the predictive value of SMA crossovers is a source of controversy even in the financial community, and thus, we focus here solely on using them as tools for detecting trends and partitioning divergent regions in historical datasets.
-
-Financial market analysis techniques can be used to detect underlying trends within noisy I/O performance data.
