@@ -20,9 +20,10 @@ I/O performance variability anecdotes on leadership-scale
 systems~\cite{Lofstead2010,Yildiz2016,carns2011understanding} and proposed
 methods to combat it.  
 
-However, these studies of application I/O and parallel file system performance and variability are based either on a small set of applications or on observations over a short duration, and they do not consider how performance and variation may be a function of time.
+However, these studies of application I/O and parallel file system performance and variability are based either on a small set of applications or on observations over a short duration.
+Furthermore, examining how performance and variation may change over time is relatively unexplored, with the existing body of work being largely anecdotal~\cite{Haryadi2018fail}.
 In this work, we build upon best-in-class previous efforts by combining system monitoring, application monitoring, and active performance probing
-to holistically characterize how I/O performance variation manifests across many dimensions over a year-long period.
+to holistically quantify how I/O performance variation manifests across many dimensions over a year-long period.
 %into a portable, holistic framework without the need for additional database infrastructure, and by 
 To this end, we also introduce systematic methods to help automate the task of deriving actionable insight from these data sources.
 We have analyzed these holistic data sets for an entire year on multiple parallel file systems and present a broad statistical analysis that provides an unprecedented advancement in our understanding of HPC I/O performance variability.
