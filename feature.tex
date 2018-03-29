@@ -25,8 +25,8 @@
 \end{figure}
 
 Continuous passive monitoring and active performance probing produce
-a large volume of data over the course of a year.  We begin our
-investigation by summarizing the data set at a high level, establishing
+a large volume of data ($\approx$ 15 GiB) over the course of a year.  We begin our
+investigation by summarizing the dataset at a high level, establishing
 methods for organizing and navigating the data in a semantically
 meaningful way, and establishing methods for identifying regions of
 interest.
@@ -36,7 +36,7 @@ interest.
 Absolute I/O performance is influenced by many factors, most notably (a)
 application I/O pattern, (b) read/write ratio, and (c) I/O system
 architecture~\cite{Lockwood2017, Xie2012}.  This makes it difficult to
-reason about performance variation across benchmarks or across platforms,
+contextualize performance variation across benchmarks or across platforms,
 because each combination is capable of a different baseline performance
 level.  We
 address this problem by normalizing the
@@ -59,12 +59,12 @@ performance fluctuations, however.
 
 Figure~\ref{fig:summary-heatmap} visualizes the same data in the form of a
 heatmap over time.  This shows that performance variation is not randomly
-distributed over the year; this is a key characteristic that is not captured by
+distributed over the year; this key characteristic is not captured by
 time-independent performance distributions.
 Several archetypical forms of correlated performance degradation observed in Fig. \ref{fig:summary-heatmap} are highlighted in Fig. \ref{fig:regions-heatmap} and fall into three broad categories of variation:
 
 \begin{enumerate}[leftmargin=*]
-\item Dark vertical bands, exemplified in the \mira data in Fig. \ref{fig:regions-heatmap}a, represent transient system-wide issues that resulted in a uniform loss of performance for all probes executed that day.
+\item Dark vertical bands, exemplified in the \mira data in Fig. \ref{fig:regions-heatmap}a, represent transient system-wide issues that results in a uniform loss of performance for all probes executed that day.
 \item Dark horizontal bands, shown in the \cori data in Fig. \ref{fig:regions-heatmap}b, indicate a long-term degradation in performance that disproportionately affects a specific I/O motif.
 \item Isolated dark blocks represent individual probes where performance was poor for a very short period of time within a day.
 \end{enumerate}
@@ -78,7 +78,7 @@ facility operators, it indicates that performance anomalies and their root
 causes should not be assessed in isolation. By integrating broader spatial and
 temporal context into the analysis, facility operators can more accurately
 discriminate between application problems and environmental factors.
-For users and application developers, it follows that the accuracy of parameterized I/O performance models~\cite{Xie2012,Madireddy2017} will degrade unless they are reparameterized as the I/O subsystem they model evolves.
+For users and application developers, it follows that the accuracy of parameterized I/O performance models~\cite{Xie2012,Madireddy2017} will degrade unless they are reparameterized as the I/O subsystem which they model evolves.
 Both of these cases justify the need for a systematic approach for identifying different regions of I/O performance to differentiate long-term factors and phenomena from short-term transients.
 
 \subsection{Time-dependent analysis} \label{sec:features/timedependent}
@@ -101,16 +101,16 @@ When chosen to be sufficiently short (${w_{short} \sim O(\textup{days})}$),
 the resulting $\textup{SMA}_{short}$ provides a rapid visual means to
 identify performance degradation or recovery that lasts for
 $O(\textup{days})$.  Multiple SMAs can be plotted simultaneously over the
-same data set to differentiate short and long term trends and identify key
+same dataset to differentiate short and long term trends and identify key
 crossover points.
 We further note that SMAs can be calculated across individual workloads or across a set of workloads by simply calculating the arithmetic mean of all relevant performance observations falling within $w$.
 The former is useful for identifying motif-specific or transient performance issues, while the latter is helpful for detecting systemic performance issues.
 
-\begin{figure}[t]
+\begin{figure}
     \centering
     \includegraphics[width=1.0\columnwidth]{longterm-cscratch-hacc}
     \vspace{-.35in}
-    \caption{Performance evolution of HACC file-per-process workload on \cori.  Red line is the overall mean (298 GiB/sec write, 204 GiB/sec read) and blue bars are raw performance measurements.}
+    \caption{Performance evolution of HACC file-per-process workload on \cori.  Green line is the global mean (298 GiB/sec write, 204 GiB/sec read) and blue bars are raw performance measurements.}
     \label{fig:timeseries-baseline}
     % source: sc18_segments.ipynb
 \end{figure}
@@ -129,8 +129,8 @@ At minimum, the security requirements of the centers which run them drive system
 Thus, administrative activities such as maintenance patches and
 software updates are a significant source of time-dependent, long term performance
 variation. This must be accounted for in both retrospective performance
-analysis and forward looking performance modeling parameterization activities.  The
-ramifications for I/O research practitioners is that holistic I/O monitoring
+analysis and forward-looking performance modeling parameterization activities.  The
+ramifications for I/O research practitioners are that holistic I/O monitoring
 must incorporate environmental provenance
 information, such as kernel, operating system, and file
 system version, to aid in correlation.
@@ -144,13 +144,13 @@ Doing so allows us to examine short-term performance variations (e.g., a
 period of sustained bandwidth contention) in the context of longer-term
 trends (e.g., in the presence of a file system software regression).  Once a
 region of interest has been defined, we can then constrain more detailed
-analysis techniques to that region to determine its cause.
-The points at which $\textup{SMA}_{short}$ intersects $\textup{SMA}_{long}$, termed \emph{crossover points}, conveniently establish the boundaries of regions where short-term performance has diverged from longer-term performance and anomalous performance is prevailing.
-We therefore introduce the notion of \emph{divergence regions} which are the periods of time bounded by two crossover points and capture correlated performance.
+analysis techniques to that region to determine why it was defined.
+The crossover points at which $\textup{SMA}_{short}$ and  $\textup{SMA}_{long}$ intersect conveniently establish the boundaries of regions where short-term performance has diverged from longer-term performance and where anomalous performance is prevailing.
+We therefore introduce the notion of \emph{divergence regions} which are the periods of time bounded by two crossover points and which capture correlated performance.
 Fig. \ref{fig:mira-regions-overview} illustrates how these concepts are applied to partition data.
 
 For the remainder of this study, we apply the concept of \emph{divergence regions}, bounded by the crossovers between $\textup{SMA}_{short}$ and $\textup{SMA}_{long}$, to systematically identify and characterize periods in time where anomalous performance was observed by the active I/O performance probes running across the test systems.
-We define $\textup{SMA}_{short}$ to have ${w_{short} = \textup{two weeks}}$ as in \ref{sec:features/timedependent} and $\textup{SMA}_{long}$ to have ${w_{long} = \textup{seven weeks}}$.
+We define $\textup{SMA}_{short}$ to have ${w_{short} = \textup{two weeks}}$ as in Section~\ref{sec:features/timedependent} and $\textup{SMA}_{long}$ to have ${w_{long} = \textup{seven weeks}}$.
 $w$ was chosen to be a multiple of seven days to align with one
 week and ensure that weekends and weekdays were equally represented in both SMA
 calculations. $w_{long}$ was set to seven weeks to span multiple $w_{short}$
@@ -161,10 +161,10 @@ In general, we find that financial market technical
 analysis techniques can be adapted to
 time series I/O performance data to attenuate noise and identify underlying trends.
 In the context of financial markets, SMAs (and other more
-sophisticated related techniques) are used for predictive purposes to time
+sophisticated techniques) are used for predictive purposes to time
 the execution of market trades.  In this study, we are not applying them to
 the task of predicting performance, but rather to identify regions of
-interest in behavior that has already been recorded.
+interest in recorded observations.
 
 \begin{figure}
     \centering

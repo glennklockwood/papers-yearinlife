@@ -3,7 +3,7 @@
 
 This study has revealed a number of novel insights into the nature of I/O performance in production using holistic I/O analysis and active I/O performance probes.
 In addition, our findings have significance beyond the scope of the specific systems evaluated, and they collectively constitute an advancement to the greater state of the practice.
-In this section, we revisit the most significant outcomes and provide corollaries that improve the ability to contextualize, quantify, and analyze I/O performance variability on large-scale storage systems.
+In this section, we revisit the most significant outcomes and provide corollaries that improve the ability for HPC storage practitioners to contextualize, quantify, and analyze I/O performance variability on large-scale storage systems.
 
 \subsection{Understanding large-scale storage system behavior}
 
@@ -15,11 +15,11 @@ systems behave at a high level:
 \item \textbf{Baseline I/O performance and variability are not constant over
 time:}
 This observation has direct implications for our specifications and expectations of system performance.
-It is unrealistic to assume that benchmarks performed upon system delivery will accurately represent performance over time, and performance expectations must be re-calibrated as storage systems age.
+It is unrealistic to assume that benchmarks performed upon system delivery will accurately represent performance over time, and performance expectations must be recalibrated as storage systems age.
 
 \item \textbf{Attributes that correlate with transient performance problems often differ from those that correlate with long-term performance problems:}
-I/O-intensive workloads in HPC are widely known to be unusually bursty compared to other I/O-intensive computing workloads, but this finding reveals that some aspects of HPC I/O workloads (such as IOPS and metadata contention) are more consistently bursty than others (such as bandwidth contention).
-Performance degradation that results from metadata or IOPS contention is unlikely to persist for days, while bandwidth contention can result in performance degradation at all time scales.
+I/O-intensive workloads in HPC are widely known to be unusually bursty compared to other I/O-intensive computing workloads, but this study demonstrates that some aspects of HPC I/O workloads (such as IOPS and metadata operations) are more consistently bursty than others (such as bandwidth utilization).
+Performance degradation that results from IOPS or metadata contention is unlikely to persist for days, while bandwidth contention can result in performance degradation at all time scales.
 
 \end{itemize}
 
@@ -34,10 +34,10 @@ The following findings motivate further advances in how large-scale storage syst
 
 \begin{itemize}[leftmargin=*]
 
-\item \textbf{Administrative activities such as maintenance patches and
+\item \textbf{Administrative activities such as system patches and
 software updates are a significant source of time-dependent, long term
 performance variation}:
-HPC systems are complex, and their upgrades may be dictated by a variety of external factors including maintenance schedules, vendor release cycles, and security concerns.
+HPC systems are complex, and their upgrades may be dictated by a variety of external factors including maintenance schedules, vendor release cycles, and security disclosures.
 Because of this, it may not be possible to capture explicit before and after measurements as part of the upgrade process.
 Continuous monitoring and active probing of performance can mitigate this problem by making such measurements a routine procedure regardless of upgrade schedule, much in the same way that continuous integration testing is used to automatically monitor software development processes.
 

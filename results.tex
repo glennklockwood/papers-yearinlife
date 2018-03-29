@@ -5,7 +5,7 @@ a systematic method for grouping time-correlated performance events.
 Once a divergence region (i.e., a performance trend) has been identified,
 more focused statistical analyses can then be applied within the region
 to gain insight into the factors that contributed to that trend.  Examples of
-contributing factors may include utilization, system health, and component performance.
+contributing factors may include resource utilization, system health, and component performance.
 In the following analyses, we separate our 11,986 performance observations into sets of observations that all ran on the same test platform (as described in Table \ref{tab:platform-descriptions}) to characterize the factors that contribute to time-dependent, systemic performance variation across different file systems and architectures.
 
 \subsection{Correlative analysis} \label{sec:results/correlate-mira}
@@ -14,16 +14,16 @@ In the following analyses, we separate our 11,986 performance observations into 
     \centering
     \includegraphics[width=1.0\columnwidth]{mira-correlation-region}
     \vspace{-.35in}
-    \caption{Correlation between performance and $CF_{bw}$ in a divergence region on \mira for all I/O motifs combined.
-    (a) highlights the divergence region of interest and corresponds to the same highlighted region shown in Fig. \ref{fig:mira-regions-overview}. (b) shows the correlation between performance and $CF_{bw}$ in that region.
+    \caption{Correlation between performance and bandwidth coverage factor in a divergence region on \mira for all I/O motifs combined.
+    (a) highlights the divergence region of interest and corresponds to the same highlighted region shown in Fig. \ref{fig:mira-regions-overview}. (b) shows the correlation between performance and bandwidth coverage factor in that region.
     Correlation coefficient is $0.507$ and p-value is ${8.71 \times 10^{-9}}$; dashed line in (b) is a linear fit with slope $0.503$ drawn for visual aid.}
     \label{fig:mira-correlation-region}
     % source: sc18_region-correlation.ipynb
 \end{figure}
 
-We begin our correlative analysis by partitioning a year-long data set into
+We begin our correlative analysis by partitioning a year-long dataset into
 divergence regions using the method described in
-Section~\ref{sec:features/partitioning}. Using the average of performance observations across all \mira
+Section~\ref{sec:features/partitioning}. Using the performance observations across all \mira
 \mirafsone workloads as an example, we set ${w_{short} = \textup{two weeks}}$ and ${w_{long}
 = \textup{seven weeks}}$ to identify divergence regions, and then discard any
 regions with fewer than three data points.  Regions with few data points are discarded
@@ -40,7 +40,7 @@ We then use the p-value of each correlation coefficient\footnote{
 The p-value of a correlation coefficient is the probability of observing data that would show the same correlation coefficient in the absence of any real relationship between the underlying metrics.
 A low p-value indicates that it is extremely unlikely that the calculated correlation coefficient would be observed if the metrics being compared had no real correlation.
 As such, p-values represent the statistical significance of a statistical measurement.}
-to further down select the total set of regions to those with extremely high significance
+to further down-select the total set of regions to those with extremely high significance
 ($\textup{p-value} < {1.0 \times 10^{-5}}$).
 This threshold yields a total of nine relevant divergence regions on \mira \mirafsone which are all depicted as shaded extents in Figure \ref{fig:mira-regions-overview}.
 Each of these nine regions exhibits at least moderate correlation ($R$) ranging from 0.507 to 0.884 with the bandwidth coverage factor feature.
@@ -49,7 +49,7 @@ Fig.~\ref{fig:mira-correlation-region} illustrates the correlation between bandw
 This example exhibits the lowest correlation ($R = 0.507$) with bandwidth coverage factor of any of the selected regions, and the scatter plot of performance results shows why:
 this region contains a cluster of poorly performing probes (${0.2 < \textup{fraction peak perf} < 0.4}$) that ran with a relatively high bandwidth coverage factor.
 This region is also the single largest divergence region observed on \mira; a difference of over 20\% between $\textup{SMA}_{short}$ and $\textup{SMA}_{long}$ was observed during this time.
-This divergence region example highlights the importance of not just identifying regions and calculating correlations, but identifying cases in which the analysis indicates the presence of an unknown factor that is not adequately captured by the instrumentation framework.
+This divergence region example highlights the importance not only of identifying regions and calculating correlations, but of identifying cases in which the analysis indicates the presence of an unknown factor that is not adequately captured by the instrumentation framework.
 
 Despite the unusual region shown in Fig. \ref{fig:mira-correlation-region},
 however, these data indicate that the time-dependent performance divergences observed on \mira show either moderate or strong correlation with bandwidth contention.
@@ -89,7 +89,7 @@ This is particularly relevant to the increasing fraction of experimental and obs
     \centering
     \includegraphics[width=1.0\columnwidth]{cscratch-bimodal-fsaveosscpu}
     \vspace{-.35in}
-    \caption{Regions of negative correlation (red) and positive correlation (blue) between fraction peak performance and data server load during trend regions identified on \cori.
+    \caption{Regions of negative correlation (red) and positive correlation (blue) between fraction peak performance and data server load during divergence regions identified on \cori.
     SMAs for \cori's HACC write workload also shown to illustrate the coincidence of a long-term performance issue with the direction of correlation.}
     \label{fig:cscratch-bimodal-fsaveosscpu}
     % source: sc18_region-correlation-all.ipynb
@@ -135,7 +135,7 @@ However, it is unclear at this time what caused the other correlated divergence 
     \vspace{-.35in}
     \caption{Attributes that correlated with poor I/O performance across all file systems and benchmarks tested normalized to the number of probes during which each attribute was measured.
     \mira was the only system for which IOPS coverage factor was measured.
-    Greyed bars are attributes whose rate of classification were not statistically significant.
+    Gray bars are attributes whose rate of classification were not statistically significant.
     Percentages do not add up to 100\% because multiple attributes are often classified as contributors for a single anomalous observation.
     }
     \label{fig:contributors-bad-by-system}
