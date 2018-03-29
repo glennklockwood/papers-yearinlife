@@ -19,8 +19,6 @@ performance.
 
 \subsection{Data collection framework}\label{sec:methods/tokio}
 
-%A holistic approach to understanding I/O behavior is a necessity given the move towards more complicated I/O architectures (in terms of number of constituent components, like high-level I/O libraries, I/O middleware systems, and low-level storage hardware) on these systems. \tokio's primary goal is to arm system users, administrators, and I/O researchers with the necessary tools to navigate this complexity and to make meaningful observations into how workloads interact with the I/O subsystem.
-
 \begin{figure}
     \centering
     \includegraphics[width=0.9\columnwidth]{tokio}
@@ -134,9 +132,3 @@ In the case of \cori and \edison, each job had access to the full I/O bandwidth 
 11,986 performance observations across \mira, \cori, and \edison over the
 course of a year.
 The remaining 18.1\% of potential probes failed due to system downtime, malfunctions of component-level monitoring tools or the automated test scheduling, queue wait times that exceeded 24 hours, or using excessive walltime.
-\TODO{any way to cite the Fail Slow at Scale here without creating a new thread for reviewers to pull at?}
-
-%\TODO{Add details of the number of processes the benchmarks ran with, and how the file systems are set up, i.e., number of OSTs on \cori, number of I/O nodes used on \mira 
-%\\
-%\edison was mentioned in the previous paragraph; Figure 1 doesn't have the results. -- Suren}
-% DONE - 2018-03-26 gkl
