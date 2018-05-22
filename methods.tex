@@ -132,11 +132,12 @@ The four underlying benchmarks (VPIC \cite{PIOK}, BDCATS \cite{Patwary:2015:BDCA
 Each probe was configured to run identically to previous work~\cite{Lockwood2017} with the goal of using a substantial fraction of the I/O subsystem's peak bandwidth while using minimal production cycles.
 
 All probes ran using 256 nodes (4,096 processes) on \cori, 128 nodes (2,048
-processes) on \edison, and 1,024 nodes (16,384 processes) on \mira.  On
-Lustre, the
-shared-file benchmarks used wide striping while the file-per-process
-benchmarks disabled striping.  In either case the goal was to leverage as
-many storage devices as possible in aggregate for each benchmark.
+processes) on \edison, and 1,024 nodes (16,384 processes) on \mira.  The
+shared-file probes on Lustre were configured to use maximum striping per
+file while the file-per-process probes placed each file on a single OST.
+The objective in both cases was to (in aggregate) leverage
+all available storage devices. The default automatic striping policy was
+used on GPFS.
 In the case of \cori and \edison, each job had access to the full I/O bandwidth of its I/O nodes as well, but due to the way in which I/O nodes are allocated in a fixed ratio to job size on Blue Gene/Q systems~\cite{Bui2014}, \mira jobs were restricted to the bandwidth provided by eight I/O nodes.
 
 81.9\% of the intended probes successfully generated results, providing 
