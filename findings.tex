@@ -1,11 +1,25 @@
 \section{Findings and Implications for State of the Practice}
 \label{sec:findings}
 
-\TODO{Need a lead-in saying our method of active performance probes are great and everyone should do them, and our SMAs are great and everyone can use them, and here's all the stuff you can discover about your own file systems with our awesome contribution to the state of the practice.}
+We have found that the combination of system-wide telemetry, active performance
+probes, modular data integration, and generalized analysis
+tools was highly effective in deriving insight from otherwise
+opaque large-scale storage systems.  Over the course of this study we
+codified successful techniques, such adaptations of financial analysis
+strategies, into our open source framework for reuse on other systems
+(see \label{sec:appendix/artifacts}).  We believe that the state of the
+practice in HPC storage will be advanced by making this methodology
+readily available and repeatable on other platforms.  Our framework notably
+decouples analysis techniques from data integration so that the
+the same analysis tools can be reused on any platform once modular
+connectors have been added to normalize that platform's telemetry data.
 
-This study has revealed a number of novel insights into the nature of I/O performance in production storage systems using holistic I/O analysis and active I/O performance probes.
-In addition, our findings have significance beyond the scope of the specific systems evaluated, and they collectively constitute an advancement to the greater state of the practice.
-In this section, we revisit the most significant outcomes and provide corollaries that improve the ability for HPC storage practitioners to contextualize, quantify, and analyze I/O performance variability on large-scale storage systems.
+We have also further advanced the state of the practice in this study by uncovering novel
+insights into the nature of I/O performance in production storage systems.
+In this section, we revisit the most significant outcomes and
+provide corollaries that improve the ability for HPC storage practitioners
+to contextualize, quantify, and analyze I/O performance variability on
+large-scale storage systems.
 
 \subsection{Understanding large-scale storage system behavior}
 
