@@ -1,9 +1,10 @@
-all: main.pdf revision-diff.pdf
+all: main.pdf
 
 main.pdf: *.tex *.bib
 	latexmk -pdf main
 
-revision-diff.pdf::
+.PHONY: revision-diff.pdf
+revision-diff.pdf:
 	./differ.sh
 
 clean::

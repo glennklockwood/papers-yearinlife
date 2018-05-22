@@ -12,16 +12,16 @@ mv 13925041wxnhdbpjvcnv diff
 
 cd old
 git checkout 05819139b1bf4ae0a8e0258e456c3e20b55f859b
-make
+make main.pdf
 cd ../
 
 cd diff
-make
+make main.pdf
 cd ../
 
 latexdiff --flatten old/main.tex $pdir/main.tex > diff/main.tex
 cd diff
 make clean
-make
+make main.pdf
 cp main.pdf $pdir/revision-diff.pdf
 
