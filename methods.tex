@@ -131,12 +131,20 @@ study, actively probing the user-perceived I/O performance of each analyzed file
 The four underlying benchmarks (VPIC \cite{PIOK}, BDCATS \cite{Patwary:2015:BDCATS,PIOK}, HACC \cite{habib2012}, and IOR \cite{ior}) were chosen to exercise a variety of I/O workloads and covered the four I/O motifs (listed in Table \ref{tab:benchmark-motifs}) in both read and write modes.
 Each probe was configured to run identically to previous work~\cite{Lockwood2017} with the goal of using a substantial fraction of the I/O subsystem's peak bandwidth while using minimal production cycles.
 
-All probes ran using 256 nodes (4,096 processes) on \cori, 128 nodes (2,048 processes) on \edison, and 1,024 nodes (16,384 processes) on \mira.
-Data was striped as widely as possible in all cases; this corresponds to
-striping over every OST (for \cori and \edison) or every LUN (for \mira).
+All probes ran using 256 nodes (4,096 processes) on \cori, 128 nodes (2,048
+processes) on \edison, and 1,024 nodes (16,384 processes) on \mira.  On
+Lustre, the
+shared-file benchmarks used wide striping while the file-per-process
+benchmarks disabled striping.  In either case the goal was to leverage as
+many storage devices as possible in aggregate for each benchmark.
 In the case of \cori and \edison, each job had access to the full I/O bandwidth of its I/O nodes as well, but due to the way in which I/O nodes are allocated in a fixed ratio to job size on Blue Gene/Q systems~\cite{Bui2014}, \mira jobs were restricted to the bandwidth provided by eight I/O nodes.
 
 81.9\% of the intended probes successfully generated results, providing 
 11,986 performance observations across \mira, \cori, and \edison over the
 course of a year.
-The remaining 18.1\% of potential probes failed due to system downtime, malfunctions of component-level monitoring tools or the automated test scheduling, queue wait times that exceeded 24 hours, or excessive walltime usage.
+The remaining 18.1\% of potential probes failed due to system downtime,
+malfunctions of component-level monitoring tools or the automated test
+scheduling, queue wait times that exceeded 24 hours, or excessive walltime
+usage.  These samples (which are not used in this study) point out the need
+for additional analysis in future work that incorporates failure data as
+well as performance data.
