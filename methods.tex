@@ -94,7 +94,13 @@ feature vector depends on what connectors are available on the target platform a
 \end{tabular}
 \end{table}
 
-We applied the \tokio framework on the \edison and \cori systems at \nersc and the \mira system at the \alcf. Each of these platforms, along with their corresponding file systems analyzed as part of this study, are briefly described in Table~\ref{tab:platform-descriptions}.
+We applied the \tokio framework on the \edison and \cori systems at \nersc
+and the \mira system at the \alcf. Each of these platforms, along with their
+corresponding file systems analyzed as part of this study, are briefly
+described in Table~\ref{tab:platform-descriptions}\footnote{The same
+techniques would be applicable to Mira's \mirafszero GPFS file system as well,
+but performance probes were not enabled on \mirafszero during the time
+period covered by this study.}
 
 Darshan is installed and automatically enabled on each of these systems, transparently characterizing the I/O workloads of a large portion of  each system's job population. 
 \nersc has deployed LMT for full-time monitoring of the Lustre scratch
