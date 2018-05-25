@@ -50,7 +50,7 @@ platform-independent I/O analysis tools.  This study in particular relies on
 integrated analysis of the following monitoring connectors:
 
 \begin{itemize}[leftmargin=*]
-\item \textbf{Application-level monitoring}: \textit{Darshan}~\cite{Carns2009} is an application I/O characterization tool that is commonly deployed at production HPC facilities. It provides a condensed set of I/O counters, timers, and other statistics for each file accessed by a given application.
+\item \textbf{Application-level monitoring}: \textit{Darshan}~\cite{Carns2009} is an application I/O characterization tool that is commonly deployed at production HPC facilities. It provides a condensed set of I/O counters, timers, and other statistics for each file accessed by a given application. Previous analysis~\cite{snyder2016performance} has demonstrated Darshan's negligible runtime overheads and log file sizes (ranging from tens of KiB to a few MiB per job, depending on the workload).
 
 \item \textbf{File system workload monitoring}: \textit{LMT}~\cite{lmt} and \textit{ggiostat}~\cite{Lockwood2017} are examples of 
 file system monitoring tools for Lustre and GPFS deployments, respectively. These tools each capture metrics quantifying file system workloads periodically over a given time interval, with some of these metrics being common to both tools (e.g., observed read/write bandwidths, number of specific metadata operations issued, etc.) and other metrics being file system specific (e.g., the CPU utilization on a given Lustre metadata server captured by LMT).
