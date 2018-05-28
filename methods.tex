@@ -75,12 +75,6 @@ A coverage factor of 1.0 indicates that a job was the exclusive consumer of
 a resource, while a coverage factor of 0.4 indicates that other competing
 jobs consumed 60\% of the total delivered resources.
 
-%Each job in this study typically produces a feature vector with 220 attributes including derived values.
-% gkl: above is misleading because all feature vectors are the same size, but they may have different attributes left undefined.
-Each job in this study produced a feature vector with 220 attributes; 96 attributes come from application-level monitoring, 101 come from file system workload monitoring, 21 come from file system health monitoring, 6 come from resource manager monitoring, and the remainder are job-wide metadata.
-The exact number of attributes defined in each
-%The exact size of the 
-feature vector depends on what connectors are available on the target platform at the time the job is executed.
 
 \subsection{Platforms}\label{sec:methods/platforms}
 
