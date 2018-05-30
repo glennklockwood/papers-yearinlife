@@ -6,6 +6,7 @@
     \vspace{-.15in}
     \caption{I/O performance grouped by I/O motifs and read(R)/write(W) mode on different file systems.  Whiskers represent the 5th and 95th percentiles.}
     \label{fig:summary-boxplots}
+	\vspace{-.15in}
 \end{figure}
 
 \begin{figure*}
@@ -36,15 +37,16 @@ interest.
 Absolute I/O performance is influenced by many factors, most notably (a)
 application I/O pattern, (b) read/write ratio, and (c) I/O system
 architecture~\cite{Lockwood2017, Xie2012}.  This makes it difficult to
-contextualize performance variation across benchmarks or across platforms,
+contextualize performance variation across benchmarks or platforms
 because each combination is capable of a different baseline performance
-level.  We
-address this problem by normalizing the
+level.
+We address this problem by normalizing the
 performance of each of the 11,986 observations in terms of its
 \emph{fraction of peak performance}.
-The fraction of peak performance is defined as the absolute performance (in
+The fraction of peak performance is the absolute performance (in
 bytes/sec) of an observation divided by the maximum absolute performance
-observed across all jobs with a common (a), (b), and (c) above.  This
+observed across all jobs with a common (a), (b), and (c) above.
+This
 approach allows us to focus on variability for different classes of I/O
 workloads rather than their relative performance.
 
@@ -64,9 +66,9 @@ time-independent performance distributions.
 Several archetypical forms of correlated performance degradation observed in Fig. \ref{fig:summary-heatmap} are highlighted in Fig. \ref{fig:regions-heatmap} and fall into three broad categories of variation:
 
 \begin{enumerate}[leftmargin=*]
-\item Dark vertical bands, exemplified in the \mira data in Fig. \ref{fig:regions-heatmap}a, represent transient system-wide issues that results in a uniform loss of performance for all probes executed that day.
+\item Dark vertical bands, exemplified in the \mira data in Fig. \ref{fig:regions-heatmap}a, represent transient system-wide issues that result in a uniform loss of performance for probes executed that day.
 \item Dark horizontal bands, shown in the \cori data in Fig. \ref{fig:regions-heatmap}b, indicate a long-term degradation in performance that disproportionately affects a specific I/O motif.
-\item Isolated dark blocks represent individual probes where performance was poor for a very short period of time within a day.
+\item Isolated dark blocks represent individual probes where performance was poor for a very short period of time.
 \end{enumerate}
 
 % - Baseline performance and variability are not constant over time.  Predictive models must therefore adapt over time as well.
@@ -126,14 +128,9 @@ Curiously, the performance of HACC read workload (Figure \ref{fig:timeseries-bas
 This asymmetry, in combination with the bounding dates of this divergent region, allowed us to trace this specific issue to unintentional behavior introduced (and later fixed) in the Lustre software running on \cori between the system upgrades.
 Although this particular case of long-term performance divergence was caused by an unexpected bug in system software, the reality of most production storage systems is that they are regularly patched and upgraded.
 At minimum, the security requirements of the centers which run them drive system updates, and as exemplified by the widely publicized Spectre and Meltdown patches, such updates can have non-trivial effects on certain types of I/O.
-Thus, administrative activities such as maintenance patches and
-software updates are a significant source of time-dependent, long term performance
-variation. This must be accounted for in both retrospective performance
-analysis and forward-looking performance modeling parameterization activities.  The
-ramifications for I/O research practitioners are that holistic I/O monitoring
-must incorporate environmental provenance
-information, such as kernel, operating system, and file
-system version, to aid in correlation.
+Thus, administrative activities such as maintenance patches and software updates are a significant source of time-dependent, long-term performance variation.
+This must be accounted for in both retrospective performance analysis and forward-looking performance modeling parameterization.  
+The ramifications for I/O research practitioners are that holistic I/O monitoring must incorporate environmental provenance information, such as kernel, operating system, and file system version, to aid in correlation.
 
 \subsection{Regions of interest} \label{sec:features/partitioning}
 
@@ -142,11 +139,11 @@ Section~\ref{sec:features/timedependent}
 by superimposing a second SMA ($\textup{SMA}_{long}$) with a longer window (${w_{long} \sim O(\textup{weeks})}$) on top of $\textup{SMA}_{short}$ (which captures variations ${O(\textup{days})}$).
 Doing so allows us to examine short-term performance variations (e.g., a
 period of sustained bandwidth contention) in the context of longer-term
-trends (e.g., in the presence of a file system software regression).  Once a
-region of interest has been defined, we can then constrain more detailed
+trends (e.g., in the presence of a file system software regression).
+Once a region of interest has been defined, we can then constrain more detailed
 analysis techniques to that region to determine why it was defined.
-The crossover points at which $\textup{SMA}_{short}$ and  $\textup{SMA}_{long}$ intersect conveniently establish the boundaries of regions where short-term performance has diverged from longer-term performance and where anomalous performance is prevailing.
-We therefore introduce the notion of \emph{divergence regions} which are the periods of time bounded by two crossover points and which capture correlated performance.
+The crossover points at which $\textup{SMA}_{short}$ and  $\textup{SMA}_{long}$ intersect establish the boundaries of regions where short-term performance has diverged from longer-term performance and where anomalous performance is prevailing.
+Thus, we introduce the notion of \emph{divergence regions} which are the periods of time bounded by two crossover points and which capture correlated performance.
 Fig. \ref{fig:mira-regions-overview} illustrates how these concepts are applied to partition data.
 
 For the remainder of this study, we apply the concept of \emph{divergence regions}, bounded by the crossovers between $\textup{SMA}_{short}$ and $\textup{SMA}_{long}$, to systematically identify and characterize periods in time where anomalous performance was observed by the active I/O performance probes running across the test systems.
@@ -174,5 +171,6 @@ interest in recorded observations.
     Both white and gray regions between crossovers are divergence regions, but only a subset of divergence regions are shaded for clarity.
     The significance of the divergence region highlighted in red is discussed in Section \ref{sec:results/correlate-mira}.}
     \label{fig:mira-regions-overview}
+    \vspace{-.15in}
     % source: sc18_region-correlation.ipynb
 \end{figure}

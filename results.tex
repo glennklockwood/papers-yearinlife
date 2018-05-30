@@ -19,6 +19,7 @@ In the following analyses, we separate our 11,986 performance observations into 
     Correlation coefficient is $0.507$ and p-value is ${8.71 \times 10^{-9}}$; dashed line in (b) is a linear fit with slope $0.503$ drawn for visual aid.}
     \label{fig:mira-correlation-region}
     % source: sc18_region-correlation.ipynb
+	\vspace{-.15in}
 \end{figure}
 
 We begin our correlative analysis by partitioning a year-long dataset into
@@ -93,8 +94,8 @@ This is particularly relevant to the increasing fraction of experimental and obs
     SMAs for \cori's HACC write workload also shown to illustrate the coincidence of a long-term performance issue with the direction of correlation.}
     \label{fig:cscratch-bimodal-fsaveosscpu}
     % source: sc18_region-correlation-all.ipynb
+    \vspace{-.15in}
 \end{figure}
-
 
 Another noteworthy feature that this method reveals is the bimodality of correlation between performance and the CPU load of the file system data servers (``Data Server Load'' in Fig. \ref{fig:trend-correlations}) on the Lustre-based test platforms.
 A time-resolved view of the regions where performance correlates with data server CPU loads (Fig. \ref{fig:cscratch-bimodal-fsaveosscpu}) reveals that the bimodality of the correlation matches the biomodality observed in the HACC write workload on the affected storage systems.
@@ -139,6 +140,7 @@ However, it is unclear at this time what caused the other correlated divergence 
     }
     \label{fig:contributors-bad-by-system}
     % source: sc18_umamify-all.ipynb
+    \vspace{-.15in}
 \end{figure}
 
 In addition to characterizing long-term performance issues, it is also advantageous to determine the reasons why I/O performance is severely degraded for one and only one day in an otherwise unremarkable period of time.
@@ -167,7 +169,7 @@ Since there is only one $\min(a)$ in each region of $N$ observations, the p-valu
 The result of this process is zero or more attributes being positively classified as contributors to anomalous performance.
 For example, if the lowest values of the bandwidth coverage factor and IOPS coverage factor attributes occur in the same feature vector as the lowest value for performance, we classify both bandwidth and IOPS coverage factors as contributors to that anomalous observation's performance.
 
-To apply this method, we first group observations into sets of data by the test platform on which they ran as was described previously.
+To apply this method, we first group observations into sets of data by the test platform on which they ran.
 These sets are then further subdivided according to I/O motif and read/write mode of the probe to classify anomalies at full temporal resolution and motif-level granularity.
 The net result are $5 \times 4 \times 2 = 40$ sets of data, each representing a unique combination of test platform ($5 \times$, as listed in Table \ref{tab:platform-descriptions}), I/O motif ($4 \times$, per Table \ref{tab:benchmark-motifs}), and whether the probe was reading or writing ($2 \times$).
 Schematically, each horizontal row in Figure \ref{fig:summary-heatmap} represents a single set.
@@ -178,20 +180,20 @@ For each such region, we then apply the aforementioned binary classification to 
 All statistically insignificant classifications ($\textup{p-value} > 0.10$) are discarded to eliminate divergence regions that are too small to make any meaningful classifications, and the final products are 
 490 anomalous observations, 410 (84\%) of which have at least one positively classified attribute.
 
-As described in Section \ref{sec:methods/tokio}, not every observation's feature vector has every feature defined.
+Not every observation's feature vector has every feature defined due to some monitoring components being offline at the time of a test.
 So as not to bias our results away from those attributes that were only measured for a subset of observations, we express the importance of each attribute as the number anomalous observations where it was positively classified divided by the total number of observations where it was measured.
 Fig. \ref{fig:contributors-bad-by-system} enumerates the attributes that were positively classified the most times.
 
 As with the longer-term performance divergence characterized in Section \ref{sec:results/correlate-all}, high contention for bandwidth also coincides with short-term performance transients.
 On the contrary, contention for IOPS is positively classified in a significant fraction of anomalous observations despite it not arising as a factor in longer-term performance divergence.
 This contrast suggests that IOPS contention only becomes a significant contributor to performance degradation in short-term transients.
-Conversely, we can conclude that periods of high IOPS contention do not last long enough to be implicated in long-term performance degradation on production file systems, whereas the same is not true of bandwidth contention. These are two distinct forms of performance variation that
+Conversely, we conclude that periods of high IOPS contention do not last long enough to be implicated in long-term performance degradation on production file systems, whereas the same is not true of bandwidth contention. These are two distinct forms of performance variation that
 require unique investigation techniques to uncover.
 
 We also observe the coincidence of anomalous observations and anomalous metadata coverage factors and CPU load on data servers to a less significant degree.
 This is consistent with the moderate correlations shown in Figure~\ref{fig:trend-correlations}.
 Unlike the correlative analysis, though, this transient analysis shows that metadata contention impacts individual jobs on every test platform, and it is observed at much higher frequency on short time scales.
-These findings indicate that, like IOPS contention, metadata contention is much more likely to coincide with transient performance loss than a long-term and sustained divergence of performance.
+This indicates that, like IOPS contention, metadata contention is much more likely to coincide with transient performance loss than a long-term performance divergence.
 
 Metadata server CPU load, file system fullness, and maximum job radius were also classified in some anomalous observations.
 However, the low number of anomalous observations in which they appeared calls into question the statistical significance of these three findings.

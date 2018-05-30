@@ -38,7 +38,7 @@ our analysis was not able to account for all variability; additional work is
 needed in both analysis techniques and monitoring.
 
 \item \textbf{Attributes that correlate with transient performance problems often differ from those that correlate with long-term performance problems:}
-I/O-intensive workloads in HPC are widely known to be unusually bursty compared to other I/O-intensive computing workloads, but this study demonstrates that some aspects of HPC I/O workloads (such as IOPS and metadata operations) are more consistently bursty than others (such as bandwidth utilization).
+I/O-intensive workloads in HPC are widely known to be unusually bursty compared to other I/O-intensive computing workloads, but this study demonstrates that some aspects of HPC I/O workloads (such as IOPS and metadata operations) are more bursty than others (such as bandwidth utilization).
 Performance degradation that results from IOPS or metadata contention is unlikely to persist for days, while bandwidth contention can result in performance degradation at all time scales.
 
 \end{itemize}
@@ -54,31 +54,26 @@ The following findings motivate further advances in how large-scale storage syst
 
 \begin{itemize}[leftmargin=*]
 
-\item \textbf{Administrative activities such as system patches and
-software updates are a significant source of time-dependent, long term
-performance variation}:
-HPC systems are complex, and their upgrades may be dictated by a variety of external factors including maintenance schedules, vendor release cycles, and security disclosures.
-Because of this, it may not be possible to capture explicit before and after measurements as part of the upgrade process.
-Continuous monitoring and active probing of performance can mitigate this
+\item \textbf{Administrative activities such as system patches and updates are a significant source of time-dependent, long term performance variation}:
+HPC systems are complex, and their upgrades may be dictated by external factors including maintenance schedules, vendor release cycles, and security disclosures.
+As such, it may not be possible to capture explicit measurements before and after the upgrade process.
+Continuous monitoring and active probing of performance mitigate this
 problem by making such measurements a routine procedure regardless of
-upgrade schedule, much in the same way that continuous integration testing
-is used to automatically monitor software development processes.  Every
-large-scale facility incorporates testing procedures into their upgrade
+upgrade schedule, much in the same way that continuous integration testing automatically monitors software development processes.
+Every large-scale facility incorporates testing procedures into their upgrade
 strategy, but this study highlights the need for breadth of performance
 testing across workload motifs.
 
 \item \textbf{Holistic I/O monitoring should incorporate environmental
-provenance information, such as kernel, operating system, and file system versions, to aid in correlation}: 
+provenance information such as kernel, OS, and file system versions}: 
 This is an obvious finding in retrospect, but is not widely taken into
 account in current instrumentation tools.
 Tools such as Darshan and LMT should capture sufficient environmental information alongside conventional performance measurements to
-simplify the task of identifying performance losses due to environmental changes.
+to aid in correlation between performance losses and environmental changes.
 
 \item \textbf{Bandwidth contention from sustained, I/O-intensive workloads often accompanies sustained performance losses}:
 The impact of bandwidth contention on I/O performance is widely supported in the literature, but this study demonstrates time-dependent behavior not previously measured.
-Specifically, detrimental contention
-can occur over time spans lasting several weeks (e.g., aggregate
-workload due to project allocation timing) and may be driven by factors 
+Detrimental contention can occur over time spans lasting several weeks (e.g., aggregate workload due to project allocation timing) and may be driven by factors 
 not captured by conventional HPC monitoring (e.g., wide area transfers or archival traffic).
 This calls for a broadening of the definition of ``holistic I/O characterization'' to include not just the full HPC I/O stack, but also the auxiliary resources that utilize the storage system.
 
@@ -94,7 +89,7 @@ Finally, the following findings highlight ways in which the accuracy and signifi
 \item \textbf{Significantly stronger correlations can be found by focusing analysis on algorithmically identified regions of interest in the data}:
 With the proliferation of machine learning, it is tempting to apply unguided techniques to a large data set in a bid to extract meaning from it.
 However we have demonstrated that a systems practitioner will gain more confident insights from targeted analysis of relevant regions of interest.
-The region identification method need not depend on SMAs, and alternative approaches for both partitioning time series data and classifying the measurements within regions can be easily replaced with other methods.
+The region identification method need not depend on SMAs, and alternative approaches for both partitioning time series data and classifying the measurements within regions can be easily replaced.
 That said, the simple technique we applied here still identified causes of poor performance in 84\% of the jobs that experienced transient performance loss.
 Applying more sophisticated classification methods are likely to improve upon this.
 
@@ -103,14 +98,14 @@ Applying more sophisticated classification methods are likely to improve upon th
 %straightforward methods that improve the efficacy of quantitative I/O analysis.
 
 \item \textbf{The nature and magnitude of how different attributes correlate with I/O performance also change over time:}
-This observation has critical ramifications for developing and applying I/O performance models.
+This observation has critical ramifications for developing I/O performance models.
 Models developed from a training set without temporal context will produce incorrect predictions, even on the same target system, if
-external factors have caused the performance of that system to evolve over time.
-For example, we demonstrated that high CPU load can correlate with favorable performance under healthy file system conditions, and it can coincide with unfavorable performance when non-I/O workloads are impacting storage servers.
+external factors have caused the performance of that system to evolve.
+For example, high CPU load was found to correlate with favorable performance under healthy file system conditions, yet it also coincides with unfavorable performance when non-I/O workloads are impacting storage servers.
 
-\item \textbf{Financial market technical analysis techniques can be adapted to I/O performance time series data to attenuate noise and identify underlying trends}:
-Processing a large, continuously expanding, and noisy time series data set is a daunting task, but one that is not unique to I/O performance characterization.
+\item \textbf{Financial market analysis techniques can be adapted to I/O performance time series data to attenuate noise and identify underlying trends}:
+Processing a large, continuously expanding, and noisy time series data set is not unique to I/O performance characterization.
 We found similarities between our data set and financial market data that enabled straightforward adaptation of known techniques and terminology.
-More advanced financial market technical analysis strategies or strategies from other similar fields would likely be even more effective.
+More advanced market analysis strategies or strategies from other fields would likely be more effective.
 
 \end{itemize}
