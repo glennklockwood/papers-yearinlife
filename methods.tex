@@ -82,6 +82,7 @@ jobs consumed 60\% of the total delivered resources.
 % \usepackage{multirow}
 \begin{table}[b]
 \centering
+\vspace{-0.15in}
 \caption{Description of \nersc and \alcf test platforms.}
 \label{tab:platform-descriptions}
 \begin{tabular}{|c|c|c|c|c|}
@@ -107,18 +108,20 @@ described in Table~\ref{tab:platform-descriptions}.
 %but performance probes were not enabled on \mirafszero during the time
 %period covered by this study.}
 
-Darshan is installed and automatically enabled on each of these systems, transparently characterizing the I/O workloads of a large portion of  each system's job population. 
+Darshan is installed and automatically enabled on each of these systems, transparently characterizing the I/O workloads of a large portion of each system's job population. 
 \nersc has deployed LMT for full-time monitoring of the Lustre scratch
 volumes on both \edison and \cori, while the \alcf has deployed ggiostat to
 do the same for the GPFS volumes on \mira.
 \nersc systems additionally utilize the Slurm resource manager, which allows for the capture of detailed metadata for every job executed on \edison or \cori.
-\tokio uses these data sources in-place to provide a unified holistic view
-of I/O performance without copying data to a dedicated database facility.
+Similar job metadata is available from \alcf's Ni API.
+\tokio can use these data sources in-place to provide a unified holistic view
+of I/O performance without copying data to a dedicated database.
 
 \subsection{I/O Performance Probes}\label{sec:methods/benchmarks}
 
 \begin{table}[b]
 \centering
+\vspace{-0.15in}
 \caption{I/O Performance Probe Motifs}
 \label{my-label}
 \begin{tabular}{|r|c|c|}
