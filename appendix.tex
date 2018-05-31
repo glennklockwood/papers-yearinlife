@@ -8,11 +8,11 @@
 This work demonstrates the benefits of applying active I/O performance probes with holistic I/O monitoring to identify the causes of short- and long-term performance variation.
 This work is based on four components which can be applied to either replicate the exact results presented in this study or reproduce this experiment on a completely new system.
 To replicate the exact results, the \emph{year-long dataset} is required.
-To conduct this experiment on an entirely new system though, the \emph{TOKIO Automated Benchmark Collection} is instead used to create a new input dataset.
+To conduct this experiment on an entirely new system though, the \emph{TOKIO Automated Benchmark Collection} is used instead to create a new input dataset.
 
 \subsubsection{Year-long dataset}
 
-This dataset contains all feature vectors generated during this study and contains all data used to generate all figures and findings presented in this work.
+This dataset contains all feature vectors that were generated during this study and used to create all figures and findings presented in this work.
 The dataset is a CSV file containing 11,986 feature vectors, each corresponding to a single job and containing up to 220 attributes.
 96 of these attributes come from application-level monitoring, 101 come from file system workload monitoring, 21 come from file system health monitoring, 6 come from resource manager monitoring, and the remainder are job-wide metadata.
 The exact number of attributes defined in each
@@ -28,13 +28,13 @@ vector depends on what connectors were available on the target platform at the t
 
 TOKIO-ABC is a software repository containing specific versions of the benchmarks used, scripts which encode the specific build processes used at NERSC and ALCF, and the exact input parameters used in all tests.
 This repository contains all of the necessary code and inputs to generate a new dataset for a new HPC system.
-For brevity, the input parameters are not reproduced here; however, the TOKIO-ABC repository (along with the commit used in this study) will be cited here upon acceptance of this manuscript.
+For brevity, the input parameters are not reproduced here; however, the TOKIO-ABC repository will be cited here upon acceptance of this manuscript.
 
 \subsubsection{TOKIO-ABC utilities library (tokio-abcutils)}
 
 tokio-abcutils is a Python library upon which the analyses performed in this study were built.
-It contains routines for calculating SMAs from feature vectors and performing the correlation analyses presented.
-tokio-abcutils also includes the Jupyter notebooks that were used to generate all figures presented.
+It contains routines for calculating SMAs from feature vectors and performing each correlation analysis presented.
+tokio-abcutils also includes the Jupyter notebooks that were used to generate all figures in this work.
 
 \subsubsection{pytokio framework}
 
@@ -56,7 +56,7 @@ To translate this experiment to a new system entirely, an optional ``TOKIO Data 
   \item {\bf Run-time state: } No specific state is required a priori.
   \item {\bf Execution: } pytokio and tokio-abcutils: command-line tools and example Jupyter notebooks; TOKIO-ABC: either a continuous integration system (e.g., Jenkins) or from cron jobs.
   \item {\bf Output: } tokio-abcutils: graphical and numerical results of intermediate analyses; TOKIO-ABC: Darshan logs and job logs
-  \item {\bf Experiment workflow: } TOKIO-ABC is set up to run automatically via Jenkins, cron, or a similar scheduling tool; pytokio's \texttt{summarize\_job}~\cite{Lockwood2018tokio} tool is used to generate feature vectors; Jupyter notebooks in tokio-abcutils performs analyses presented on these feature vectors.
+  \item {\bf Experiment workflow: } TOKIO-ABC is set up to run automatically via Jenkins, cron, or a similar scheduling tool; pytokio's \texttt{summarize\_job}~\cite{Lockwood2018tokio} tool is used to generate feature vectors; Jupyter notebooks in tokio-abcutils performs statistical analyses using these feature vectors.
   \item {\bf Experiment customization: } pytokio: via additional TOKIO connector packages or new analysis tools; tokio-abcutils: by extending analysis routines and plots in Jupyter notebooks; TOKIO-ABC: via input decks
   \item {\bf Publicly available?: } Yes
 \end{itemize}
@@ -74,21 +74,20 @@ There may be hardware dependencies of the component-level monitoring tools with 
 
 \subsubsection{Software dependencies}
 
-\paragraph{TOKIO}
+\paragraph{pytokio}
 
-TOKIO specifically depends on Python 2.7 and a number of associated data analysis packages.
-Specifically, the reference implementation presented here relied on pandas 0.18.1, matplotlib 2.0.0, numpy 1.11.1, and scipy 0.17.1.
+pytokio specifically depends on Python 2.7, and the work here additionally used pandas 0.18.1, matplotlib 2.0.0, numpy 1.11.1, and scipy 0.17.1.
 For simplicity, we opted to use the software environment provided by Continuum IO's Anaconda version 4.3.14 with matplotlib explicitly upgraded to 2.0.0.
 
-TOKIO also relies on a number of component-level monitoring tools.
-As described in this paper, TOKIO can integrate with any tool that provides scalar or time-resolved data types, and we include interfaces for the following data sources:
+pytokio also relies on a number of component-level monitoring tools.
+As described in this paper, TOKIO can integrate with any tool that provides scalar or time-resolved data types, and pytokio includes interfaces for the following data sources:
 
 \begin{itemize}
 \item Darshan 3.1.3 % \url{http://www.mcs.anl.gov/research/projects/darshan/}.
 \item ggiostat
 \item LMT (as provided by Neo 2.x on Cray ClusterStor) % \url{https://github.com/LLNL/lmt}
 \item Lustre 2.5.1 (health monitoring via lfs and lctl)
-\item Slurm 17.02.1-2 and CLE 6.0 (job topology on Edison)
+\item Slurm 17.02.1-2 and CLE 6.0 (job topology at NERSC)
 \end{itemize}
 
 \paragraph{TOKIO-ABC} The Automated Benchmark Collection is a meta-package that contains the specific versions of each benchmark used, specific patches applied to those upstream versions, and scripts that configure and build the collection.
@@ -120,9 +119,9 @@ The mapping between feature names and their descriptions are included in tokio-a
 \subsection{Installation}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-After unpacking the python package source distribution, installing these libraries is a matter of performing \texttt{{pip install -r .}}.
+After unpacking the python package source distribution, installing these libraries is a matter of performing ``\texttt{{pip install -r .}}''.
 Build scripts for Mira, Cori, and Edison are included in the TOKIO-ABC source distribution, and the specific configure options used for each benchmark are defined near the top of each script.
-These scripts should be portable to any Blue Gene/Q and Cray Linux 6 environment, respectively, and only minor modification should be required to build TOKIO-ABC on commodity platforms.
+These scripts should be portable to any Blue Gene/Q and Cray Linux 6 environment, and only minor modification should be required to build TOKIO-ABC on commodity platforms.
 These build scripts configure, build, and install the benchmarks within the unpacked source repository itself, and all of the utility scripts provided assume this self-contained installation directory structure.
 
 \subsection{Experiment workflow}
@@ -144,25 +143,24 @@ This can be done via any automated scheduling mechanism; NERSC uses cron, while 
 
 Each figure presented in this manuscript is the result of an analysis notebook that is provided in tokio-abcutils repository.
 Furthermore, tokio-abcutils includes a special subpackage specific to this manuscript, \texttt{sc18paper.py}, that implements and describes the specific data filtering used here.
-For example, it demonstrates that this paper discounted all jobs whose Darshan log reflected less than 1 GiB of I/O being performed; this criteria was required to invalidate results from several days where the BD-CATS binary on Edison was conflicting with an update to the default HDF5 library on that system.
+For example, it demonstrates that this paper discounted all jobs whose Darshan log reflected less than 1 GiB of I/O being performed; this criteria was required to invalidate results from several days where the BD-CATS binary on Edison was conflicting with an update to the default HDF5 library on that system that resulted in BD-CATS performing no actual I/O.
 
-All components of the analyses presented here (including the feature vector dataset, pytokio, and tokio-abcutils) have been tested and confirmed to run on generic UNIX-like environments outside of NERSC and ALCF (e.g., on standard MacBooks).
+All components of the analyses presented here (including the feature vector dataset, pytokio, and tokio-abcutils) have been tested and confirmed to run on generic UNIX-like environments outside of NERSC and ALCF (e.g., on standard MacBooks with macOS 10.13).
 
 \subsection{Evaluation and expected result}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 The figures presented in this paper can all be regenerated or manipulated using the dataset, pytokio, and tokio-abcutils.
-The Jupyter notebooks included in tokio-abcutils generate PDFs (or other graphic formats) in the directory from which the tool was run.
-Analyses also generate numerical results which are printed to stdout by default.
+The Jupyter notebooks included in tokio-abcutils generate PDFs or PNG images, and most notebooks also generate numerical results which can be exported as CSVs.
 
 Detailed documentation for each analysis, its expected inputs and outputs, and the analytical methods they apply are provided as Markdown cells in each notebook.
-Special care has been taken to explain each step in each notebook's analysis process for the benefit of the authors' collaboration, but these notes will also benefit anyone interested in reproducing the results presented here..
+Special care has been taken to explain each step in each notebook's analysis process for the benefit of the authors' collaboration, but these notes will also benefit anyone interested in reproducing the results presented in this work.
 
 \subsection{Experiment customization}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Customization can be done by either adding new TOKIO connectors to interface with different component-level monitoring tools or creating new analysis tools which operate on the year-long dataset.
-As an example of the former, contributing a connector that can access traffic counters to burst buffer file systems (such as collectd for DataWarp~\cite{Lockwood2018tokio}) would allow pytokio, and by extension this work, provide more insight into how various factors may contribute to burst buffer performance in contrast to disk-based parallel file systems.
+As an example of the former, contributing a connector that can access traffic counters to burst buffer file systems (such as collectd for DataWarp~\cite{Lockwood2018tokio}) would allow pytokio, and by extension this work, to provide more insight into how various factors may contribute to burst buffer performance in contrast to disk-based parallel file systems.
 An example of the latter would be modifying the analysis notebooks to generate plots for the combinations of systems and analysis that were \emph{not} presented in this manuscript due to space constraints.
 
 The input parameters for each performance probe benchmark are defined in \texttt{.params} files in the \texttt{inputs} subdirectory of the TOKIO-ABC repository.
@@ -175,4 +173,4 @@ Application-specific documentation is provided in the repository; the most commo
 Significantly more documentation on pytokio, tokio-abcutils, TOKIO-ABC, and the year-long dataset used in this study are contained within each repository.
 For additional clarity, many of the tools used to generate the figures for this manuscript are also included as self-documented Jupyter notebooks.
 Finally, both pytokio and tokio-abcutils follow the Google Python Style Guide\footnote{https://google.github.io/styleguide/pyguide.html}.
-In combination with Sphinx Autodoc\footnote{http://www.sphinx-doc.org/en/stable/ext/autodoc.html}, pytokio and tokio-abcutils include extensive self-documentation.
+In combination with Sphinx Autodoc\footnote{http://www.sphinx-doc.org/en/stable/ext/autodoc.html}, pytokio and tokio-abcutils include extensive self-documentation of their APIs which can be rendered as PDF- or HTML-formatted manuals.
