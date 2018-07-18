@@ -7,6 +7,7 @@
     \caption{I/O performance grouped by I/O motifs and read(R)/write(W) mode on different file systems.  Whiskers represent the 5th and 95th percentiles.  Edison scratch2 distributions are not shown but closely resemble scratch1.}
     \label{fig:summary-boxplots}
 	\vspace{-.15in}
+    % source: sc18-figure2.ipynb
 \end{figure}
 
 \begin{figure*}
@@ -15,18 +16,20 @@
     \vspace{-.2in}
     \caption{Performance of daily probes normalized to the peak observed performance for each probe type (I/O motif and read/write mode combination) on the specified system.  The y-axis labels show combinations of system, I/O motif, and mode (Read/Write).  Grey represents days on which no observations were made.  The two regions highlighted in green boxes are expanded upon in Figure \ref{fig:regions-heatmap}.}
     \label{fig:summary-heatmap}
+    % source: sc18-figure3-figure4.ipynb
 \end{figure*}
 
 \begin{figure}
     \centering
     \includegraphics[width=0.90\linewidth]{regions-heatmap}
     \vspace{-.2in}
-    \caption{Examples of structure in the fraction of peak performance observations.  Color scale is the same as that in Figure \ref{fig:summary-heatmap}.  In (a), the vertical band on Sept 26 corresponds to a transient system-wide degradation on \mira.  The horizontal bands for the IOR file-per-process write workload (IOR/fpp(W)) and HACC write workload (HACC(W)) in (b) show a motif-specific sustained performance problem for file-per-process write workloads on \cori.}
+    \caption{Examples of structure in the fraction of peak performance observations.  Color scale is the same as that in Fig. \ref{fig:summary-heatmap}.  In (a), the vertical band on Sept. 26 corresponds to a transient systemwide degradation on \mira.  The horizontal bands for the IOR file-per-process write workload (IOR/fpp(W)) and HACC write workload (HACC(W)) in (b) show a motif-specific sustained performance problem for file-per-process write workloads on \cori.}
     \label{fig:regions-heatmap}
+    % source: sc18-figure3-figure4.ipynb
 \end{figure}
 
 Continuous passive monitoring and active performance probing produce
-a large volume of data ($\approx$ 15 GiB) over the course of a year.  We begin our
+a large volume of data ($\approx$ 15 GiB) over the course of a year.  We began our
 investigation by summarizing the dataset at a high level, establishing
 methods for organizing and navigating the data in a semantically
 meaningful way, and establishing methods for identifying regions of
@@ -36,7 +39,7 @@ interest.
 
 Absolute I/O performance is influenced by many factors, most notably (a)
 application I/O pattern, (b) read/write ratio, and (c) I/O system
-architecture~\cite{Lockwood2017, Xie2012}.  This makes it difficult to
+architecture~\cite{Lockwood2017, Xie2012}.  These make it difficult to
 contextualize performance variation across benchmarks or platforms
 because each combination is capable of a different baseline performance
 level.
@@ -54,7 +57,7 @@ workloads rather than their relative performance.
 
 The distribution of the fraction of peak performance measurements for four
 of the five systems tested is shown in Fig. \ref{fig:summary-boxplots}.
-This figure illustrates that the performance of active I/O performance
+The figure illustrates that the performance of active I/O performance
 probes on production file systems is highly dynamic over the course of a
 year.  It does not provide any insight into the temporal nature of the
 performance fluctuations, however.
@@ -63,25 +66,25 @@ Figure~\ref{fig:summary-heatmap} visualizes the same data in the form of a
 heatmap over time.  This shows that performance variation is not randomly
 distributed over the year; this key characteristic is not captured by
 time-independent performance distributions.
-Several archetypical forms of correlated performance degradation observed in Fig. \ref{fig:summary-heatmap} are highlighted in Fig. \ref{fig:regions-heatmap} and fall into three broad categories of variation:
+Several archetypical forms of correlated performance degradation observed in Fig. \ref{fig:summary-heatmap} are highlighted in Fig. \ref{fig:regions-heatmap} and fall into three broad categories of variation.
 
 \begin{enumerate}[leftmargin=*]
-\item Dark vertical bands, exemplified in the \mira data in Fig. \ref{fig:regions-heatmap}a, represent transient system-wide issues that result in a uniform loss of performance for probes executed that day.
+\item Dark vertical bands, exemplified in the \mira data in Fig. \ref{fig:regions-heatmap}a, represent transient systemwide issues that result in a uniform loss of performance for probes executed that day.
 \item Dark horizontal bands, shown in the \cori data in Fig. \ref{fig:regions-heatmap}b, indicate a long-term degradation in performance that disproportionately affects a specific I/O motif.
 \item Isolated dark blocks represent individual probes where performance was poor for a very short period of time.
 \end{enumerate}
 
 % - Baseline performance and variability are not constant over time.  Predictive models must therefore adapt over time as well.
-The preponderance of these time-dependent phenomena underscores the observation that baseline I/O performance and variability are not constant over time, and
+The preponderance of these time-dependent phenomena underscores the observation that baseline I/O performance and variability are not constant over time and that
 what may qualify as abnormally poor performance during one period of time may be the baseline performance expectation during another.
 
-This has implications for both HPC facility operators and users.  For
+This observation has implications for both HPC facility operators and users.  For
 facility operators, it indicates that performance anomalies and their root
 causes should not be assessed in isolation. By integrating broader spatial and
 temporal context into the analysis, facility operators can more accurately
 discriminate between application problems and environmental factors.
-For users and application developers, it follows that the accuracy of parameterized I/O performance models~\cite{Xie2012,Madireddy2018} will degrade unless they are reparameterized as the I/O subsystem which they model evolves.
-Both of these cases justify the need for a systematic approach for identifying different regions of I/O performance to differentiate long-term factors and phenomena from short-term transients.
+For users and application developers, it follows that the accuracy of parameterized I/O performance models~\cite{Xie2012,Madireddy2018} will degrade unless they are reparameterized as the I/O subsystem that they model evolves.
+Both  these cases justify the need for a systematic approach for identifying different regions of I/O performance in order to differentiate long-term factors and phenomena from short-term transients.
 
 \subsection{Time-dependent analysis} \label{sec:features/timedependent}
 
@@ -97,13 +100,13 @@ the price of assets and identifying price movement
 trends~\cite{james1968monthly,gunasekarage2001profitability}.  
 
 The most straightforward initial technique to apply from this domain is
-the use of Simple Moving Averages (SMAs) over the performance observations.
+the use of simple moving averages (SMAs) over the performance observations.
 Given a time window of width $w$, the SMA for performance at time $t$ is the arithmetic mean of the fraction peak performance over ${-0.5w <= t < +0.5w}$.
 When chosen to be sufficiently short (${w_{short} \sim O(\textup{days})}$),
 the resulting $\textup{SMA}_{short}$ provides a rapid visual means to
 identify performance degradation or recovery that lasts for
 $O(\textup{days})$.  Multiple SMAs can be plotted simultaneously over the
-same dataset to differentiate short and long term trends and identify key
+same dataset to differentiate short- and long-term trends and identify key
 crossover points.
 We further note that SMAs can be calculated across individual workloads or across a set of workloads by simply calculating the arithmetic mean of all relevant performance observations falling within $w$.
 The former is useful for identifying motif-specific or transient performance issues, while the latter is helpful for detecting systemic performance issues.
@@ -112,22 +115,22 @@ The former is useful for identifying motif-specific or transient performance iss
     \centering
     \includegraphics[width=1.0\columnwidth]{longterm-cscratch-hacc}
     \vspace{-.35in}
-    \caption{Performance evolution of HACC file-per-process workload on \cori.  Green line is the global mean (298 GiB/sec write, 204 GiB/sec read) and blue bars are raw performance measurements.}
+    \caption{Performance evolution of HACC file-per-process workload on \cori.  Green line is the global mean (298 GiB/sec write, 204 GiB/sec read), and blue bars are raw performance measurements.}
     \label{fig:timeseries-baseline}
-    % source: sc18_segments.ipynb
+    % source: sc18-figure5.ipynb
 \end{figure}
 
 
-An example of an SMA ($w_{short}$ = two weeks) applied to the performance data collected from the HACC workloads run on \cori is shown in Fig. \ref{fig:timeseries-baseline}.
+An example of an SMA ($w_{short}$ = two weeks) applied to the performance data collected from the HACC workloads run on \cori is shown in Fig \ref{fig:timeseries-baseline}.
 When contrasted with a time-independent summary statistic such as the overall mean performance of the entire year, the SMA clearly identifies the long period of degraded HACC write performance on \cori that was qualitatively shown in the bottom half of Fig. \ref{fig:summary-heatmap}.
-The points at which the SMA rise above or below the global mean performance also provide quantitative measurements of the region of time when an underlying issue manifested;
+The points at which the SMA rises above or below the global mean performance also provide quantitative measurements of the region of time when an underlying issue manifested itself;
 in Fig. \ref{fig:timeseries-baseline}, these \emph{crossover points} fall on March 24 and August 10.
 Cross-referencing these dates with the service history of \cori retrospectively revealed that the beginning and end of this long-term region of divergent performance coincided with major system software upgrades that also happened on March 24 and August 10.
 
-Curiously, the performance of HACC read workload (Figure \ref{fig:timeseries-baseline}b) was unaffected during this time, demonstrating that not all workloads are affected by long-term variation equally.
+Curiously, the performance of HACC read workload (Fig. \ref{fig:timeseries-baseline}b) was unaffected during this time, demonstrating that not all workloads are affected by long-term variation equally.
 This asymmetry, in combination with the bounding dates of this divergent region, allowed us to trace this specific issue to unintentional behavior introduced (and later fixed) in the Lustre software running on \cori between the system upgrades.
 Although this particular case of long-term performance divergence was caused by an unexpected bug in system software, the reality of most production storage systems is that they are regularly patched and upgraded.
-At minimum, the security requirements of the centers which run them drive system updates, and as exemplified by the widely publicized Spectre and Meltdown patches, such updates can have non-trivial effects on certain types of I/O.
+At a minimum, the security requirements of the centers that run these systems drive system updates; and as exemplified by the widely publicized Spectre and Meltdown patches, such updates can have nontrivial effects on certain types of I/O.
 Thus, administrative activities such as maintenance patches and software updates are a significant source of time-dependent, long-term performance variation.
 This must be accounted for in both retrospective performance analysis and forward-looking performance modeling parameterization.  
 The ramifications for I/O research practitioners are that holistic I/O monitoring must incorporate environmental provenance information, such as kernel, operating system, and file system version, to aid in correlation.
@@ -143,12 +146,12 @@ trends (e.g., in the presence of a file system software regression).
 Once a region of interest has been defined, we can then constrain more detailed
 analysis techniques to that region to determine why it was defined.
 The crossover points at which $\textup{SMA}_{short}$ and  $\textup{SMA}_{long}$ intersect establish the boundaries of regions where short-term performance has diverged from longer-term performance and where anomalous performance is prevailing.
-Thus, we introduce the notion of \emph{divergence regions} which are the periods of time bounded by two crossover points and which capture correlated performance.
-Fig. \ref{fig:mira-regions-overview} illustrates how these concepts are applied to partition data.
+Thus, we introduce the notion of \emph{divergence regions}, which are the periods of time bounded by two crossover points and which capture correlated performance.
+Figure \ref{fig:mira-regions-overview} illustrates how these concepts are applied to partition data.
 
 For the remainder of this study, we apply the concept of \emph{divergence regions}, bounded by the crossovers between $\textup{SMA}_{short}$ and $\textup{SMA}_{long}$, to systematically identify and characterize periods in time where anomalous performance was observed by the active I/O performance probes running across the test systems.
 We define $\textup{SMA}_{short}$ to have ${w_{short} = \textup{two weeks}}$ as in Section~\ref{sec:features/timedependent} and $\textup{SMA}_{long}$ to have ${w_{long} = \textup{seven weeks}}$.
-$w$ was chosen to be a multiple of seven days to align with one
+We chose $w$  to be a multiple of seven days to align with one
 week and ensure that weekends and weekdays were equally represented in both SMA
 calculations. $w_{long}$ was set to seven weeks to span multiple $w_{short}$
 regions and at least one month boundary.  In our experience, the analysis
@@ -172,5 +175,5 @@ interest in recorded observations.
     The significance of the divergence region highlighted in red is discussed in Section \ref{sec:results/correlate-mira}.}
     \label{fig:mira-regions-overview}
     \vspace{-.15in}
-    % source: sc18_region-correlation.ipynb
+    % source: sc18-figure6-figure7.ipynb
 \end{figure}

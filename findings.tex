@@ -1,7 +1,7 @@
 \section{Findings and Implications for State of the Practice}
 \label{sec:findings}
 
-We found that the combination of system-wide telemetry, active performance
+We found that the combination of systemwide telemetry, active performance
 probes, modular data integration, and generalized analysis
 tools was highly effective in deriving insight from otherwise
 opaque large-scale storage systems.  Over the course of this study we
@@ -23,8 +23,8 @@ large-scale storage systems.
 
 \subsection{Understanding large-scale storage system behavior}
 
-The following findings serve to refine our understanding of how large-scale storage
-systems behave at a high level: 
+The following findings  refine our understanding of how large-scale storage
+systems behave at a high level. 
 
 \begin{itemize}[leftmargin=*]
 
@@ -38,15 +38,15 @@ our analysis was not able to account for all variability; additional work is
 needed in both analysis techniques and monitoring.
 
 \item \textbf{Attributes that correlate with transient performance problems often differ from those that correlate with long-term performance problems:}
-I/O-intensive workloads in HPC are widely known to be unusually bursty compared to other I/O-intensive computing workloads, but this study demonstrates that some aspects of HPC I/O workloads (such as IOPS and metadata operations) are more bursty than others (such as bandwidth utilization).
-Performance degradation that results from IOPS or metadata contention is unlikely to persist for days, while bandwidth contention can result in performance degradation at all time scales.
+I/O-intensive workloads in HPC are widely known to be unusually bursty compared with other I/O-intensive computing workloads, but this study demonstrates that some aspects of HPC I/O workloads (such as IOPS and metadata operations) are more bursty than others (such as bandwidth utilization).
+Performance degradation that results from IOPS or metadata contention is unlikely to persist for days, whereas bandwidth contention can result in performance degradation at all time scales.
 
 \end{itemize}
 
 
 \subsection{Improving monitoring and telemetric coverage}
 
-The following findings motivate further advances in how large-scale storage systems are monitored and what data sources are required:
+The following findings motivate further advances in how large-scale storage systems are monitored and what data sources are required.
 
 % \TODO{\textbf{where does this go?  tempted to drop it since it's specific to our results, not the state of the practice}
 % Furthermore, 16\% of the transient I/O performance issues defied classification using our binary classification method.
@@ -54,44 +54,44 @@ The following findings motivate further advances in how large-scale storage syst
 
 \begin{itemize}[leftmargin=*]
 
-\item \textbf{Administrative activities such as system patches and updates are a significant source of time-dependent, long term performance variation}:
+\item \textbf{Administrative activities such as system patches and updates are a significant source of time-dependent, long-term performance variation}:
 HPC systems are complex, and their upgrades may be dictated by external factors including maintenance schedules, vendor release cycles, and security disclosures.
-As such, it may not be possible to capture explicit measurements before and after the upgrade process.
+Thus, capturing explicit measurements before and after the upgrade process may not be possible.
 Continuous monitoring and active probing of performance mitigate this
 problem by making such measurements a routine procedure regardless of
 upgrade schedule, much in the same way that continuous integration testing automatically monitors software development processes.
-Every large-scale facility incorporates testing procedures into their upgrade
+Every large-scale facility incorporates testing procedures into its upgrade
 strategy, but this study highlights the need for breadth of performance
 testing across workload motifs.
 
 \item \textbf{Holistic I/O monitoring should incorporate environmental
 provenance information such as kernel, OS, and file system versions}: 
-This is an obvious finding in retrospect, but is not widely taken into
+This is an obvious finding in retrospect but is not widely taken into
 account in current instrumentation tools.
-Tools such as Darshan and LMT should capture sufficient environmental information alongside conventional performance measurements to
+Tools such as Darshan and LMT should capture sufficient environmental information alongside conventional performance measurements 
 to aid in correlation between performance losses and environmental changes.
 
 \item \textbf{Bandwidth contention from sustained, I/O-intensive workloads often accompanies sustained performance losses}:
 The impact of bandwidth contention on I/O performance is widely supported in the literature, but this study demonstrates time-dependent behavior not previously measured.
 Detrimental contention can occur over time spans lasting several weeks (e.g., aggregate workload due to project allocation timing) and may be driven by factors 
 not captured by conventional HPC monitoring (e.g., wide area transfers or archival traffic).
-This calls for a broadening of the definition of ``holistic I/O characterization'' to include not just the full HPC I/O stack, but also the auxiliary resources that utilize the storage system.
+This calls for a broadening of the definition of ``holistic I/O characterization'' to include not just the full HPC I/O stack but also the auxiliary resources that utilize the storage system.
 
 \end{itemize}
 
 
 \subsection{Analyzing evolving storage systems}
 
-Finally, the following findings highlight ways in which the accuracy and significance of I/O analysis and modeling methodologies can be improved:
+The following findings highlight ways in which the accuracy and significance of I/O analysis and modeling methodologies can be improved.
 
 \begin{itemize}[leftmargin=*]
 
 \item \textbf{Significantly stronger correlations can be found by focusing analysis on algorithmically identified regions of interest in the data}:
-With the proliferation of machine learning, it is tempting to apply unguided techniques to a large data set in a bid to extract meaning from it.
-However we have demonstrated that a systems practitioner will gain more confident insights from targeted analysis of relevant regions of interest.
+With the proliferation of machine learning, it is tempting to apply unguided techniques to a large data set in a bid to extract meaning from the data set.
+However, we have demonstrated that a systems practitioner will gain more confident insights from targeted analysis of relevant regions of interest.
 The region identification method need not depend on SMAs, and alternative approaches for both partitioning time series data and classifying the measurements within regions can be easily replaced.
-That said, the simple technique we applied here still identified causes of poor performance in 84\% of the jobs that experienced transient performance loss.
-Applying more sophisticated classification methods are likely to improve upon this.
+The simple technique we applied here still identified causes of poor performance in 84\% of the jobs that experienced transient performance loss.
+Applying more sophisticated classification methods is likely to improve upon this.
 
 %Our hope is that the simple statistical methods presented here will advance
 %the state of the practice across the HPC community by encouraging

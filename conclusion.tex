@@ -12,7 +12,7 @@ production systems so that the lessons learned here (especially those
 related to dynamic, time-dependent behavior) can be more generally extracted
 at any time from a running system to produce actionable feedback.
 
-Near term future work calls for the development of additional \tokio
+Near-term future work calls for the development of additional \tokio
 connectors to incorporate additional storage resources such as burst
 buffers.
 In the long term, we plan to develop methods to systematically classify the
@@ -31,16 +31,16 @@ reduce the amount of I/O performance variation seen in production.
 We have shown that the baseline peak performance for a given I/O motif on a file systems can change over time as a result of factors such as system software updates and sustained workloads motivated by external factors such as end of allocation year.
 \TODO{1. you can't just measure performance on day 1}
 
-\item \textbf{The magnitude and sign of correlation between performance and other measured metrics also varies over time.} 
+\item \textbf{The magnitude and sign of correlation between performance and other measured metrics also vary over time.} 
 We demonstrated that high CPU load can correlate with favorable performance under healthy file system conditions, and it can coincide with unfavorable performance when non-I/O workloads are impacting storage servers.
 \TODO{2. be careful how you interpret your metrics; training a model on one dataset might not make it apply to others}
 
 \item \textbf{Bandwidth, IOPS, and metadata contention are often confidently correlated with I/O performance problems are occurring.}
 We were able to obtain statistically significant trends about isolated performance transients by aggregating simple binary classifications based on coincident observations of worst values within regions.
 That said, some jobs defied classification using our binary classification method.
-This indicates that we are still missing telemetry from important components of the I/O subsystem that contribute to performance variation.
+This result indicates that we are still missing telemetry from important components of the I/O subsystem that contribute to performance variation.
 \TODO{3. metadata contention is burstier than bandwidth, but they both affect performance.  just at different time scales}
 
 \item The methods presented here are not dependent on SMAs, and alternative approaches for both partitioning time series data and classifying the measurements within regions can be replaced with more sophisticated methods.
-What we have shown is that a great deal of information about I/O performance variation can be quantified using holistic I/O analysis and simple statistical methods.
+What we have shown is that a great deal of information about I/O performance variation can be quantified by using holistic I/O analysis and simple statistical methods.
 \end{enumerate}

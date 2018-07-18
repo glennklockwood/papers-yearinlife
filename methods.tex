@@ -47,29 +47,29 @@ on-demand analysis, or \tokio-aware tools can archive directly into this
 format on-disk. These design decisions greatly simplify the process of
 integrating new monitoring sources as well the process of developing
 platform-independent I/O analysis tools.  This study in particular relies on
-integrated analysis of the following monitoring connectors:
+integrated analysis of the following monitoring connectors.
 
 \begin{itemize}[leftmargin=*]
-\item \textbf{Application-level monitoring}: \textit{Darshan}~\cite{Carns2009} is an application I/O characterization tool that is commonly deployed at production HPC facilities. It provides a condensed set of I/O counters, timers, and other statistics for each file accessed by a given application. Previous analysis~\cite{snyder2016performance} has demonstrated Darshan's negligible runtime overheads and log file sizes (ranging from tens of KiB to a few MiB per job, depending on the workload).
+\item \textbf{Application-level monitoring}: \textit{Darshan}~\cite{Carns2009} is an application I/O characterization tool that is commonly deployed at production HPC facilities. It provides a condensed set of I/O counters, timers, and other statistics for each file accessed by a given application. Previous analysis~\cite{snyder2016performance} has demonstrated Darshan's negligible runtime overheads and log file sizes (ranging from tens of kilobytes to a few megabytes per job, depending on the workload).
 
 \item \textbf{File system workload monitoring}: \textit{LMT}~\cite{lmt} and \textit{ggiostat}~\cite{Lockwood2017} are examples of 
 file system monitoring tools for Lustre and GPFS deployments, respectively.
 These tools each capture metrics quantifying file system workloads
 periodically over a given time interval, with some of these metrics being
 common to both tools (e.g., observed read/write bandwidths, number of
-specific metadata operations issued, etc.) and other metrics being file
-system specific (e.g., the CPU utilization on a given Lustre metadata server
+specific metadata operations issued) and other metrics being file
+system specific (e.g., CPU utilization on a given Lustre metadata server
 captured by LMT).  File system workload data is collected asynchronously
 outside of the application data access path in order to minimize overhead.
 
-\item \textbf{File system capacity/health monitoring}: File system specific tools like Lustre's \textit{lfs} and \textit{lctl} or GPFS's \textit{mmdf} and \textit{mmlsdisk} can be invoked periodically to capture current file system state, including the capacity and failover status of individual storage servers and/or LUNs in the system.
+\item \textbf{File system capacity/health monitoring}: File-system-specific tools such as Lustre's \textit{lfs} and \textit{lctl} or GPFS's \textit{mmdf} and \textit{mmlsdisk} can be invoked periodically to capture current file system state, including the capacity and failover status of individual storage servers and/or LUNs in the system.
 
-\item \textbf{Resource manager monitoring}: Resource managers like Slurm~\cite{2003slurm} often keep a detailed accounting of all jobs that execute on a particular system, including useful details like the size of the job and its placement across available compute nodes.
+\item \textbf{Resource manager monitoring}: Resource managers such as Slurm~\cite{2003slurm} often keep a detailed accounting of all jobs that execute on a particular system, including useful details like the size of the job and its placement across available compute nodes.
 \end{itemize}
 
-The telemetric data from these connectors are aggregated into scalar \emph{attributes} associated with each job, and all of the attributes associated with a job are represented as \emph{feature vectors}.
+The telemetric data from these connectors is aggregated into scalar \emph{attributes} associated with each job, and all  the attributes associated with a job are represented as \emph{feature vectors}.
 For monitoring sources that produce time-resolved data (e.g., LMT reports workload statistics at five-second intervals), we calculate the sum, minimum, maximum, and average value of the data generated over the duration of the job and define those four reduced scalars as attributes of the feature vector.
-Wherever possible, attributes are also expressed as \emph{coverage factors}~\cite{Lockwood2017} which quantify the fraction of system-wide activity that can be attributed to the job of interest.
+Wherever possible, attributes are also expressed as \emph{coverage factors}~\cite{Lockwood2017}, which quantify the fraction of systemwide activity that can be attributed to the job of interest.
 For example, a job's \emph{bandwidth coverage factor} is the number of bytes read and written by that job's application (measured by Darshan) divided by the number of bytes read and written across the entire parallel file system (measured by LMT or ggiostat) while that job was running.
 A coverage factor of 1.0 indicates that a job was the exclusive consumer of
 a resource, while a coverage factor of 0.4 indicates that other competing
@@ -99,7 +99,7 @@ jobs consumed 60\% of the total delivered resources.
 We applied the \tokio framework on the \edison and \cori systems at \nersc
 and the \mira system at the \alcf.
 Each of these platforms, along with their
-corresponding file systems analyzed as part of this study, are briefly
+corresponding file systems analyzed as part of this study, is briefly
 described in Table~\ref{tab:platform-descriptions}.
 %\footnote{Mira offers an additional GPFS file system, \mirafszero, to users, but it was not evaluated in this study since our project allocation only provides scratch storage on \mirafsone.
 % The techniques explored in this work could just as easily be applied to this file system.}.
@@ -133,7 +133,7 @@ of I/O performance without copying data to a dedicated database.
 \label{tab:benchmark-motifs}
 \end{table}
 
-To measure the performance variation on the systems described in Section \ref{sec:methods/platforms}, we ran four I/O-intensive application benchmarks on a daily basis from February 14, 2017 to February 15, 2018.
+To measure the performance variation on the systems described in Section \ref{sec:methods/platforms}, we ran four I/O-intensive application benchmarks on a daily basis from February 14, 2017, to February 15, 2018.
 We utilize these benchmarking runs as another monitoring source for this
 study, actively probing the user-perceived I/O performance of each analyzed file system on a daily basis across a range of representative I/O motifs.
 The four underlying benchmarks (VPIC \cite{PIOK}, BDCATS \cite{Patwary:2015:BDCATS,PIOK}, HACC \cite{habib2012}, and IOR \cite{ior}) were chosen to exercise a variety of I/O workloads and covered the four I/O motifs (listed in Table \ref{tab:benchmark-motifs}) in both read and write modes.
@@ -142,16 +142,16 @@ Each probe was configured to run identically to previous work~\cite{Lockwood2017
 All probes ran using 256 nodes (4,096 processes) on \cori, 128 nodes (2,048
 processes) on \edison, and 1,024 nodes (16,384 processes) on \mira.  The
 shared-file probes on Lustre were configured to use maximum striping per
-file while the file-per-process probes placed each file on a single OST.
+file, while the file-per-process probes placed each file on a single off-line storage table.
 The objective in both cases was to (in aggregate) leverage
 all available storage devices. The default automatic striping policy was
 used on GPFS.
-In the case of \cori and \edison, each job had access to the full I/O bandwidth of its I/O nodes as well, but due to the way in which I/O nodes are allocated in a fixed ratio to job size on Blue Gene/Q systems~\cite{Bui2014}, \mira jobs were restricted to the bandwidth provided by eight I/O nodes.
+In the case of \cori and \edison, each job had access to the full I/O bandwidth of its I/O nodes as well, but because of the way in which I/O nodes are allocated in a fixed ratio to job size on Blue Gene/Q systems~\cite{Bui2014}, \mira jobs were restricted to the bandwidth provided by eight I/O nodes.
 
-81.9\% of the intended probes successfully generated results, providing 
+Of the intended probes81.9\%  successfully generated results, providing 
 11,986 performance observations across \mira, \cori, and \edison over the
 course of a year.
-The remaining 18.1\% of potential probes failed due to system downtime,
+The remaining 18.1\% of potential probes failed because of system downtime,
 malfunctions of component-level monitoring tools or the automated test
 scheduling, queue wait times that exceeded 24 hours, or excessive walltime
 usage.  These failed probe samples (which are not considered in this study) point out the need
