@@ -54,13 +54,8 @@ integrated analysis of the following monitoring connectors.
 
 \item \textbf{File system workload monitoring}: \textit{LMT}~\cite{lmt} and \textit{ggiostat}~\cite{Lockwood2017} are examples of 
 file system monitoring tools for Lustre and GPFS deployments, respectively.
-These tools each capture metrics quantifying file system workloads
-periodically over a given time interval, with some of these metrics being
-common to both tools (e.g., observed read/write bandwidths, number of
-specific metadata operations issued) and other metrics being file
-system specific (e.g., CPU utilization on a given Lustre metadata server
-captured by LMT).  File system workload data is collected asynchronously
-outside of the application data access path in order to minimize overhead.
+These tools each capture metrics quantifying file system workloads periodically over a time interval, with some of these metrics being common to both tools (e.g., observed read/write bandwidths, number of specific metadata operations issued) and others being file system specific (e.g., CPU utilization on a given Lustre metadata server captured by LMT).
+File system workload data is collected asynchronously outside of the application data access path to minimize overhead.
 
 \item \textbf{File system capacity/health monitoring}: File-system-specific tools such as Lustre's \textit{lfs} and \textit{lctl} or GPFS's \textit{mmdf} and \textit{mmlsdisk} can be invoked periodically to capture current file system state, including the capacity and failover status of individual storage servers and/or LUNs in the system.
 
@@ -148,7 +143,7 @@ all available storage devices. The default automatic striping policy was
 used on GPFS.
 In the case of \cori and \edison, each job had access to the full I/O bandwidth of its I/O nodes as well, but because of the way in which I/O nodes are allocated in a fixed ratio to job size on Blue Gene/Q systems~\cite{Bui2014}, \mira jobs were restricted to the bandwidth provided by eight I/O nodes.
 
-Of the intended probes81.9\%  successfully generated results, providing 
+Of the intended probes, 81.9\%  successfully generated results, providing 
 11,986 performance observations across \mira, \cori, and \edison over the
 course of a year.
 The remaining 18.1\% of potential probes failed because of system downtime,

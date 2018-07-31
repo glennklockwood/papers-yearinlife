@@ -16,6 +16,7 @@
     \vspace{-.2in}
     \caption{Performance of daily probes normalized to the peak observed performance for each probe type (I/O motif and read/write mode combination) on the specified system.  The y-axis labels show combinations of system, I/O motif, and mode (Read/Write).  Grey represents days on which no observations were made.  The two regions highlighted in green boxes are expanded upon in Figure \ref{fig:regions-heatmap}.}
     \label{fig:summary-heatmap}
+    \vspace{-.2in}
     % source: sc18-figure3-figure4.ipynb
 \end{figure*}
 
@@ -25,6 +26,7 @@
     \vspace{-.2in}
     \caption{Examples of structure in the fraction of peak performance observations.  Color scale is the same as that in Fig. \ref{fig:summary-heatmap}.  In (a), the vertical band on Sept. 26 corresponds to a transient systemwide degradation on \mira.  The horizontal bands for the IOR file-per-process write workload (IOR/fpp(W)) and HACC write workload (HACC(W)) in (b) show a motif-specific sustained performance problem for file-per-process write workloads on \cori.}
     \label{fig:regions-heatmap}
+    \vspace{-.2in}
     % source: sc18-figure3-figure4.ipynb
 \end{figure}
 
@@ -130,7 +132,7 @@ Cross-referencing these dates with the service history of \cori retrospectively 
 Curiously, the performance of HACC read workload (Fig. \ref{fig:timeseries-baseline}b) was unaffected during this time, demonstrating that not all workloads are affected by long-term variation equally.
 This asymmetry, in combination with the bounding dates of this divergent region, allowed us to trace this specific issue to unintentional behavior introduced (and later fixed) in the Lustre software running on \cori between the system upgrades.
 Although this particular case of long-term performance divergence was caused by an unexpected bug in system software, the reality of most production storage systems is that they are regularly patched and upgraded.
-At a minimum, the security requirements of the centers that run these systems drive system updates; and as exemplified by the widely publicized Spectre and Meltdown patches, such updates can have nontrivial effects on certain types of I/O.
+At a minimum, the security requirements of the centers that run these systems drive system updates; and as exemplified by the recent Spectre and Meltdown patches, such updates can have nontrivial effects on certain types of I/O~\cite{Fullop2018}.
 Thus, administrative activities such as maintenance patches and software updates are a significant source of time-dependent, long-term performance variation.
 This must be accounted for in both retrospective performance analysis and forward-looking performance modeling parameterization.  
 The ramifications for I/O research practitioners are that holistic I/O monitoring must incorporate environmental provenance information, such as kernel, operating system, and file system version, to aid in correlation.
@@ -145,12 +147,12 @@ period of sustained bandwidth contention) in the context of longer-term
 trends (e.g., in the presence of a file system software regression).
 Once a region of interest has been defined, we can then constrain more detailed
 analysis techniques to that region to determine why it was defined.
-The crossover points at which $\textup{SMA}_{short}$ and  $\textup{SMA}_{long}$ intersect establish the boundaries of regions where short-term performance has diverged from longer-term performance and where anomalous performance is prevailing.
+The crossover points at which $\textup{SMA}_{short}$ and  $\textup{SMA}_{long}$ intersect establish the boundaries of regions where short-term performance has diverged from longer-term performance and anomalous performance is prevailing.
 Thus, we introduce the notion of \emph{divergence regions}, which are the periods of time bounded by two crossover points and which capture correlated performance.
 Figure \ref{fig:mira-regions-overview} illustrates how these concepts are applied to partition data.
 
 For the remainder of this study, we apply the concept of \emph{divergence regions}, bounded by the crossovers between $\textup{SMA}_{short}$ and $\textup{SMA}_{long}$, to systematically identify and characterize periods in time where anomalous performance was observed by the active I/O performance probes running across the test systems.
-We define $\textup{SMA}_{short}$ to have ${w_{short} = \textup{two weeks}}$ as in Section~\ref{sec:features/timedependent} and $\textup{SMA}_{long}$ to have ${w_{long} = \textup{seven weeks}}$.
+We define $\textup{SMA}_{short}$ to have ${w_{short} = \textup{14 days}}$ as in Section~\ref{sec:features/timedependent} and $\textup{SMA}_{long}$ to have ${w_{long} = \textup{49 days}}$.
 We chose $w$  to be a multiple of seven days to align with one
 week and ensure that weekends and weekdays were equally represented in both SMA
 calculations. $w_{long}$ was set to seven weeks to span multiple $w_{short}$
@@ -174,6 +176,6 @@ interest in recorded observations.
     Both white and gray regions between crossovers are divergence regions, but only a subset of divergence regions are shaded for clarity.
     The significance of the divergence region highlighted in red is discussed in Section \ref{sec:results/correlate-mira}.}
     \label{fig:mira-regions-overview}
-    \vspace{-.15in}
     % source: sc18-figure6-figure7.ipynb
+    \vspace{-.2in}
 \end{figure}
