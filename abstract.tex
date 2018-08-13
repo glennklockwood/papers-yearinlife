@@ -3,48 +3,37 @@
 \begin{abstract}
  
 
-I/O performance is a critical aspect of data-intensive scientific computing,
-but it is notoriously difficult to understand and diagnose. This problem
-is exacerbated by the current trends toward 
-more complex I/O architectures and more diverse applications that must
-be sustained over multiyear production life spans.
+% I/O performance is a critical aspect of data-intensive scientific computing,
+% but it is notoriously difficult to understand and diagnose. This problem
+% is exacerbated by the current trends toward 
+% more complex I/O architectures and more diverse applications that must
+% be sustained over multiyear production life spans.
 
-In this work we seek to advance the state of the practice in understanding
-and diagnosing large-scale I/O performance issues. We present a
-comprehensive I/O performance data set assembled via continuous
-instrumentation methods and active performance probes across a full year of production storage activity,
-at two leadership-scale computing facilities, on five file systems,
-connected to three machines.  We then demonstrate techniques to identify
-regions of interest in large-scale I/O performance data sets, perform
-focused investigations of both long-term trends and transient anomalies,
-and uncover the contributing factors that lead to performance fluctuation.
+% In this work we seek to advance the state of the practice in understanding
+% and diagnosing large-scale I/O performance issues. We present a
+% comprehensive I/O performance data set assembled via continuous
+% instrumentation methods and active performance probes across a full year of production storage activity,
+% at two leadership-scale computing facilities, on five file systems,
+% connected to three machines.  We then demonstrate techniques to identify
+% regions of interest in large-scale I/O performance data sets, perform
+% focused investigations of both long-term trends and transient anomalies,
+% and uncover the contributing factors that lead to performance fluctuation.
 
-We find that a year in the life of a parallel file system comprises distinct regions of longer-term performance variation in addition to short-term performance transients.
-We demonstrate how systematic identification of these performance regions,
-combined with comprehensive telemetry and statistical analysis, allow us to
-isolate the factors contributing to different performance maladies at different time scales.
-From this, we present specific lessons learned and important considerations
-for HPC storage practitioners.
+% We find that a year in the life of a parallel file system comprises distinct regions of longer-term performance variation in addition to short-term performance transients.
+% We demonstrate how systematic identification of these performance regions,
+% combined with comprehensive telemetry and statistical analysis, allow us to
+% isolate the factors contributing to different performance maladies at different time scales.
+% From this, we present specific lessons learned and important considerations for HPC storage practitioners.
 
 % 150 WORD VERSION HERE
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% I/O performance is a critical aspect of data-intensive scientific
-% computing.  We seek to advance the state of the practice in understanding
-% and diagnosing I/O performance issues through investigation of a
-% comprehensive I/O performance data set that captures a full year of
-% production storage activity at two leadership-scale computing facilities.
-% We demonstrate techniques to identify regions of interest, perform
-% focused investigations of both long-term trends and transient anomalies,
-% and uncover the contributing factors that lead to performance fluctuation.
-% 
-% We find that a year in the life of a parallel file system is comprised
-% of distinct regions of long-term performance variation in addition
-% to short-term performance transients.  We demonstrate how systematic
-% identification of these performance regions, combined with comprehensive
-% analysis, allows us to isolate the factors contributing to different
-% performance maladies at different time scales.  From this, we present
-% specific lessons learned and important considerations for HPC storage
-% practitioners.
+I/O performance is a critical aspect of data-intensive scientific computing.
+We seek to advance the state of the practice in understanding and diagnosing I/O performance issues through investigation of a comprehensive I/O performance data set that captures a full year of production storage activity at two leadership-scale computing facilities.
+We demonstrate techniques to identify regions of interest, perform focused investigations of both long-term trends and transient anomalies, and uncover the contributing factors that lead to performance fluctuation.
+
+We find that a year in the life of a parallel file system is comprised of distinct regions of long-term performance variation in addition to short-term performance transients.
+We demonstrate how systematic identification of these performance regions, combined with comprehensive analysis, allows us to isolate the factors contributing to different performance maladies at different time scales.
+From this, we present specific lessons learned and important considerations for HPC storage practitioners.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % In order to
