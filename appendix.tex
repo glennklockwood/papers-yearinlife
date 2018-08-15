@@ -39,8 +39,8 @@ tokio-abcutils also includes the Jupyter notebooks that were used to generate al
 \subsubsection{pytokio framework}
 
 pytokio~\cite{Lockwood2018tokio} is an implementation of the TOKIO framework that is required by tokio-abcutils.
-It is freely available on GitHub, and the instructions included in its README are sufficient to meet the requirements of tokio-abcutils.
-In order to translate this experiment to a new system entirely, an optional ``TOKIO Data Services'' subpackage is included to simplify automated data collection.
+It is freely available on GitHub\footnote{https://www.github.com/nersc/pytokio}, and the instructions included in its README are sufficient to meet the requirements of tokio-abcutils.
+% In order to translate this experiment to a new system entirely, an optional ``TOKIO Data Services'' subpackage is included to simplify automated data collection.
 
 \subsection{Description}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -49,10 +49,10 @@ In order to translate this experiment to a new system entirely, an optional ``TO
 
 {\small
 \begin{itemize}
-  \item {\bf Program: } pytokio, tokio-abc, tokio-abcutils
+  \item {\bf Program: } pytokio, TOKIO-ABC, tokio-abcutils
   \item {\bf Compilation: } pytokio and tokio-abcutils require no compilation; TOKIO-ABC includes autoconf-based build scripts to aid in compilation and deployment
   \item {\bf Data set:} Features vectors from all 11,986 benchmark runs
-  \item {\bf Run-time environment: } pytokio and tokio-abcutils require Python 2.7, pandas 0.18, matplotlib 2.0, numpy 1.11, and scipy 0.17; TOKIO-ABC requires MPI-3.0 and HDF5 1.8.
+  \item {\bf Run-time environment: } pytokio and tokio-abcutils require Python 2.7, pandas 0.23, matplotlib 2.2, numpy 1.13, and scipy 0.19; TOKIO-ABC requires MPI-3.0 and HDF5 1.8.
   \item {\bf Run-time state: } No specific state is required a priori.
   \item {\bf Execution: } pytokio and tokio-abcutils: command-line tools and example Jupyter notebooks; TOKIO-ABC: either a continuous integration system (e.g., Jenkins) or from cron jobs.
   \item {\bf Output: } tokio-abcutils: graphical and numerical results of intermediate analyses; TOKIO-ABC: Darshan logs and job logs
@@ -65,7 +65,7 @@ In order to translate this experiment to a new system entirely, an optional ``TO
 \subsubsection{How software can be obtained (if available)}
 
 All components of TOKIO used in this study are BSD-licensed.
-pytokio, TOKIO-ABC, and tokio-abcutils are available online.\footnote{https://www.nersc.gov/research-and-development/tokio/}
+pytokio\footnote{https://doi.org/10.5281/zenodo.1345790}, TOKIO-ABC\footnote{https://doi.org/10.5281/zenodo.1345784}, and tokio-abcutils\footnote{https://doi.org/10.5281/zenodo.1345786} are available online at the specific software versions used in this work.
 
 \subsubsection{Hardware dependencies}
 
@@ -74,10 +74,10 @@ There may be hardware dependencies of the component-level monitoring tools with 
 
 \subsubsection{Software dependencies}
 
-\paragraph{pytokio}
+\paragraph{pytokio v0.10.0 and tokio-abcutils v1.0.0}
 
-pytokio specifically depends on Python 2.7, and the work here additionally used pandas 0.18.1, matplotlib 2.0.0, numpy 1.11.1, and scipy 0.17.1.
-For simplicity, we opted to use the software environment provided by Continuum IO's Anaconda version 4.3.14 with matplotlib explicitly upgraded to 2.0.0.
+pytokio and tokio-abcutils require Python 2.7, and the work here additionally used pandas 0.23.0, matplotlib 2.2.2, numpy 1.13.1, and scipy 0.19.1.
+For simplicity, we opted to use the software environment provided by Continuum IO's Anaconda version 4.4.7 with the aforementioned four libraries explicitly upgraded to the stated versions.
 
 pytokio also relies on a number of component-level monitoring tools.
 As described in this paper, TOKIO can integrate with any tool that provides scalar or time-resolved data types, and pytokio includes interfaces for the following data sources:
@@ -90,7 +90,7 @@ As described in this paper, TOKIO can integrate with any tool that provides scal
 \item Slurm 17.02.1-2 and CLE 6.0 (job topology at NERSC)
 \end{itemize}
 
-\paragraph{TOKIO-ABC} The Automated Benchmark Collection is a metapackage that contains the specific versions of each benchmark used, specific patches applied to those upstream versions, and scripts that configure and build the collection.
+\paragraph{TOKIO-ABC v1.0.0} The Automated Benchmark Collection is a metapackage that contains the specific versions of each benchmark used, specific patches applied to those upstream versions, and scripts that configure and build the collection.
 Its external dependencies are those of the benchmark applications, which include the following:
 
 \begin{itemize}
@@ -104,7 +104,7 @@ Further details on known issues and specific version incompatibilities are docum
 
 \subsubsection{Datasets}
 
-To validate this work and allow the community to build upon our experimental data, we will release the entire  year-long dataset including the following:
+To validate this work and allow the community to build upon our experimental data, the entire year-long dataset is available online\footnote{https://dx.doi.org/10.5281/zenodo.1345780} and includes the following:
 
 \begin{itemize}
 \item All feature vectors corresponding to all 11,986 jobs run over the experimental period
@@ -113,8 +113,8 @@ To validate this work and allow the community to build upon our experimental dat
 
 This CSV dataset represents TOKIO-ABC results from the five test environments presented:
 Edison scratch1, scratch2, scratch3; Cori scratch, and Mira mifa-fs1.
-The dataset will be labeled with feature names encoded as the first CSV line.
-The mapping between feature names and their descriptions is included in tokio-abcutils.
+The dataset is labeled with feature names encoded as the first CSV line.
+The mapping between feature names and their descriptions is also documented.
 
 \subsection{Installation}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
