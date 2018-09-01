@@ -59,7 +59,7 @@ File system workload data is collected asynchronously outside of the application
 
 \item \textbf{File system capacity/health monitoring}: File-system-specific tools such as Lustre's \textit{lfs} and \textit{lctl} or GPFS's \textit{mmdf} and \textit{mmlsdisk} can be invoked periodically to capture current file system state, including the capacity and failover status of individual storage servers and/or LUNs in the system.
 
-\item \textbf{Resource manager monitoring}: Resource managers such as Slurm~\cite{2003slurm} often keep a detailed accounting of all jobs that execute on a particular system, including useful details like the size of the job and its placement across available compute nodes.
+\item \textbf{Resource manager monitoring}: Resource managers such as Slurm~\cite{2003slurm} often keep a detailed accounting of all jobs executing on a particular system, such as the size of the job and its placement across available compute nodes.
 \end{itemize}
 
 The telemetric data from these connectors is aggregated into scalar \emph{attributes} associated with each job, and all  the attributes associated with a job are represented as \emph{feature vectors}.
