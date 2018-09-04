@@ -63,7 +63,7 @@ File system workload data is collected asynchronously outside of the application
 \end{itemize}
 
 The telemetric data from these connectors is aggregated into scalar \emph{attributes} associated with each job, and all attributes associated with a job are represented as \emph{feature vectors}.
-For data sources that produce time-resolved data (e.g., LMT reports workload statistics at five-second intervals), we calculate the sum, minimum, maximum, and average value of the data generated over the duration of the job and define those reduced scalars as attributes of the feature vector.
+For data sources that produce time-resolved data (e.g., LMT samples workload data at five-second intervals), we calculate the sum, minimum, maximum, and average value of the data generated over the duration of the job and define those reduced scalars as attributes of the feature vector.
 When possible, attributes are also expressed as \emph{coverage factors}~\cite{Lockwood2017} which quantify the fraction of system-wide activity attributable to the job of interest.
 For example, a job's \emph{bandwidth coverage factor} is the number of bytes read and written by that job (measured by Darshan) divided by the number of bytes read and written across the entire storage system (measured by LMT or ggiostat) while that job was running.
 A coverage factor of 1.0 indicates that a job was the exclusive consumer of
