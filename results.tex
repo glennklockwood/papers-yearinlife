@@ -98,10 +98,10 @@ This fact is particularly relevant to the increasing fraction of experimental an
 
 Another noteworthy feature that this method reveals is the bimodality of correlation between performance and the CPU load of the file system data servers (``Data Server Load'' in Fig. \ref{fig:trend-correlations}) on the Lustre-based test platforms.
 A time-resolved view of the regions where performance correlates with data server CPU loads (Fig. \ref{fig:cscratch-bimodal-fsaveosscpu}) reveals that the bimodality of the correlation matches the biomodality observed in the HACC write workload on the affected storage systems.
-During the long-term performance regression discussed in Section \ref{sec:features/timedependent}, high CPU load on the Lustre Object Storage Services coincided with low performance of the I/O performance probes.
-As soon as performance was restored on August 10, the relationship reversed, and high CPU load was observed favorably with respect to performance.
+During the long-term performance regression discussed in Section \ref{sec:features/timedependent}, high CPU load on the Lustre data servers coincided with low I/O performance probe performance.
+Once performance was restored on August 10, the relationship reversed, and high CPU load correlated favorably with performance.
 
-The positive correlation between performance and CPU load is consistent with the data servers using CPUs primarily to service incoming I/O requests, whereas the negative correlation indicates that another CPU load (as may be caused by an algorithmic bug) was present and competed with the data servers' ability to use CPU to service those same requests.
+The positive correlation between performance and CPU load is consistent with the data servers using CPUs to service incoming I/O requests, whereas the negative correlation indicates that another CPU load (as may result from a software bug) was present and competed with the servers' ability to use CPU to service I/O requests.
 From these results we conclude that not only does baseline I/O performance vary with time but also the nature and magnitude of how different attributes correlate with I/O performance  change over time.
 Had this correlation analysis been performed without partitioning over divergence regions, the regions of positive and negative correlation would have obfuscated each other in the net result.
 
